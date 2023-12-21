@@ -1,1 +1,1 @@
-export const APP_TITLE = 'Vue Scaffold'
+export const APP_TITLE = 'Vue 7 Projects'

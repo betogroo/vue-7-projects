@@ -1,6 +1,6 @@
 {
-  "name": "vue-scaffold",
-  "version": "0.2.10",
+  "name": "vue-7-projects",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "vite",
