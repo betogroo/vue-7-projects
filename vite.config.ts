@@ -11,6 +11,9 @@ export default defineConfig({
   plugins: [
     vue({
       template: { transformAssetUrls },
+      script: {
+        defineModel: true,
+      },
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({
