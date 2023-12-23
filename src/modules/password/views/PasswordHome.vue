@@ -3,8 +3,12 @@ import { computed, ref } from 'vue'
 import { AppSwitch, AppSlider } from '../components'
 import { reactive } from 'vue'
 
-//reactive
+interface SecurityLevel {
+  color: 'red' | 'yellow' | 'green'
+  message: 'fraca' | 'razoável' | 'forte'
+}
 
+//reactive
 const formData = reactive({
   length: 6,
   includeUppercase: false,
@@ -26,26 +30,18 @@ const handleSubmit = () => {
   console.log(formData)
 }
 
-const securityColor = computed(() => {
+const securityLevel = computed<SecurityLevel>(() => {
   const countTrue = [
     formData.includeUppercase,
     formData.includeNumber,
     formData.includeSpecialCharacters,
+    formData.length >= 12,
   ].filter(Boolean).length
-  let color
 
-  switch (countTrue) {
-    case 0:
-    case 1:
-      color = 'red'
-      break
-    case 2:
-      color = 'yellow'
-      break
-    case 3:
-      color = 'green'
-  }
-  return color
+  if (countTrue === 2 || countTrue === 3)
+    return { color: 'yellow', message: 'razoável' }
+  if (countTrue === 4) return { color: 'green', message: 'forte' }
+  return { color: 'red', message: 'fraca' }
 })
 </script>
 <template>
@@ -65,19 +61,19 @@ const securityColor = computed(() => {
           <v-col>
             <AppSwitch
               v-model="formData.includeUppercase"
-              :color="securityColor"
+              :color="securityLevel.color"
               title="Incluir Letra Maiúscula"
               @toggle-switch="toggleUppercase()"
             />
             <AppSwitch
               v-model="formData.includeNumber"
-              :color="securityColor"
+              :color="securityLevel.color"
               title="Incluir Número"
               @toggle-switch="toggleNumber()"
             />
             <AppSwitch
               v-model="formData.includeSpecialCharacters"
-              :color="securityColor"
+              :color="securityLevel.color"
               title="Incluir Caracteres Especiais"
               @toggle-switch="toggleSpecialCharacters()"
             />
@@ -87,9 +83,9 @@ const securityColor = computed(() => {
           <v-col
             ><v-btn
               block
-              :color="securityColor"
+              :color="securityLevel.color"
               type="submit"
-              >Gerar Senha</v-btn
+              >{{ `Gerar Senha ${securityLevel.message}` }}</v-btn
             ></v-col
           >
         </v-row>
