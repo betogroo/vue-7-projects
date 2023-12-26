@@ -1,4 +1,4 @@
-import { computed, ref, type Ref } from 'vue'
+import { computed, ref, Ref } from 'vue'
 import { SecurityLevel } from '../types/Password'
 const isPending = ref(false)
 const error = ref(null)
@@ -16,7 +16,12 @@ const usePassword = () => {
     password.value = ''
   }
 
-  const toggleUppercase = () => {
+  const toggleOption = (option: Ref<boolean>) => {
+    resetPassword()
+    option.value = !option.value
+  }
+
+  /* const toggleUppercase = () => {
     resetPassword()
     includeUppercase.value = !includeUppercase.value
   }
@@ -27,7 +32,7 @@ const usePassword = () => {
   const toggleSpecialCharacters = () => {
     resetPassword()
     includeSpecialCharacters.value = !includeSpecialCharacters.value
-  }
+  } */
 
   const generatePassword = () => {
     const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz'
@@ -72,9 +77,9 @@ const usePassword = () => {
     includeNumber,
     includeSpecialCharacters,
     includeUppercase,
-    toggleNumber,
-    toggleSpecialCharacters,
-    toggleUppercase,
+    toggleNumber: () => toggleOption(includeNumber),
+    toggleSpecialCharacters: () => toggleOption(includeSpecialCharacters),
+    toggleUppercase: () => toggleOption(includeUppercase),
     generatePassword,
     securityLevel,
   }
