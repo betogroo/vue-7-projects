@@ -1,73 +1,29 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { AppSwitch, AppSlider } from '../components'
-import type { SecurityLevel } from '../types/Password'
+import usePassword from '../composables/usePassword'
+
+//composable
+
+const {
+  password,
+  passwordLength,
+  includeNumber,
+  includeSpecialCharacters,
+  includeUppercase,
+  toggleNumber,
+  toggleSpecialCharacters,
+  toggleUppercase,
+  generatePassword,
+  securityLevel,
+} = usePassword()
 
 //reactive
-
-const passwordLength = ref(6)
-const includeUppercase = ref(false)
-const includeNumber = ref(false)
-const includeSpecialCharacters = ref(false)
-
 const showHelp = ref(false)
-const password = ref<string>('')
-
-//methods
-
-const resetPassword = () => {
-  password.value = ''
-}
-const toggleUppercase = () => {
-  resetPassword()
-  includeUppercase.value = !includeUppercase.value
-}
-const toggleNumber = () => {
-  resetPassword()
-  includeNumber.value = !includeNumber.value
-}
-const toggleSpecialCharacters = () => {
-  resetPassword()
-  includeSpecialCharacters.value = !includeSpecialCharacters.value
-}
-const generatePassword = () => {
-  const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz'
-  const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  const numbers = '0123456789'
-  const specialChars = '!@#$%^&*()-_+=[]{}|;:,.<>?/~'
-
-  let validChars = lowercaseChars
-  if (includeUppercase.value) validChars += uppercaseChars
-  if (includeNumber.value) validChars += numbers
-  if (includeSpecialCharacters.value) validChars += specialChars
-  let generatedPassword = ''
-  for (let i = 0; i < passwordLength.value; i++) {
-    const randomIndex = Math.floor(Math.random() * validChars.length)
-    generatedPassword += validChars.charAt(randomIndex)
-  }
-  password.value = generatedPassword
-}
 
 const contentCopy = () => {
   console.log(password.value)
 }
-
-const securityLevel = computed<SecurityLevel>(() => {
-  const countTrue = [
-    includeUppercase.value,
-    includeNumber.value,
-    includeSpecialCharacters.value,
-    passwordLength.value >= 12,
-  ].filter(Boolean).length
-
-  console.log(countTrue)
-
-  if (countTrue === 2 || countTrue === 3)
-    return { color: 'warning', message: 'razoável' }
-  if (countTrue === 4)
-    return { color: 'success', message: 'forte', strong: true }
-  return { color: 'error', message: 'fraca' }
-})
 </script>
 <template>
   <v-container class="d-flex flex-column justify-center">
