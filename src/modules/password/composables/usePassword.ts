@@ -21,19 +21,6 @@ const usePassword = () => {
     option.value = !option.value
   }
 
-  /* const toggleUppercase = () => {
-    resetPassword()
-    includeUppercase.value = !includeUppercase.value
-  }
-  const toggleNumber = () => {
-    resetPassword()
-    includeNumber.value = !includeNumber.value
-  }
-  const toggleSpecialCharacters = () => {
-    resetPassword()
-    includeSpecialCharacters.value = !includeSpecialCharacters.value
-  } */
-
   const generatePassword = () => {
     const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz'
     const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
