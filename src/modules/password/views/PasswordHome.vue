@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { AppSwitch, AppSlider } from '../components'
+import { AppSwitch, AppSlider, AppTooltip } from '../components'
 import usePassword from '../composables/usePassword'
 
 //composable
@@ -11,16 +11,17 @@ const {
   includeNumber,
   includeSpecialCharacters,
   includeUppercase,
+  securityLevel,
   toggleNumber,
   toggleSpecialCharacters,
   toggleUppercase,
   generatePassword,
-  securityLevel,
 } = usePassword()
 
 //reactive
 const showHelp = ref(false)
 
+//methods
 const contentCopy = () => {
   console.log(password.value)
 }
@@ -29,39 +30,24 @@ const contentCopy = () => {
   <v-container class="d-flex flex-column justify-center">
     <div class="d-flex justify-space-around align-center">
       <h1 class="text-center">Password Generator</h1>
-      <v-tooltip
+      <AppTooltip
         v-model="showHelp"
-        :content-class="`bg-${securityLevel.color}`"
-        :open-on-click="true"
-        width="100%"
+        :color="securityLevel.color"
       >
-        <template #activator="{ props }">
-          <v-btn
-            :color="securityLevel.color"
-            density="compact"
-            icon
-            variant="text"
-            v-bind="props"
-          >
-            <v-icon>mdi-help-circle-outline</v-icon></v-btn
-          >
-        </template>
-        <template #default>
-          <div
-            v-if="!securityLevel.strong"
-            class="text-justify"
-          >
-            Para uma senha forte, escolha no mínimo 12 caracteres, e também
-            inclua letras maiúsculas, números e caracteres especiais
-          </div>
-          <div
-            v-else
-            class="text-justify text-h5"
-          >
-            Senha Forte
-          </div>
-        </template>
-      </v-tooltip>
+        <div
+          v-if="!securityLevel.strong"
+          class="text-justify"
+        >
+          Para uma senha forte, escolha no mínimo 12 caracteres, e também inclua
+          letras maiúsculas, números e caracteres especiais
+        </div>
+        <div
+          v-else
+          class="text-justify text-h5"
+        >
+          Senha Forte
+        </div>
+      </AppTooltip>
     </div>
 
     <v-card
