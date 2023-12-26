@@ -16,6 +16,10 @@ const formData = reactive({
   includeSpecialCharacters: false,
 })
 
+const showHelp = ref(false)
+
+const password = ref<string>('')
+
 //methods
 const toggleUppercase = () => {
   formData.includeUppercase = !formData.includeUppercase
@@ -46,7 +50,31 @@ const securityLevel = computed<SecurityLevel>(() => {
 </script>
 <template>
   <v-container class="d-flex flex-column justify-center">
-    <h1 class="text-center">Password Generator</h1>
+    <div class="d-flex justify-space-around align-center">
+      <h1 class="text-center">Password Generator</h1>
+      <v-tooltip
+        v-model="showHelp"
+        :content-class="`bg-${securityLevel.color}`"
+        :open-on-click="true"
+      >
+        <template #activator="{ props }">
+          <v-btn
+            :color="securityLevel.color"
+            density="compact"
+            icon
+            variant="text"
+            v-bind="props"
+          >
+            <v-icon>mdi-help-circle-outline</v-icon></v-btn
+          >
+        </template>
+        <template #default>
+          Para uma senha forte, escolha no mínimo 12 caracteres, e também inclua
+          letras maiúsculas, números e caracteres especiais
+        </template>
+      </v-tooltip>
+    </div>
+
     <v-card
       class="pa-4"
       variant="outlined"
