@@ -170,7 +170,5 @@ const securityLevel = computed<SecurityLevel>(() => {
         </v-col>
       </v-row>
     </v-card>
-
-    {{ securityLevel }}
   </v-container>
 </template>
