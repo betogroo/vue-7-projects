@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { AppSwitch, AppSlider } from '../components'
-
-interface SecurityLevel {
-  color: 'error' | 'warning' | 'success'
-  message: 'fraca' | 'razoável' | 'forte'
-  strong?: boolean
-}
+import type { SecurityLevel } from '../types/Password'
 
 //reactive
 
