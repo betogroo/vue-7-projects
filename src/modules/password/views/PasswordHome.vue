@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { AppSwitch, AppSlider, AppTooltip } from '../components'
 import usePassword from '../composables/usePassword'
+import { useClipboard } from '@vueuse/core'
 
 //composable
 const {
@@ -17,12 +18,14 @@ const {
   generatePassword,
 } = usePassword()
 
+const { copy, copied } = useClipboard({ copiedDuring: 2000 })
+
 //reactive
 const isHelpVisible = ref(false)
 
 //methods
-const copyPassword = () => {
-  console.log(password.value)
+const copyPassword = async () => {
+  await copy(password.value)
 }
 </script>
 <template>
@@ -93,15 +96,32 @@ const copyPassword = () => {
         <v-col>
           <v-card
             class="d-flex justify-space-around align-center"
-            variant="text"
+            variant="outlined"
           >
-            <v-card-text :class="passwordLength < 25 ? 'text-h5' : ''">{{
-              password
-            }}</v-card-text>
-            <v-icon @click="copyPassword">mdi-content-copy</v-icon>
+            <v-card-text
+              v-if="!copied"
+              :class="passwordLength < 25 ? 'text-h5' : ''"
+              >{{ password }}</v-card-text
+            >
+            <v-card-text
+              v-else
+              class="passwordContainer"
+              >Copiado para a área de transferência</v-card-text
+            >
+            <v-icon
+              class="mr-2"
+              :icon="!copied ? 'mdi-content-copy' : 'mdi-check'"
+              @click="copyPassword"
+            />
           </v-card>
         </v-col>
       </v-row>
     </v-card>
   </v-container>
 </template>
+
+<style lang="scss" scoped>
+.passwordContainer {
+  font-size: 1rem;
+}
+</style>
