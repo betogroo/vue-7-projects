@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import type { colors } from '../types/Password'
 
 const sliderLength = defineModel<number>()
-//const sliderLength = ref<number>(6)
 
 const color = computed<colors>(() => {
   if (!sliderLength.value) return 'error'

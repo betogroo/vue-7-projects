@@ -1,12 +1,11 @@
 <script setup lang="ts">
 interface Props {
   color: string
+  icon?: string
 }
-const props = defineProps<Props>()
-
-const $emit = defineEmits<{
-  toggleTooltip: []
-}>()
+withDefaults(defineProps<Props>(), {
+  icon: 'mdi-help-circle-outline',
+})
 
 const showTooltip = defineModel<boolean>()
 </script>
@@ -26,8 +25,8 @@ const showTooltip = defineModel<boolean>()
         variant="text"
         v-bind="props"
       >
-        <v-icon>mdi-help-circle-outline</v-icon></v-btn
-      >
+        <v-icon :icon="icon"
+      /></v-btn>
     </template>
     <slot />
   </v-tooltip>

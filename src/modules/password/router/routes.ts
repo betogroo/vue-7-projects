@@ -7,8 +7,9 @@ const routes: CustomRouteRecordRaw[] = [
     component: () => import('../views/PasswordHome.vue'),
     name: 'PasswordHome',
     meta: {
-      title: 'Password Generator',
+      title: 'Gerador de Senha',
       requiresAuth: false,
+      icon: '',
     },
   },
 ]

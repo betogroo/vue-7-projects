@@ -4,7 +4,6 @@ import { AppSwitch, AppSlider, AppTooltip } from '../components'
 import usePassword from '../composables/usePassword'
 
 //composable
-
 const {
   password,
   passwordLength,
@@ -19,19 +18,19 @@ const {
 } = usePassword()
 
 //reactive
-const showHelp = ref(false)
+const isHelpVisible = ref(false)
 
 //methods
-const contentCopy = () => {
+const copyPassword = () => {
   console.log(password.value)
 }
 </script>
 <template>
-  <v-container class="d-flex flex-column justify-center">
-    <div class="d-flex justify-space-around align-center">
-      <h1 class="text-center">Password Generator</h1>
+  <v-container class="d-flex flex-column justify-start">
+    <div class="d-flex justify-space-around align-center mb-3">
+      <h1 class="text-center text-h5">Password Generator</h1>
       <AppTooltip
-        v-model="showHelp"
+        v-model="isHelpVisible"
         :color="securityLevel.color"
       >
         <div
@@ -50,10 +49,7 @@ const contentCopy = () => {
       </AppTooltip>
     </div>
 
-    <v-card
-      class="pa-4"
-      variant="outlined"
-    >
+    <v-card variant="text">
       <v-form @submit.prevent="generatePassword">
         <v-row align="center">
           <v-col>
@@ -102,7 +98,7 @@ const contentCopy = () => {
             <v-card-text :class="passwordLength < 25 ? 'text-h5' : ''">{{
               password
             }}</v-card-text>
-            <v-icon @click="contentCopy">mdi-content-copy</v-icon>
+            <v-icon @click="copyPassword">mdi-content-copy</v-icon>
           </v-card>
         </v-col>
       </v-row>

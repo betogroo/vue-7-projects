@@ -1,3 +1,6 @@
+<script setup lang="ts">
+import { APP_TITLE } from '@/config'
+</script>
 <template>
   <v-app-bar
     color="blue"
@@ -7,7 +10,7 @@
       <RouterLink
         class="text-white text-decoration-none"
         :to="{ name: 'HomeView' }"
-        >Vue Scaffold</RouterLink
+        >{{ APP_TITLE }}</RouterLink
       >
     </v-app-bar-title>
     <div class="ma-3">

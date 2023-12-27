@@ -1,7 +1,10 @@
 import { computed, ref, Ref } from 'vue'
 import { SecurityLevel } from '../types/Password'
-const isPending = ref(false)
-const error = ref(null)
+
+const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz'
+const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const numbers = '0123456789'
+const specialChars = '!@#$%^&*()-_+=[]{}|;:,.<>?/~'
 
 const usePassword = () => {
   const password = ref<string>('')
@@ -22,11 +25,6 @@ const usePassword = () => {
   }
 
   const generatePassword = () => {
-    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz'
-    const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    const numbers = '0123456789'
-    const specialChars = '!@#$%^&*()-_+=[]{}|;:,.<>?/~'
-
     let validChars = lowercaseChars
     if (includeUppercase.value) validChars += uppercaseChars
     if (includeNumber.value) validChars += numbers
@@ -47,8 +45,6 @@ const usePassword = () => {
       passwordLength.value >= 12,
     ].filter(Boolean).length
 
-    console.log(countTrue)
-
     if (countTrue === 2 || countTrue === 3)
       return { color: 'warning', message: 'razoável' }
     if (countTrue === 4)
@@ -57,8 +53,6 @@ const usePassword = () => {
   })
 
   return {
-    isPending,
-    error,
     password,
     passwordLength,
     includeNumber,
