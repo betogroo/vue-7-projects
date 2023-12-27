@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
+import type { colors } from '../types/Password'
 
 const sliderLength = defineModel<number>()
 //const sliderLength = ref<number>(6)
 
-const color = computed(() => {
-  if (!sliderLength.value) return 'red'
-  if (sliderLength.value < 8) return 'red'
-  if (sliderLength.value < 12) return 'yellow'
-  return 'green'
+const color = computed<colors>(() => {
+  if (!sliderLength.value) return 'error'
+  if (sliderLength.value < 8) return 'error'
+  if (sliderLength.value < 12) return 'warning'
+  return 'success'
 })
 </script>
 

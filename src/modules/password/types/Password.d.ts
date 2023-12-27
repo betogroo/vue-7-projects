@@ -1,5 +1,8 @@
+export type colors = 'error' | 'warning' | 'success'
+export type messages = 'fraca' | 'razoável' | 'forte'
+
 export interface SecurityLevel {
-  color: 'error' | 'warning' | 'success'
-  message: 'fraca' | 'razoável' | 'forte'
+  color: colors
+  message: messages
   strong?: boolean
 }
