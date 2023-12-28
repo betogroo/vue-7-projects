@@ -11,7 +11,8 @@
     "check-types": "tsc --noEmit",
     "vue-check-types": "vue-tsc --noEmit",
     "prepare": "husky install",
-    "commitlint": "commitlint --edit"
+    "commitlint": "commitlint --edit",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/logo.png"
   },
   "dependencies": {
     "@mdi/font": "7.3.67",
@@ -32,6 +33,7 @@
     "@types/webfontloader": "^1.6.38",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "@vite-pwa/assets-generator": "^0.2.2",
     "@vitejs/plugin-vue": "^4.5.2",
     "@vue/eslint-config-typescript": "^11.0.3",
     "eslint": "^8.56.0",
