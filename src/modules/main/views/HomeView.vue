@@ -1,16 +1,28 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { AppsCard } from '../components'
+import type { Apps } from '../types/Main'
+
+const apps: Apps[] = [
+  {
+    title: 'Password Generator',
+    description: 'Gere senhas seguras e difíceis de ser quebradas',
+    name: 'PasswordHome',
+  },
+  {
+    title: 'Voting System',
+    description: 'Sistema de votação, com contabilização de votos',
+    name: 'VotingHome',
+  },
+]
+</script>
 <template>
-  <v-container class="d-flex justify-center fill-height">
-    <v-responsive max-width="250">
-      <v-card
-        :to="{ name: 'PasswordHome' }"
-        variant="outlined"
-      >
-        <v-card-title>Password Generator</v-card-title>
-        <v-card-text class="text-justify"
-          >Gere passwords seguras e difíceis de ser quebradas</v-card-text
-        >
-      </v-card>
-    </v-responsive>
+  <v-container class="d-flex justify-center">
+    <AppsCard
+      v-for="app in apps"
+      :key="app.name"
+      :description="app.description"
+      :name="app.name"
+      :title="app.title"
+    />
   </v-container>
 </template>
