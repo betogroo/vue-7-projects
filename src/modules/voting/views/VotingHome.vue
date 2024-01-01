@@ -111,6 +111,7 @@ const btnActions: BtnAction[] = [
             <v-col
               v-for="col in 3"
               :key="col"
+              class="text-center"
               :order="col === 1 ? 'last' : col === 3 ? 'first' : ''"
             >
               <BtnNumber
