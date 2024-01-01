@@ -1,9 +1,22 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { BtnNumber } from '../components'
+import { BtnNumber, TextContainer } from '../components'
+import type { BtnAction } from '../types/Voting'
+
+const display = ref('')
+const resetDisplay = () => {
+  display.value = ''
+}
+
+const confirmVote = () => {
+  console.log(display.value)
+}
 
 const btn = [9, 8, 7, 6, 5, 4, 3, 2, 1]
-const display = ref('')
+
+const displayConfig = ref({
+  uppercaseText: true,
+})
 
 const updateDisplay = (value: number | string) => {
   if (display.value === '0') display.value = ''
@@ -11,40 +24,125 @@ const updateDisplay = (value: number | string) => {
 }
 
 const suitorCard = computed<boolean>(() => display.value.length === 3)
+const btnActions: BtnAction[] = [
+  {
+    color: 'white',
+    text: 'Corrige',
+    value: 'clear',
+    action: resetDisplay,
+  },
+  {
+    color: 'success',
+    text: 'Confirma',
+    value: 'confirm',
+    action: confirmVote,
+  },
+]
 </script>
 <template>
-  <v-container class="d-flex justify-center fill-height">
-    <v-card>
-      <v-row
-        v-for="row in 3"
-        :key="row"
-        no-gutters
-      >
-        <v-col
-          v-for="col in 3"
-          :key="col"
-          :order="col === 1 ? 'last' : col === 3 ? 'first' : ''"
+  <v-container
+    class="d-flex justify-center align-start fill-height"
+    fluid
+  >
+    <v-row no-gutters>
+      <v-col cols="12">
+        <v-card
+          class="head"
+          variant="outlined"
         >
-          <BtnNumber
-            :disabled="suitorCard"
-            :value="btn[(row - 1) * 3 + col - 1]"
-            @handle-click="updateDisplay"
-          />
-        </v-col>
-      </v-row>
-      <v-row no-gutters>
-        <v-col class="text-center"
-          ><BtnNumber
-            :disabled="suitorCard"
-            :value="0"
-            @handle-click="updateDisplay"
-        /></v-col>
-      </v-row>
-    </v-card>
-    <v-card v-if="suitorCard">
-      <v-alert>{{ display }}</v-alert>
-    </v-card>
+          Nome da Instituição
+        </v-card>
+      </v-col>
+      <v-col cols="7">
+        <v-card
+          class="display d-flex flex-column justify-space-between h-100"
+          variant="outlined"
+        >
+          <TextContainer text="Digite o grêmio que deseja votar" />
+          <div>
+            <div class="d-flex align-center">
+              <TextContainer text="Número: " />
+              <v-otp-input
+                v-model="display"
+                height="80"
+                length="3"
+                width="240"
+              >
+              </v-otp-input>
+            </div>
+            <TextContainer
+              v-if="suitorCard"
+              align="left"
+              class="mt-8"
+              text="NOME: AQUI APARECE O NOME DO GRÊMIO"
+            />
+          </div>
 
-    {{ display }}
+          <div>
+            <v-divider></v-divider>
+            <TextContainer
+              align="left"
+              text="Aperte a tecla:"
+            />
+            <TextContainer
+              align="left"
+              class="ml-4"
+              text="CONFIRMA para CONFIRMAR este voto"
+            />
+            <TextContainer
+              align="left"
+              class="ml-4"
+              text="CORRIGE para REINICIAR este voto"
+            />
+          </div>
+        </v-card>
+      </v-col>
+      <v-col>
+        <v-card
+          class="keyboard"
+          height="500"
+          variant="outlined"
+        >
+          <v-row
+            v-for="row in 3"
+            :key="row"
+            no-gutters
+          >
+            <v-col
+              v-for="col in 3"
+              :key="col"
+              :order="col === 1 ? 'last' : col === 3 ? 'first' : ''"
+            >
+              <BtnNumber
+                :disabled="suitorCard"
+                :value="btn[(row - 1) * 3 + col - 1]"
+                @handle-click="updateDisplay"
+              />
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col class="text-center"
+              ><BtnNumber
+                :disabled="suitorCard"
+                :value="0"
+                @handle-click="updateDisplay"
+            /></v-col>
+          </v-row>
+          <v-row>
+            <v-col
+              v-for="btn in btnActions"
+              :key="btn.value"
+              class="text-center"
+            >
+              <v-btn
+                :color="btn.color"
+                @click="btn.action"
+                >{{ btn.text }}</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 interface Props {
   value: number | string
+  color?: string
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  color: 'black',
+})
 
 const $emit = defineEmits<{
   handleClick: [value: number | string]
@@ -16,7 +19,7 @@ const handleClick = () => {
 <template>
   <v-btn
     class="ma-2"
-    color="blue-grey-lighten-2"
+    :color="color"
     width="100"
     @click.prevent="handleClick"
   >
