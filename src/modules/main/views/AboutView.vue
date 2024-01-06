@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { version as vuetifyVersion } from 'vuetify'
 import { version as vueVersion } from 'vue'
+const appVersion = __APP_VERSION__
+const appName = __APP_NAME__
 </script>
 <template>
-  <v-container class="fill-height">
-    <v-responsive class="align-center text-center fill-height">
+  <v-container>
+    <v-responsive class="align-center text-center">
       <v-row>
+        <v-col cols="12">
+          <h2>{{ appName }}</h2>
+          <h4>{{ appVersion }}</h4>
+        </v-col>
         <v-col>
           <v-img src="@/assets/vue.svg" />
           {{ vueVersion }}
