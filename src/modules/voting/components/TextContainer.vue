@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { updateExpression } from '@babel/types'
-
 interface Props {
   uppercaseText?: boolean
   text: string

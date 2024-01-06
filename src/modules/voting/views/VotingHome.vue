@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { BtnNumber, TextContainer } from '../components'
-import type { BtnAction } from '../types/Voting'
 
 const display = ref('')
 const resetDisplay = () => {
@@ -14,9 +13,9 @@ const confirmVote = () => {
 
 const btn = [9, 8, 7, 6, 5, 4, 3, 2, 1]
 
-const displayConfig = ref({
+/* const displayConfig = ref({
   uppercaseText: true,
-})
+}) */
 
 const updateDisplay = (value: number | string) => {
   if (display.value === '0') display.value = ''
@@ -24,7 +23,7 @@ const updateDisplay = (value: number | string) => {
 }
 
 const suitorCard = computed<boolean>(() => display.value.length === 3)
-const btnActions: BtnAction[] = [
+/* const btnActions: BtnAction[] = [
   {
     color: 'white',
     text: 'Corrige',
@@ -39,7 +38,7 @@ const btnActions: BtnAction[] = [
     action: confirmVote,
     disabled: !suitorCard.value,
   },
-]
+] */
 </script>
 <template>
   <v-container
