@@ -30,12 +30,14 @@ const btnActions: BtnAction[] = [
     text: 'Corrige',
     value: 'clear',
     action: resetDisplay,
+    disabled: suitorCard.value,
   },
   {
     color: 'success',
     text: 'Confirma',
     value: 'confirm',
     action: confirmVote,
+    disabled: !suitorCard.value,
   },
 ]
 </script>
@@ -130,15 +132,17 @@ const btnActions: BtnAction[] = [
             /></v-col>
           </v-row>
           <v-row>
-            <v-col
-              v-for="btn in btnActions"
-              :key="btn.value"
-              class="text-center"
-            >
+            <v-col class="d-flex justify-space-around text-center">
               <v-btn
-                :color="btn.color"
-                @click="btn.action"
-                >{{ btn.text }}</v-btn
+                color="white"
+                @click="resetDisplay"
+                >Corrige</v-btn
+              >
+              <v-btn
+                color="success"
+                :disabled="!suitorCard"
+                @click="confirmVote"
+                >Confirmar</v-btn
               >
             </v-col>
           </v-row>
