@@ -11,32 +11,12 @@ const confirmVote = () => {
   console.log(display.value)
 }
 
-/* const displayConfig = ref({
-  uppercaseText: true,
-}) */
-
 const updateDisplay = (value: number | string) => {
   if (display.value === '0') display.value = ''
   display.value += value
 }
 
 const suitorCard = computed<boolean>(() => display.value.length === 3)
-/* const btnActions: BtnAction[] = [
-  {
-    color: 'white',
-    text: 'Corrige',
-    value: 'clear',
-    action: resetDisplay,
-    disabled: suitorCard.value,
-  },
-  {
-    color: 'success',
-    text: 'Confirma',
-    value: 'confirm',
-    action: confirmVote,
-    disabled: !suitorCard.value,
-  },
-] */
 </script>
 <template>
   <v-container>
@@ -60,8 +40,12 @@ const suitorCard = computed<boolean>(() => display.value.length === 3)
         />
       </v-col>
       <v-col class="d-flex flex-column align-center">
-        <NumericKeyboard @handle-click="updateDisplay" />
+        <NumericKeyboard
+          :keyboard-disabled="suitorCard"
+          @handle-click="updateDisplay"
+        />
         <ActionKeyboard
+          :confirm-disabled="!suitorCard"
           @handle-confirm="confirmVote"
           @handle-reset="resetDisplay"
         />

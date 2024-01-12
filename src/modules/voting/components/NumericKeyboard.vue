@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { NumericBtn } from '.'
 
+interface Props {
+  keyboardDisabled: boolean
+}
+withDefaults(defineProps<Props>(), {
+  keyboardDisabled: false,
+})
+
 const $emit = defineEmits<{
   'handle-click': [value: number | string]
 }>()
@@ -12,9 +19,11 @@ const handleClick = (value: number | string) => {
 
 <template>
   <v-card
-    class="mt-2 ml-1"
+    class="mt-2 ml-1 rounded-xl"
+    :disabled="keyboardDisabled"
     max-width="300"
-    variant="outlined"
+    :ripple="false"
+    variant="text"
   >
     <v-card-text class="text-center">
       <v-row>

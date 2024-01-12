@@ -19,11 +19,14 @@ const handleClick = () => {
 <template>
   <v-btn
     :color="color"
-    max-width="100"
+    density="comfortable"
+    :ripple="false"
+    size="x-small"
+    stacked
     @click.prevent="handleClick"
   >
     <template #default>
-      <h1>{{ value }}</h1>
+      <h1 class="text-h4">{{ value }}</h1>
     </template>
   </v-btn>
 </template>

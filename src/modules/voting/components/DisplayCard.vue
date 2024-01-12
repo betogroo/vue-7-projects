@@ -11,8 +11,9 @@ const displayValue = defineModel<string>()
 
 <template>
   <v-card
-    class="mt-2 mr-1"
-    variant="outlined"
+    class="mt-2 mr-1 rounded-xl"
+    :hover="false"
+    variant="text"
   >
     <v-card-title class="text-center text-uppercase"
       >Digite o Grêmio que deseja votar</v-card-title
@@ -24,7 +25,9 @@ const displayValue = defineModel<string>()
           ><v-otp-input
             v-model="displayValue"
             length="3"
-        /></v-col>
+            variant="outlined"
+          />
+        </v-col>
       </v-row>
       <v-row
         align="center"
@@ -35,7 +38,10 @@ const displayValue = defineModel<string>()
           <span>Nome do Grêmio escolhido</span>
         </v-col>
       </v-row>
-      <v-divider class="my-8"></v-divider>
+      <v-divider
+        class="my-8"
+        thickness="4"
+      ></v-divider>
       <v-row
         align="center"
         no-gutters
@@ -53,7 +59,10 @@ const displayValue = defineModel<string>()
 </template>
 
 <style lang="scss" scoped>
-.v-field--disabled {
-  opacity: 100;
+.v-field {
+  border: solid red 3px;
+  opacity: none;
+  color: #000000; /* Defina a cor do texto desejada para o botão desativado */
+  /* Adicione outros estilos conforme necessário */
 }
 </style>

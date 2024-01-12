@@ -1,4 +1,11 @@
 <script setup lang="ts">
+interface Props {
+  confirmDisabled: boolean
+}
+withDefaults(defineProps<Props>(), {
+  confirmDisabled: false,
+})
+
 const $emit = defineEmits<{
   'handle-reset': []
   'handle-confirm': []
@@ -14,7 +21,7 @@ const handleConfirm = () => {
 <template>
   <v-card
     max-width="300"
-    variant="plain"
+    variant="text"
   >
     <v-card-text>
       <v-row class="text-center">
@@ -28,6 +35,7 @@ const handleConfirm = () => {
         <v-col cols="6">
           <v-btn
             color="success"
+            :disabled="confirmDisabled"
             @click.prevent="handleConfirm"
             >Confirma</v-btn
           >
