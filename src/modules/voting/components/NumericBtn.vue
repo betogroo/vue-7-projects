@@ -18,9 +18,8 @@ const handleClick = () => {
 
 <template>
   <v-btn
-    class="ma-2"
     :color="color"
-    width="100"
+    max-width="100"
     @click.prevent="handleClick"
   >
     <template #default>
