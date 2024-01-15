@@ -4,5 +4,6 @@ import { ref } from 'vue'
 
 export const useVotingStore = defineStore('voting', () => {
   const voting = ref('Voting')
-  return { voting }
+  const candidateNumberLength = ref(3)
+  return { voting, candidateNumberLength }
 })

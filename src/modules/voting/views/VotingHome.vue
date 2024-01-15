@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { NumericKeyboard, ActionKeyboard, DisplayCard } from '../components'
+import { useVotingStore } from '../store/useVotingStore'
 
 const display = ref('')
 const resetDisplay = () => {
   display.value = ''
 }
+
+const store = useVotingStore()
 
 const confirmVote = () => {
   console.log(display.value)
@@ -16,7 +19,9 @@ const updateDisplay = (value: number | string) => {
   display.value += value
 }
 
-const suitorCard = computed<boolean>(() => display.value.length === 3)
+const suitorCard = computed<boolean>(
+  () => display.value.length === store.candidateNumberLength,
+)
 </script>
 <template>
   <v-container>

@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import { NumericDisplay } from '.'
+import { useVotingStore } from '../store/useVotingStore'
 interface Props {
   visible: boolean
 }
 withDefaults(defineProps<Props>(), {
   visible: false,
 })
+
+const store = useVotingStore()
 
 const displayValue = defineModel<string>()
 </script>
@@ -21,11 +25,10 @@ const displayValue = defineModel<string>()
     <v-card-text class="text-uppercase text-h6 text-start">
       <v-row align="center">
         <v-col cols="4">Número</v-col>
-        <v-col
-          ><v-otp-input
-            v-model="displayValue"
-            length="3"
-            variant="outlined"
+        <v-col>
+          <NumericDisplay
+            :content="displayValue"
+            :length="store.candidateNumberLength"
           />
         </v-col>
       </v-row>
@@ -57,12 +60,3 @@ const displayValue = defineModel<string>()
     </v-card-text>
   </v-card>
 </template>
-
-<style lang="scss" scoped>
-.v-field {
-  border: solid red 3px;
-  opacity: none;
-  color: #000000; /* Defina a cor do texto desejada para o botão desativado */
-  /* Adicione outros estilos conforme necessário */
-}
-</style>
