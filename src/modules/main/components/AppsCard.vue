@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import type { App as Props } from '../types/Main'
+interface Apps {
+  title: string
+  description: string
+  name: string
+}
 
-defineProps<Props>()
+defineProps<Apps>()
 </script>
 
 <template>
