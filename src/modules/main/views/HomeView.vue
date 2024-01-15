@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { AppsCard } from '../components'
-import type { Apps } from '../types/Main'
+import type { App } from '../types/Main'
 
-const apps: Apps[] = [
+const apps: App[] = [
   {
     title: 'Password Generator',
     description: 'Gere senhas seguras e difíceis de ser quebradas',

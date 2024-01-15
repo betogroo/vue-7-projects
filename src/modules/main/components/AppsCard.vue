@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Apps as Props } from '../types/Main'
+import type { App as Props } from '../types/Main'
 
 defineProps<Props>()
 </script>
