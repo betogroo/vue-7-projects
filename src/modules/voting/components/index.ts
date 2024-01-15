@@ -4,6 +4,7 @@ import TextContainer from './TextContainer.vue'
 import NumericKeyboard from './NumericKeyboard.vue'
 import ActionKeyboard from './ActionKeyboard.vue'
 import DisplayCard from './DisplayCard.vue'
+import CandidateDisplay from './CandidateDisplay.vue'
 
 export {
   NumericBtn,
@@ -11,5 +12,6 @@ export {
   ActionKeyboard,
   TextContainer,
   NumericKeyboard,
+  CandidateDisplay,
   DisplayCard,
 }
