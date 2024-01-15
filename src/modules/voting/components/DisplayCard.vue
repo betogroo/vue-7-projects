@@ -24,10 +24,10 @@ const displayValue = defineModel<string>()
     >
     <v-card-text class="text-uppercase text-h6 text-start">
       <v-row align="center">
-        <v-col cols="4">Número</v-col>
         <v-col>
           <NumericDisplay
             :content="displayValue"
+            label="Número"
             :length="store.candidateNumberLength"
           />
         </v-col>
@@ -36,7 +36,7 @@ const displayValue = defineModel<string>()
         align="center"
         :style="{ visibility: visible ? 'visible' : 'hidden' }"
       >
-        <v-col cols="4">Nome</v-col>
+        <v-col cols="4"><h4>Nome:</h4></v-col>
         <v-col>
           <span>Nome do Grêmio escolhido</span>
         </v-col>
