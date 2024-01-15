@@ -1,8 +1,15 @@
-export type colors = 'error' | 'warning' | 'success'
-export type messages = 'fraca' | 'razoável' | 'forte'
+import { z } from 'zod'
 
-export interface SecurityLevel {
-  color: colors
-  message: messages
-  strong?: boolean
-}
+const colorsSchema = z.enum(['error', 'warning', 'success'])
+const messagesSchema = z.enum(['fraca', 'razoável', 'forte'])
+const strongSchema = z.boolean().nullish()
+
+export const securityLevelSchema = z.object({
+  color: z.infer<typeof colorsSchema>,
+  message: z.infer<typeof messagesSchema>,
+  strong: z.infer<typeof strongSchema>,
+})
+
+export type colors = z.infer<typeof colorsSchema>
+
+export type SecurityLevel = z.infer<typeof securityLevelSchema>
