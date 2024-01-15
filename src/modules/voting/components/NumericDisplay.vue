@@ -24,7 +24,7 @@ const display = computed(() => {
   >
     <v-col
       v-if="label"
-      cols="4"
+      sm="4"
     >
       <h4>{{ label }}:</h4>
     </v-col>

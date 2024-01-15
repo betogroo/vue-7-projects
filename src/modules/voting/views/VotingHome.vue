@@ -24,14 +24,16 @@ const suitorCard = computed<boolean>(
 )
 </script>
 <template>
-  <v-container>
+  <v-container class="pa-1 ma-1">
     <v-row
       justify="center"
       no-gutters
     >
       <v-col cols="12">
-        <v-sheet class="text-h4 text-uppercase text-center"
-          >Nome da Escola</v-sheet
+        <v-sheet
+          class="text-h4 text-center"
+          :class="store.uppercase ? 'text-uppercase' : ''"
+          >{{ store.institutionName }}</v-sheet
         >
       </v-col>
       <v-col

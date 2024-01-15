@@ -19,11 +19,14 @@ const displayValue = defineModel<string>()
     :hover="false"
     variant="text"
   >
-    <v-card-title
-      class="text-center"
-      :class="store.uppercase ? 'text-uppercase' : ''"
-      >Digite o Grêmio que deseja votar</v-card-title
-    >
+    <v-row>
+      <v-col
+        class="text-h6"
+        :class="store.uppercase ? 'text-uppercase' : ''"
+      >
+        {{ store.displayCardTitle }}
+      </v-col>
+    </v-row>
     <v-card-text
       class="text-h6 text-start"
       :class="store.uppercase ? 'text-uppercase' : ''"

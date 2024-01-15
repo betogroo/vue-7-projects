@@ -12,7 +12,7 @@ withDefaults(defineProps<Props>(), {
     align="center"
     :style="{ visibility: visible ? 'visible' : 'hidden' }"
   >
-    <v-col cols="4"><h4>Nome:</h4></v-col>
+    <v-col sm="4"><h4>Nome:</h4></v-col>
     <v-col>
       <span>Nome do Grêmio escolhido</span>
     </v-col>
