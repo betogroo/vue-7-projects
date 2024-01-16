@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Candidate } from '../types/Voting'
 interface Props {
   visible: boolean
+  candidate: Candidate | undefined
 }
 withDefaults(defineProps<Props>(), {
   visible: false,
@@ -14,7 +16,7 @@ withDefaults(defineProps<Props>(), {
   >
     <v-col sm="4"><h4>Nome:</h4></v-col>
     <v-col>
-      <span>Nome do Grêmio escolhido</span>
+      <span>{{ candidate ? candidate.name : 'Candidato não encontrado' }}</span>
     </v-col>
   </v-row>
 </template>

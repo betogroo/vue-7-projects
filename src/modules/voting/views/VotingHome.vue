@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { NumericKeyboard, ActionKeyboard, DisplayCard } from '../components'
 import { useVotingStore } from '../store/useVotingStore'
+import { Candidate } from '../types/Voting'
 
 const display = ref('')
+const selectedCandidate = ref<Candidate | undefined>(undefined)
 const resetDisplay = () => {
   display.value = ''
+  selectedCandidate.value = undefined
 }
 
 const store = useVotingStore()
 
 const confirmVote = () => {
   console.log(display.value)
+  console.log(store.candidates)
 }
 
 const updateDisplay = (value: number | string) => {
@@ -19,9 +23,22 @@ const updateDisplay = (value: number | string) => {
   display.value += value
 }
 
-const suitorCard = computed<boolean>(
-  () => display.value.length === store.candidateNumberLength,
+watch(
+  () => display.value,
+  (newValue) => {
+    selectedCandidate.value = undefined
+    if (newValue.length === store.candidateNumberLength) {
+      selectedCandidate.value = store.candidates.find(
+        (candidate) => candidate.id === +display.value,
+      )
+      if (selectedCandidate.value) console.log(selectedCandidate.value)
+    }
+  },
 )
+
+const suitorCard = computed<boolean>(() => {
+  return display.value.length === store.candidateNumberLength
+})
 </script>
 <template>
   <v-container class="pa-1 ma-1">
@@ -43,6 +60,7 @@ const suitorCard = computed<boolean>(
       >
         <DisplayCard
           v-model="display"
+          :candidate="selectedCandidate"
           :visible="suitorCard"
         />
       </v-col>

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { NumericDisplay, CandidateDisplay } from '.'
 import { useVotingStore } from '../store/useVotingStore'
+import type { Candidate } from '../types/Voting'
 interface Props {
   visible: boolean
+  candidate: Candidate | undefined
 }
 withDefaults(defineProps<Props>(), {
   visible: false,
@@ -37,7 +39,10 @@ const displayValue = defineModel<string>()
         :length="store.candidateNumberLength"
       />
 
-      <CandidateDisplay :visible="visible" />
+      <CandidateDisplay
+        :candidate="candidate"
+        :visible="visible"
+      />
       <v-divider
         class="my-8"
         thickness="4"
