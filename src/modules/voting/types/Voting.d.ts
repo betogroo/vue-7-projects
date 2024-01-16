@@ -1,7 +1,8 @@
-export interface BtnAction {
-  value: string
-  color: string
-  text: string
-  action?: () => void
-  disabled?: boolean
-}
+import { z } from 'zod'
+
+export const candidateSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1, 'Obrigatório'),
+})
+
+export type Candidate = z.infer<typeof candidateSchema>
