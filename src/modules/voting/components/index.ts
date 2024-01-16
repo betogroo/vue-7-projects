@@ -4,6 +4,7 @@ import TextContainer from './TextContainer.vue'
 import NumericKeyboard from './NumericKeyboard.vue'
 import ActionKeyboard from './ActionKeyboard.vue'
 import DisplayCard from './DisplayCard.vue'
+import DisplayEnd from './DisplayEnd.vue'
 import CandidateDisplay from './CandidateDisplay.vue'
 
 export {
@@ -14,4 +15,5 @@ export {
   NumericKeyboard,
   CandidateDisplay,
   DisplayCard,
+  DisplayEnd,
 }

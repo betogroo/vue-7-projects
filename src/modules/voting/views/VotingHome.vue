@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { NumericKeyboard, ActionKeyboard, DisplayCard } from '../components'
+import {
+  NumericKeyboard,
+  ActionKeyboard,
+  DisplayCard,
+  DisplayEnd,
+} from '../components'
 import { useVotingStore } from '../store/useVotingStore'
 import { Candidate } from '../types/Voting'
 
@@ -11,11 +16,14 @@ const resetDisplay = () => {
   selectedCandidate.value = undefined
 }
 
+const test = ref(true)
+
 const store = useVotingStore()
 
 const confirmVote = () => {
   console.log(display.value)
   console.log(store.candidates)
+  test.value = false
 }
 
 const updateDisplay = (value: number | string) => {
@@ -54,15 +62,17 @@ const suitorCard = computed<boolean>(() => {
         >
       </v-col>
       <v-col
-        class="text-center"
+        class="text-center d-flex align-center justify-center"
         cols="12"
         sm="8 "
       >
         <DisplayCard
+          v-if="test"
           v-model="display"
           :candidate="selectedCandidate"
           :visible="suitorCard"
         />
+        <DisplayEnd v-else />
       </v-col>
       <v-col class="d-flex flex-column align-center">
         <NumericKeyboard
