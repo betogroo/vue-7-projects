@@ -25,6 +25,7 @@ const displayValue = defineModel<string>()
       <v-col
         class="text-h6"
         :class="store.uppercase ? 'text-uppercase' : ''"
+        cols="12"
       >
         {{ store.displayCardTitle }}
       </v-col>

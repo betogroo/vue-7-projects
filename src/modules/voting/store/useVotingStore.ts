@@ -14,14 +14,19 @@ export const useVotingStore = defineStore('voting', () => {
     {
       id: 111,
       name: 'Grêmio dos Cachorros',
+      avatar: 'https://th.bing.com/th/id/OIG.5asg2sze5JPEFgB_m8v0?pid=ImgGn',
     },
     {
       id: 222,
       name: 'Grêmio dos Gatos',
+      avatar:
+        'https://th.bing.com/th/id/OIG.Pm6TceMZjAql5dj6yiQB?w=1024&h=1024&rs=1&pid=ImgDetMain',
     },
     {
       id: 333,
       name: 'Grêmio dos Passarinhos',
+      avatar:
+        'https://th.bing.com/th/id/OIG.4i381yryCo5.5FCupq0r?w=1024&h=1024&rs=1&pid=ImgDetMain',
     },
   ]
 
