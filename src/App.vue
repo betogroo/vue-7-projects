@@ -7,7 +7,10 @@ import { AppBar } from '@/shared/components'
   <v-app>
     <AppBar v-if="!route.meta.hideNavBar" />
     <v-main>
-      <RouterView />
+      <Suspense>
+        <template #fallback>Loading</template>
+        <RouterView />
+      </Suspense>
     </v-main>
   </v-app>
 </template>

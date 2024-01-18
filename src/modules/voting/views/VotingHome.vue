@@ -7,6 +7,7 @@ import {
   DisplayEnd,
 } from '../components'
 import { useVotingStore } from '../store/useVotingStore'
+import { useVoting } from '../composables'
 import { Candidate } from '../types/Voting'
 
 const display = ref('')
@@ -19,8 +20,10 @@ const resetDisplay = () => {
 const readyToVote = ref(true)
 
 const store = useVotingStore()
+const { addVote } = useVoting()
 
-const confirmVote = () => {
+const confirmVote = async () => {
+  await addVote(+display.value)
   store.setVote(+display.value)
   readyToVote.value = false
 }

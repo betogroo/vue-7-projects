@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { useVotingStore } from '../store/useVotingStore'
+import { useVoting } from '../composables'
+
+const { fetchCandidates, fetchVotes } = useVoting()
+await fetchCandidates()
 
 const store = useVotingStore()
+await fetchVotes()
 </script>
 
 <template>
