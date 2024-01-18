@@ -2,6 +2,9 @@
 import { useInterval } from '@vueuse/core'
 import { ref, watchEffect } from 'vue'
 
+const $emit = defineEmits<{
+  releaseVote: []
+}>()
 const { counter: loading, pause } = useInterval(20, { controls: true })
 const end = ref(false)
 
@@ -27,10 +30,8 @@ watchEffect(() => {
     ></v-progress-linear>
     <div>Gravando</div>
   </v-sheet>
-  <h1
-    v-else
-    class="text-h1"
-  >
-    FIM
-  </h1>
+  <div v-else>
+    <h1 class="text-h1">FIM</h1>
+    <v-btn @click="$emit('releaseVote')">Liberar Voto</v-btn>
+  </div>
 </template>

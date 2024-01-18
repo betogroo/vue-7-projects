@@ -16,14 +16,18 @@ const resetDisplay = () => {
   selectedCandidate.value = undefined
 }
 
-const test = ref(true)
+const readyToVote = ref(true)
 
 const store = useVotingStore()
 
 const confirmVote = () => {
-  console.log(display.value)
-  console.log(store.candidates)
-  test.value = false
+  store.setVote(+display.value)
+  readyToVote.value = false
+}
+
+const enableVoting = () => {
+  resetDisplay()
+  readyToVote.value = true
 }
 
 const updateDisplay = (value: number | string) => {
@@ -67,12 +71,14 @@ const suitorCard = computed<boolean>(() => {
         sm="8 "
       >
         <DisplayCard
-          v-if="test"
+          v-if="readyToVote"
           v-model="display"
           :candidate="selectedCandidate"
           :visible="suitorCard"
         />
-        <DisplayEnd v-else />
+        <template v-else>
+          <DisplayEnd @release-vote="enableVoting" />
+        </template>
       </v-col>
       <v-col class="d-flex flex-column align-center">
         <NumericKeyboard
@@ -80,11 +86,12 @@ const suitorCard = computed<boolean>(() => {
           @handle-click="updateDisplay"
         />
         <ActionKeyboard
-          :confirm-disabled="!suitorCard"
+          :confirm-disabled="!suitorCard || selectedCandidate === undefined"
           @handle-confirm="confirmVote"
           @handle-reset="resetDisplay"
         />
       </v-col>
     </v-row>
+    <v-btn :to="{ name: 'AdminHome' }">Ver Votos</v-btn>
   </v-container>
 </template>

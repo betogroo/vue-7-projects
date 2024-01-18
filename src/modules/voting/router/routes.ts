@@ -11,6 +11,15 @@ const routes: CustomRouteRecordRaw[] = [
       requiresAuth: false,
     },
   },
+  {
+    path: '/voting/admin',
+    component: () => import('../views/AdminHome.vue'),
+    name: 'AdminHome',
+    meta: {
+      title: 'Administração e Contabilização',
+      requiresAuth: true,
+    },
+  },
 ]
 
 export default routes

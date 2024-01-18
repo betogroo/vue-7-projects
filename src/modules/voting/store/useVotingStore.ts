@@ -1,6 +1,6 @@
 // Utilities
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { Candidate } from '../types/Voting'
 
 export const useVotingStore = defineStore('voting', () => {
@@ -9,6 +9,19 @@ export const useVotingStore = defineStore('voting', () => {
   const uppercase = ref(true)
   const institutionName = ref('Nome da Escola')
   const displayCardTitle = ref('Digite os números do grêmio que deseja votar')
+  const password = ref('112233445566')
+
+  const votes = ref<number[]>([])
+
+  const setVote = (idCandidate: number) => {
+    votes.value.push(idCandidate)
+  }
+
+  const totalVotes = computed<number>(() => votes.value.length)
+
+  const totalCandidateVote = computed(() => (idCandidate: number) => {
+    return votes.value.filter((id) => id === idCandidate).length
+  })
 
   const candidates: Candidate[] = [
     {
@@ -32,10 +45,15 @@ export const useVotingStore = defineStore('voting', () => {
 
   return {
     voting,
+    votes,
     candidateNumberLength,
     uppercase,
     institutionName,
     displayCardTitle,
     candidates,
+    totalVotes,
+    setVote,
+    totalCandidateVote,
+    password,
   }
 })
