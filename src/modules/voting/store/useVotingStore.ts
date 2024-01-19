@@ -4,12 +4,14 @@ import { computed, ref } from 'vue'
 import type { Candidate, Votes } from '../types/Voting'
 
 export const useVotingStore = defineStore('voting', () => {
-  const voting = ref('Voting')
+  // config
   const candidateNumberLength = ref(3)
   const uppercase = ref(true)
   const institutionName = ref('Nome da Escola')
   const displayCardTitle = ref('Digite os números do grêmio que deseja votar')
   const password = ref('112233445566')
+
+  //
 
   const votes = ref<Votes>([])
 
@@ -27,7 +29,6 @@ export const useVotingStore = defineStore('voting', () => {
   const candidates: Candidate[] = []
 
   return {
-    voting,
     votes,
     candidateNumberLength,
     uppercase,

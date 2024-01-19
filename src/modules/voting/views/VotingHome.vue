@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
 import {
   NumericKeyboard,
   ActionKeyboard,
@@ -8,52 +7,60 @@ import {
 } from '../components'
 import { useVotingStore } from '../store/useVotingStore'
 import { useVoting } from '../composables'
-import { Candidate } from '../types/Voting'
+// import { Candidate } from '../types/Voting'
 
-const display = ref('')
-const selectedCandidate = ref<Candidate | undefined>(undefined)
-const resetDisplay = () => {
-  display.value = ''
+//const display = ref('')
+//const selectedCandidate = ref<Candidate | undefined>(undefined)
+
+/* const resetDisplay = () => {
+  numericDisplay.value = ''
   selectedCandidate.value = undefined
-}
+} */
 
-const readyToVote = ref(true)
+/* const updateDisplay = (value: number | string) => {
+  numericDisplay.value += value
+} */
+// const readyToVote = ref(true)
 
-const store = useVotingStore()
-const { addVote } = useVoting()
-
-const confirmVote = async () => {
-  await addVote(+display.value)
-  store.setVote(+display.value)
-  readyToVote.value = false
-}
-
-const enableVoting = () => {
+/* const enableVoting = () => {
   resetDisplay()
   readyToVote.value = true
-}
+} */
 
-const updateDisplay = (value: number | string) => {
-  if (display.value === '0') display.value = ''
-  display.value += value
-}
-
-watch(
-  () => display.value,
+/* watch(
+  () => numericDisplay.value,
   (newValue) => {
     selectedCandidate.value = undefined
     if (newValue.length === store.candidateNumberLength) {
       selectedCandidate.value = store.candidates.find(
-        (candidate) => candidate.id === +display.value,
-      )
-      if (selectedCandidate.value) console.log(selectedCandidate.value)
-    }
-  },
-)
+        (candidate) => candidate.id === +numericDisplay.value,
+        )
+      }
+    },
+    ) */
+/* const candidateCard = computed<boolean>(() => {
+      return numericDisplay.value.length === store.candidateNumberLength
+    }) */
 
-const suitorCard = computed<boolean>(() => {
-  return display.value.length === store.candidateNumberLength
-})
+const store = useVotingStore()
+// composable
+const {
+  numericDisplay,
+  readyToVote,
+  selectedCandidate,
+  candidateCard,
+  addVote,
+  enableVoting,
+  fetchCandidates,
+  resetDisplay,
+  updateDisplay,
+} = useVoting()
+
+const confirmVote = async () => {
+  await addVote(+numericDisplay.value)
+}
+
+await fetchCandidates()
 </script>
 <template>
   <v-container class="pa-1 ma-1">
@@ -75,9 +82,9 @@ const suitorCard = computed<boolean>(() => {
       >
         <DisplayCard
           v-if="readyToVote"
-          v-model="display"
+          v-model="numericDisplay"
           :candidate="selectedCandidate"
-          :visible="suitorCard"
+          :visible="candidateCard"
         />
         <template v-else>
           <DisplayEnd @release-vote="enableVoting" />
@@ -85,11 +92,12 @@ const suitorCard = computed<boolean>(() => {
       </v-col>
       <v-col class="d-flex flex-column align-center">
         <NumericKeyboard
-          :keyboard-disabled="suitorCard"
+          :keyboard-disabled="candidateCard"
           @handle-click="updateDisplay"
         />
         <ActionKeyboard
-          :confirm-disabled="!suitorCard || selectedCandidate === undefined"
+          :confirm-disabled="!candidateCard || selectedCandidate === undefined"
+          :reset-disabled="!numericDisplay.length"
           @handle-confirm="confirmVote"
           @handle-reset="resetDisplay"
         />

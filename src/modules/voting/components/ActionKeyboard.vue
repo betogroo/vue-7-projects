@@ -1,9 +1,11 @@
 <script setup lang="ts">
 interface Props {
   confirmDisabled: boolean
+  resetDisabled: boolean
 }
 withDefaults(defineProps<Props>(), {
   confirmDisabled: false,
+  resetDisabled: false,
 })
 
 const $emit = defineEmits<{
@@ -27,7 +29,8 @@ const handleConfirm = () => {
       <v-row class="text-center">
         <v-col cols="6">
           <v-btn
-            color="white"
+            color="warning"
+            :disabled="resetDisabled"
             @click.prevent="handleReset"
             >Corrige</v-btn
           >
