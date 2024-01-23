@@ -76,5 +76,6 @@ await fetchCandidates()
         />
       </v-col>
     </v-row>
+    <v-btn :to="{ name: 'AdminHome' }">Admin</v-btn>
   </v-container>
 </template>
