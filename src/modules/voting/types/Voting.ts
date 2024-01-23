@@ -16,5 +16,14 @@ export const votesSchema = z.array(
   }),
 )
 
+export const ConfigSchema = z.object({
+  id: z.string().nullish(),
+  created_at: z.string().nullish(),
+  uppercase: z.boolean().nullish(),
+  ready: z.boolean().nullish(),
+  organization: z.string().nullish(),
+})
+
 export type Candidate = z.infer<typeof candidateSchema>
 export type Votes = z.infer<typeof votesSchema>
+export type Config = z.infer<typeof ConfigSchema>

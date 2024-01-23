@@ -6,10 +6,10 @@ import type { Candidate, Votes } from '../types/Voting'
 export const useVotingStore = defineStore('voting', () => {
   // config
   const candidateNumberLength = ref(3)
-  const uppercase = ref(true)
   const institutionName = ref('Nome da Escola')
   const displayCardTitle = ref('Digite os números do grêmio que deseja votar')
   const password = ref('112233445566')
+  const readyToVote = ref(true)
 
   //
 
@@ -31,13 +31,13 @@ export const useVotingStore = defineStore('voting', () => {
   return {
     votes,
     candidateNumberLength,
-    uppercase,
     institutionName,
     displayCardTitle,
     candidates,
     totalVotes,
     setVote,
     totalCandidateVote,
+    readyToVote,
     password,
   }
 })

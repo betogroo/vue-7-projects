@@ -5,9 +5,11 @@ import type { Candidate } from '../types/Voting'
 interface Props {
   visible: boolean
   candidate: Candidate | undefined
+  uppercase: boolean
 }
 withDefaults(defineProps<Props>(), {
   visible: false,
+  uppercase: false,
 })
 
 const store = useVotingStore()
@@ -24,7 +26,7 @@ const displayValue = defineModel<string>()
     <v-row>
       <v-col
         class="text-h6"
-        :class="store.uppercase ? 'text-uppercase' : ''"
+        :class="uppercase ? 'text-uppercase' : ''"
         cols="12"
       >
         {{ store.displayCardTitle }}
@@ -32,7 +34,7 @@ const displayValue = defineModel<string>()
     </v-row>
     <v-card-text
       class="text-h6 text-start"
-      :class="store.uppercase ? 'text-uppercase' : ''"
+      :class="uppercase ? 'text-uppercase' : ''"
     >
       <NumericDisplay
         :content="displayValue"

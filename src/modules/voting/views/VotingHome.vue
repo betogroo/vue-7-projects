@@ -5,48 +5,16 @@ import {
   DisplayCard,
   DisplayEnd,
 } from '../components'
-import { useVotingStore } from '../store/useVotingStore'
+import { useConfigStore } from '../store/useConfigStore'
 import { useVoting } from '../composables'
-// import { Candidate } from '../types/Voting'
+import { useConfig } from '../composables'
+import { storeToRefs } from 'pinia'
 
-//const display = ref('')
-//const selectedCandidate = ref<Candidate | undefined>(undefined)
-
-/* const resetDisplay = () => {
-  numericDisplay.value = ''
-  selectedCandidate.value = undefined
-} */
-
-/* const updateDisplay = (value: number | string) => {
-  numericDisplay.value += value
-} */
-// const readyToVote = ref(true)
-
-/* const enableVoting = () => {
-  resetDisplay()
-  readyToVote.value = true
-} */
-
-/* watch(
-  () => numericDisplay.value,
-  (newValue) => {
-    selectedCandidate.value = undefined
-    if (newValue.length === store.candidateNumberLength) {
-      selectedCandidate.value = store.candidates.find(
-        (candidate) => candidate.id === +numericDisplay.value,
-        )
-      }
-    },
-    ) */
-/* const candidateCard = computed<boolean>(() => {
-      return numericDisplay.value.length === store.candidateNumberLength
-    }) */
-
-const store = useVotingStore()
+const configStore = useConfigStore()
+const { config } = storeToRefs(configStore)
 // composable
 const {
   numericDisplay,
-  readyToVote,
   selectedCandidate,
   candidateCard,
   addVote,
@@ -55,11 +23,14 @@ const {
   resetDisplay,
   updateDisplay,
 } = useVoting()
+const { fetchConfig, setConfig } = useConfig()
 
 const confirmVote = async () => {
   await addVote(+numericDisplay.value)
+  await setConfig({ id: config.value?.id, ready: false })
 }
 
+await fetchConfig()
 await fetchCandidates()
 </script>
 <template>
@@ -71,8 +42,8 @@ await fetchCandidates()
       <v-col cols="12">
         <v-sheet
           class="text-h4 text-center"
-          :class="store.uppercase ? 'text-uppercase' : ''"
-          >{{ store.institutionName }}</v-sheet
+          :class="config?.uppercase ? 'text-uppercase' : ''"
+          >{{ config?.organization }}</v-sheet
         >
       </v-col>
       <v-col
@@ -81,9 +52,10 @@ await fetchCandidates()
         sm="8 "
       >
         <DisplayCard
-          v-if="readyToVote"
+          v-if="config?.ready"
           v-model="numericDisplay"
           :candidate="selectedCandidate"
+          :uppercase="config.uppercase!"
           :visible="candidateCard"
         />
         <template v-else>

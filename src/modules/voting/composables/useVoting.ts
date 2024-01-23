@@ -1,13 +1,18 @@
 import { supabase } from '@/plugins/supabase'
 import { type Candidate, candidatesSchema } from '../types/Voting'
 import { useVotingStore } from '../store/useVotingStore'
+// import { useConfigStore } from '../store/useConfigStore'
 import { computed, ref, watch } from 'vue'
+//import { useConfig } from '.'
+//const { setConfig } = useConfig()
+
 const useVoting = () => {
   const store = useVotingStore()
+  //const configStore = useConfigStore()
 
   const numericDisplay = ref('')
   const selectedCandidate = ref<Candidate | undefined>(undefined)
-  const readyToVote = ref(true)
+  // const readyToVote = ref(true)
 
   const resetDisplay = () => {
     numericDisplay.value = ''
@@ -20,7 +25,7 @@ const useVoting = () => {
 
   const enableVoting = () => {
     resetDisplay()
-    readyToVote.value = true
+    store.readyToVote = true
   }
 
   const addVote = async (candidate_id: number) => {
@@ -30,9 +35,10 @@ const useVoting = () => {
         .insert({ candidate_id })
 
       if (err) throw Error('Não foi possível votar')
+      //await setConfig({ ready: false, id: configStore.config?.id })
       store.setVote(candidate_id)
-      readyToVote.value = false
       resetDisplay()
+      //store.readyToVote = false
     } catch (err) {
       const e = err as Error
       console.log(e)
@@ -86,31 +92,9 @@ const useVoting = () => {
     },
   )
 
-  /* const channel = supabase
-    .channel('my_channel_for_candidates')
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: '*',
-        table: 'candidates',
-      },
-      (event) => {
-        console.log(event)
-        const { new: newCandidate } = event
-        store.candidates = store.candidates.map((candidate) => {
-          if (candidate.id === newCandidate.id) {
-            return { ...candidate, ...newCandidate }
-          }
-          return candidate
-        })
-      },
-    )
-    .subscribe() */
-
   return {
     numericDisplay,
-    readyToVote,
+    // readyToVote,
     selectedCandidate,
     candidateCard,
     addVote,
