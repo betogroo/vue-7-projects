@@ -12,7 +12,8 @@ import { storeToRefs } from 'pinia'
 
 const configStore = useConfigStore()
 const { config } = storeToRefs(configStore)
-// composable
+
+// composables
 const {
   numericDisplay,
   selectedCandidate,
@@ -26,8 +27,8 @@ const {
 const { fetchConfig, setConfig } = useConfig()
 
 const confirmVote = async () => {
-  await addVote(+numericDisplay.value)
   await setConfig({ id: config.value?.id, ready: false })
+  await addVote(+numericDisplay.value)
 }
 
 await fetchConfig()
@@ -51,16 +52,16 @@ await fetchCandidates()
         cols="12"
         sm="8 "
       >
+        <template v-if="!config?.ready">
+          <DisplayEnd @release-vote="enableVoting" />
+        </template>
         <DisplayCard
-          v-if="config?.ready"
+          v-else
           v-model="numericDisplay"
           :candidate="selectedCandidate"
           :uppercase="config.uppercase!"
           :visible="candidateCard"
         />
-        <template v-else>
-          <DisplayEnd @release-vote="enableVoting" />
-        </template>
       </v-col>
       <v-col class="d-flex flex-column align-center">
         <NumericKeyboard
@@ -75,6 +76,5 @@ await fetchCandidates()
         />
       </v-col>
     </v-row>
-    <v-btn :to="{ name: 'AdminHome' }">Ver Votos</v-btn>
   </v-container>
 </template>

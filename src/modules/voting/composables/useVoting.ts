@@ -36,8 +36,8 @@ const useVoting = () => {
 
       if (err) throw Error('Não foi possível votar')
       //await setConfig({ ready: false, id: configStore.config?.id })
-      store.setVote(candidate_id)
       resetDisplay()
+      store.setVote(candidate_id)
       //store.readyToVote = false
     } catch (err) {
       const e = err as Error
