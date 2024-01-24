@@ -9,6 +9,7 @@ const routes: CustomRouteRecordRaw[] = [
     meta: {
       title: 'Sistema de Votação',
       requiresAuth: false,
+      hideNavBar: true,
     },
   },
   {

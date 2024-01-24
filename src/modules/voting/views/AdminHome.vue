@@ -1,7 +1,25 @@
 <script setup lang="ts">
 import { useVotingStore } from '../store/useVotingStore'
+import { useConfig, useVoting, useVoters } from '../composables'
+
+const { fetchCandidates, fetchVotes } = useVoting()
+const { setConfig, fetchConfig } = useConfig()
+const { fetchVoters } = useVoters()
+await fetchCandidates()
 
 const store = useVotingStore()
+import { useConfigStore } from '../store/useConfigStore'
+import { storeToRefs } from 'pinia'
+
+const configStore = useConfigStore()
+const { config } = storeToRefs(configStore)
+
+const enableVoting = async () => {
+  console.log(111)
+  setConfig({ ready: true, id: config.value!.id })
+}
+await fetchConfig()
+await fetchVotes()
 </script>
 
 <template>
@@ -22,4 +40,6 @@ const store = useVotingStore()
   </v-list>
   Total de votos: {{ store.totalVotes }}
   <v-btn :to="{ name: 'VotingHome' }">Voltar à Urna</v-btn>
+  <v-btn @click="enableVoting">LiberarVoto</v-btn>
+  <v-btn @click="fetchVoters">Log Voters</v-btn>
 </template>

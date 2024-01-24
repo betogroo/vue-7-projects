@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { useInterval } from '@vueuse/core'
 import { ref, watchEffect } from 'vue'
-
-const $emit = defineEmits<{
-  releaseVote: []
-}>()
-const { counter: loading, pause } = useInterval(20, { controls: true })
+const { counter: loading, pause } = useInterval(5, { controls: true })
 const end = ref(false)
 
 watchEffect(() => {
@@ -32,6 +28,5 @@ watchEffect(() => {
   </v-sheet>
   <div v-else>
     <h1 class="text-h1">FIM</h1>
-    <v-btn @click="$emit('releaseVote')">Liberar Voto</v-btn>
   </div>
 </template>
