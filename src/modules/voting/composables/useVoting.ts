@@ -50,7 +50,6 @@ const useVoting = () => {
       const { data, error: err } = await supabase.from('votes').select('*')
       if (err) throw err
       store.votes = data
-      console.log(data)
     } catch (err) {
       const e = err as Error
       console.log(e)

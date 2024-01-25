@@ -1,5 +1,6 @@
 import useVoting from './useVoting'
 import useVoters from './useVoters'
 import useConfig from './useConfig'
+import useElection from './useElection'
 
-export { useConfig, useVoters, useVoting }
+export { useElection, useConfig, useVoters, useVoting }

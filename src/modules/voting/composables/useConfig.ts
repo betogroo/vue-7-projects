@@ -13,6 +13,7 @@ const useConfig = () => {
         .single()
       if (err) throw err
       store.config = data
+      console.log(data)
     } catch (err) {
       const e = err as Error
       console.log(e)

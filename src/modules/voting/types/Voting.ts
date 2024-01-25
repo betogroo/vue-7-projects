@@ -31,7 +31,16 @@ export const voterSchema = z.object({
   ra: z.number(),
 })
 
+export const electionSchema = z.object({
+  id: z.number().nullish(),
+  created_at: z.string().nullish(),
+  date: z.string(),
+  name: z.string().min(1, 'Obrigatório'),
+  description: z.string(),
+})
+
 export type Candidate = z.infer<typeof candidateSchema>
 export type Votes = z.infer<typeof votesSchema>
 export type Config = z.infer<typeof ConfigSchema>
 export type Voter = z.infer<typeof voterSchema>
+export type Election = z.infer<typeof electionSchema>
