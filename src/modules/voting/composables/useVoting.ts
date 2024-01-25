@@ -41,6 +41,7 @@ const useVoting = () => {
         .eq('election_id', election_id)
       if (err) throw err
       store.votes = data
+      return data
     } catch (err) {
       const e = err as Error
       console.log(e)
@@ -58,6 +59,7 @@ const useVoting = () => {
       if (data) {
         const parsedData = candidatesSchema.parse(data)
         store.candidates = parsedData
+        return data || null
         //console.log(data)
       }
     } catch (err) {

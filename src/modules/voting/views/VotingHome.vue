@@ -19,19 +19,15 @@ const {
   selectedCandidate,
   candidateCard,
   addVote,
-  fetchCandidates,
   resetDisplay,
   updateDisplay,
 } = useVoting()
-const { getElection, setReady } = useElection()
+const { setReady } = useElection()
 
 const confirmVote = async () => {
   await addVote(+numericDisplay.value, 7)
   await setReady(7, false)
 }
-
-await getElection(7)
-await fetchCandidates()
 </script>
 <template>
   <v-container class="pa-1 ma-1">

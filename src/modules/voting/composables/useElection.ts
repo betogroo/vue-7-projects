@@ -11,9 +11,9 @@ const useElection = () => {
         .eq('id', id)
         .returns<Election>()
         .single()
-
       if (err) throw err
       store.election = data
+      return data || null
     } catch (err) {
       const e = err as Error
       console.log(e)

@@ -2,7 +2,7 @@
 import { useVotingStore } from '../store/useVotingStore'
 import { useVoting, useVoters, useElection } from '../composables'
 
-const { fetchCandidates, fetchVotes } = useVoting()
+const { fetchCandidates } = useVoting()
 const { fetchVoters } = useVoters()
 const { getElection, addElection, setReady } = useElection()
 await fetchCandidates()
@@ -15,8 +15,6 @@ const enableVoting = async () => {
   console.log('Enabling Voting')
   setReady(7, true)
 }
-await getElection(7)
-await fetchVotes(7)
 
 const election = ref<Election>({
   organization: '',
