@@ -11,18 +11,16 @@ export const useVotingStore = defineStore('voting', () => {
   const password = ref('112233445566')
   const readyToVote = ref(true)
 
-  //
-
   const votes = ref<Votes>([])
 
-  const setVote = (idCandidate: number) => {
-    votes.value.push({ candidate_id: idCandidate })
+  const setVote = (candidate_id: number, election_id: number) => {
+    votes.value.push({ candidate_id, election_id })
   }
 
   const totalVotes = computed<number>(() => votes.value.length)
 
-  const totalCandidateVote = computed(() => (idCandidate: number) => {
-    return votes.value.filter((item) => item.candidate_id === idCandidate)
+  const totalCandidateVote = computed(() => (candidate_id: number) => {
+    return votes.value.filter((item) => item.candidate_id === candidate_id)
       .length
   })
 

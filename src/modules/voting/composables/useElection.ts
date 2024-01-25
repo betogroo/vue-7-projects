@@ -1,6 +1,6 @@
 import { supabase } from '@/plugins/supabase'
-import { type Election } from '../types/Voting'
 import { useElectionStore } from '../store/useElectionStore'
+import type { Election } from '../types/Voting'
 const useElection = () => {
   const store = useElectionStore()
   const getElection = async (id: number) => {
@@ -11,8 +11,9 @@ const useElection = () => {
         .eq('id', id)
         .returns<Election>()
         .single()
+
       if (err) throw err
-      if (data) store.election = data
+      store.election = data
     } catch (err) {
       const e = err as Error
       console.log(e)
@@ -32,7 +33,43 @@ const useElection = () => {
       console.log(e)
     }
   }
-  return { getElection, addElection }
+
+  const setReady = async (id: number, value: boolean) => {
+    try {
+      const { data, error: err } = await supabase
+        .from('election')
+        .update({ ready: value })
+        .eq('id', id)
+      if (err) throw err
+      console.log(data)
+      console.log(value)
+    } catch (err) {
+      const e = err as Error
+      console.log(e)
+    }
+  }
+
+  supabase
+    .channel('election')
+    .on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: '*',
+        table: 'election',
+      },
+      (event) => {
+        if (store.election && event.old.id === store.election.id) {
+          console.log(event)
+          console.log('Vai mudar a tabela')
+          const { new: newConfig } = event
+          store.election = newConfig as Election
+        }
+      },
+    )
+    .subscribe()
+
+  return { getElection, addElection, setReady }
 }
 
 export default useElection

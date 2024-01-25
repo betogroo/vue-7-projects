@@ -5,13 +5,13 @@ import {
   DisplayCard,
   DisplayEnd,
 } from '../components'
-import { useConfigStore } from '../store/useConfigStore'
 import { useVoting } from '../composables'
-import { useConfig } from '../composables'
+import { useElection } from '../composables'
 import { storeToRefs } from 'pinia'
+import { useElectionStore } from '../store/useElectionStore'
 
-const configStore = useConfigStore()
-const { config } = storeToRefs(configStore)
+const electionStore = useElectionStore()
+const { election } = storeToRefs(electionStore)
 
 // composables
 const {
@@ -19,19 +19,18 @@ const {
   selectedCandidate,
   candidateCard,
   addVote,
-  enableVoting,
   fetchCandidates,
   resetDisplay,
   updateDisplay,
 } = useVoting()
-const { fetchConfig, setConfig } = useConfig()
+const { getElection, setReady } = useElection()
 
 const confirmVote = async () => {
-  await setConfig({ id: config.value?.id, ready: false })
-  await addVote(+numericDisplay.value)
+  await addVote(+numericDisplay.value, 7)
+  await setReady(7, false)
 }
 
-await fetchConfig()
+await getElection(7)
 await fetchCandidates()
 </script>
 <template>
@@ -43,8 +42,8 @@ await fetchCandidates()
       <v-col cols="12">
         <v-sheet
           class="text-h4 text-center"
-          :class="config?.uppercase ? 'text-uppercase' : ''"
-          >{{ config?.organization }}</v-sheet
+          :class="election?.uppercase ? 'text-uppercase' : ''"
+          >{{ election?.organization }}</v-sheet
         >
       </v-col>
       <v-col
@@ -52,14 +51,14 @@ await fetchCandidates()
         cols="12"
         sm="8 "
       >
-        <template v-if="!config?.ready">
-          <DisplayEnd @release-vote="enableVoting" />
+        <template v-if="!election?.ready">
+          <DisplayEnd />
         </template>
         <DisplayCard
           v-else
           v-model="numericDisplay"
           :candidate="selectedCandidate"
-          :uppercase="config.uppercase!"
+          :uppercase="election.uppercase!"
           :visible="candidateCard"
         />
       </v-col>

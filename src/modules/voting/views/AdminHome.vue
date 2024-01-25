@@ -1,27 +1,21 @@
 <script setup lang="ts">
 import { useVotingStore } from '../store/useVotingStore'
-import { useConfig, useVoting, useVoters, useElection } from '../composables'
+import { useVoting, useVoters, useElection } from '../composables'
 
 const { fetchCandidates, fetchVotes } = useVoting()
-const { setConfig, fetchConfig } = useConfig()
 const { fetchVoters } = useVoters()
-const { getElection, addElection } = useElection()
+const { getElection, addElection, setReady } = useElection()
 await fetchCandidates()
 
 const store = useVotingStore()
-import { useConfigStore } from '../store/useConfigStore'
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { Election } from '../types/Voting'
 
-const configStore = useConfigStore()
-const { config } = storeToRefs(configStore)
-
 const enableVoting = async () => {
-  console.log(111)
-  setConfig({ ready: true, id: config.value!.id })
+  console.log('Enabling Voting')
+  setReady(7, true)
 }
-await fetchConfig()
+await getElection(7)
 await fetchVotes()
 
 const election = ref<Election>({
@@ -57,7 +51,6 @@ const handleAddElection = async () => {
   <v-btn @click="enableVoting">LiberarVoto</v-btn>
   <v-btn @click="fetchVoters">Log Voters</v-btn>
   <v-btn @click="getElection(7)">Log Election</v-btn>
-  <v-btn @click="fetchConfig">Log Config</v-btn>
 
   <v-row>
     <v-col cols="6">

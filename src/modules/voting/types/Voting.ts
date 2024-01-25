@@ -13,6 +13,7 @@ export const votesSchema = z.array(
     id: z.string().uuid().nullish(),
     created_at: z.string().nullish(),
     candidate_id: z.number(),
+    election_id: z.number(),
   }),
 )
 
