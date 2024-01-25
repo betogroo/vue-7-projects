@@ -1,6 +1,8 @@
 import { supabase } from '@/plugins/supabase'
-import type { Election } from '../types/Voting'
+import { type Election } from '../types/Voting'
+import { useElectionStore } from '../store/useElectionStore'
 const useElection = () => {
+  const store = useElectionStore()
   const getElection = async (id: number) => {
     try {
       const { data, error: err } = await supabase
@@ -10,7 +12,7 @@ const useElection = () => {
         .returns<Election>()
         .single()
       if (err) throw err
-      if (data) console.log(data)
+      if (data) store.election = data
     } catch (err) {
       const e = err as Error
       console.log(e)

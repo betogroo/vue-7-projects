@@ -37,6 +37,9 @@ export const electionSchema = z.object({
   date: z.string(),
   name: z.string().min(1, 'Obrigatório'),
   description: z.string(),
+  uppercase: z.boolean().nullish(),
+  ready: z.boolean().nullish(),
+  organization: z.string().nullish(),
 })
 
 export type Candidate = z.infer<typeof candidateSchema>

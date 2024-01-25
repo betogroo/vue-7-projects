@@ -25,6 +25,7 @@ await fetchConfig()
 await fetchVotes()
 
 const election = ref<Election>({
+  organization: '',
   name: '',
   description: '',
   date: '',
@@ -55,7 +56,7 @@ const handleAddElection = async () => {
   <v-btn :to="{ name: 'VotingHome' }">Voltar à Urna</v-btn>
   <v-btn @click="enableVoting">LiberarVoto</v-btn>
   <v-btn @click="fetchVoters">Log Voters</v-btn>
-  <v-btn @click="getElection(1)">Log Election</v-btn>
+  <v-btn @click="getElection(7)">Log Election</v-btn>
   <v-btn @click="fetchConfig">Log Config</v-btn>
 
   <v-row>
@@ -63,8 +64,12 @@ const handleAddElection = async () => {
       <v-card title="Teste Cadastro Eleição">
         <v-form @submit.prevent="handleAddElection">
           <v-text-field
+            v-model="election.organization"
+            label="Nome da Organização"
+          />
+          <v-text-field
             v-model="election.name"
-            label="Nome"
+            label="Nome da Eleição"
           />
           <v-text-field
             v-model="election.description"
@@ -72,7 +77,7 @@ const handleAddElection = async () => {
           />
           <v-text-field
             v-model="election.date"
-            label="Data"
+            label="Data da Eleição"
             type="date"
           />
           <v-btn type="submit">Cadastrar</v-btn>
