@@ -33,9 +33,12 @@ const useVoting = () => {
     }
   }
 
-  const fetchVotes = async () => {
+  const fetchVotes = async (election_id: number) => {
     try {
-      const { data, error: err } = await supabase.from('votes').select('*')
+      const { data, error: err } = await supabase
+        .from('votes')
+        .select('*')
+        .eq('election_id', election_id)
       if (err) throw err
       store.votes = data
     } catch (err) {

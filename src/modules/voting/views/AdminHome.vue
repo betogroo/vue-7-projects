@@ -16,7 +16,7 @@ const enableVoting = async () => {
   setReady(7, true)
 }
 await getElection(7)
-await fetchVotes()
+await fetchVotes(7)
 
 const election = ref<Election>({
   organization: '',
