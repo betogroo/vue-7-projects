@@ -60,7 +60,7 @@ const confirmVote = async () => {
       </v-col>
       <v-col class="d-flex flex-column align-center">
         <NumericKeyboard
-          :keyboard-disabled="candidateCard"
+          :keyboard-disabled="candidateCard || !election?.ready"
           @handle-click="updateDisplay"
         />
         <ActionKeyboard
