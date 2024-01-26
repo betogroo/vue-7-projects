@@ -14,19 +14,12 @@ export const votesSchema = z.array(
     created_at: z.string().nullish(),
     candidate_id: z.number(),
     election_id: z.number(),
+    voter_id: z.string().uuid().nullish(),
   }),
 )
 
-export const ConfigSchema = z.object({
-  id: z.string().nullish(),
-  created_at: z.string().nullish(),
-  uppercase: z.boolean().nullish(),
-  ready: z.boolean().nullish(),
-  organization: z.string().nullish(),
-})
-
 export const voterSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   created_at: z.string(),
   name: z.string().min(1, 'Obrigatório'),
   ra: z.number(),
@@ -45,6 +38,5 @@ export const electionSchema = z.object({
 
 export type Candidate = z.infer<typeof candidateSchema>
 export type Votes = z.infer<typeof votesSchema>
-export type Config = z.infer<typeof ConfigSchema>
 export type Voter = z.infer<typeof voterSchema>
 export type Election = z.infer<typeof electionSchema>

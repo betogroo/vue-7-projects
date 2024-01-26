@@ -1,10 +1,12 @@
 import { supabase } from '@/plugins/supabase'
 import { type Candidate, candidatesSchema } from '../types/Voting'
 import { useVotingStore } from '../store/useVotingStore'
+import { useVoterStore } from '../store/useVotersStore'
 import { computed, ref, watch } from 'vue'
 
 const useVoting = () => {
   const store = useVotingStore()
+  const voterStore = useVoterStore()
 
   const numericDisplay = ref('')
   const selectedCandidate = ref<Candidate | undefined>(undefined)
@@ -19,10 +21,12 @@ const useVoting = () => {
   }
 
   const addVote = async (candidate_id: number, election_id: number) => {
+    const voter_id = voterStore.randomVoter()
+    console.log(voter_id)
     try {
       const { error: err } = await supabase
         .from('votes')
-        .insert({ candidate_id, election_id })
+        .insert({ candidate_id, election_id, voter_id })
 
       if (err) throw Error('Não foi possível votar')
       resetDisplay()
