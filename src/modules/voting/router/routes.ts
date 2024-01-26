@@ -37,11 +37,11 @@ const routes: CustomRouteRecordRaw[] = [
       requiresAuth: false,
       hideNavBar: false,
     },
-    props: true,
+    props: (router) => ({ id: +router.params.id }),
     beforeEnter: async (to, from, next) => {
       const { getElection } = useElection()
       try {
-        const election = await getElection(7)
+        const election = await getElection(+to.params.id)
         if (!election) next({ name: 'AboutView' })
         next()
       } catch (err) {
@@ -66,7 +66,7 @@ const routes: CustomRouteRecordRaw[] = [
         next()
       } catch (err) {
         console.log(err)
-        next({ path: '/:catchAll(.*)' })
+        next({ name: 'AboutView' })
       }
       //console.log(store)
     },

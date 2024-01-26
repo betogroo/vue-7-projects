@@ -9,6 +9,7 @@ const useElection = () => {
         .from('election')
         .select('*')
         .returns<Election[]>()
+        .order('id')
       if (err) throw err
       if (!data.length) throw Error('Nenhuma eleição cadastrada!')
       store.elections = data
@@ -75,11 +76,22 @@ const useElection = () => {
         table: 'election',
       },
       (event) => {
+        // update election state
         if (store.election && event.old.id === store.election.id) {
           console.log(event)
           console.log('Vai mudar a tabela')
           const { new: newConfig } = event
           store.election = newConfig as Election
+        }
+        // update elections state
+        const index = store.elections.findIndex(
+          (item) => item.id === event.old.id,
+        )
+        if (index !== -1) {
+          console.log(event, index)
+          store.elections[index] = event.new as Election
+        } else {
+          console.log('nao achou')
         }
       },
     )
