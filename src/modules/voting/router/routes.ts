@@ -13,7 +13,6 @@ const routes: CustomRouteRecordRaw[] = [
       hideNavBar: true,
     },
     beforeEnter: async () => {
-      //const store = useElectionStore()
       const { getElection } = useElection()
       const { fetchCandidates } = useVoting()
       try {
@@ -35,7 +34,6 @@ const routes: CustomRouteRecordRaw[] = [
       requiresAuth: true,
     },
     beforeEnter: async (to, from, next) => {
-      //const store = useElectionStore()
       const { getElection } = useElection()
       const { fetchVotes } = useVoting()
       try {
