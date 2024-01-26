@@ -1,8 +1,11 @@
 import { defineStore } from 'pinia'
 import type { Election } from '../types/Voting'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 export const useElectionStore = defineStore('election', () => {
+  const elections = ref<Election[]>([])
   const election = ref<Election>()
-  return { election }
+
+  const totalElections = computed(() => elections.value.length)
+  return { election, elections, totalElections }
 })

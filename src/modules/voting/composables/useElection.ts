@@ -3,6 +3,22 @@ import { useElectionStore } from '../store/useElectionStore'
 import type { Election } from '../types/Voting'
 const useElection = () => {
   const store = useElectionStore()
+  const fetchElections = async () => {
+    try {
+      const { data, error: err } = await supabase
+        .from('election')
+        .select('*')
+        .returns<Election[]>()
+      if (err) throw err
+      if (!data.length) throw Error('Nenhuma eleição cadastrada!')
+      store.elections = data
+      return data
+    } catch (err) {
+      const e = err as Error
+      console.log(e)
+    }
+  }
+
   const getElection = async (id: number) => {
     try {
       const { data, error: err } = await supabase
@@ -69,7 +85,7 @@ const useElection = () => {
     )
     .subscribe()
 
-  return { getElection, addElection, setReady }
+  return { fetchElections, getElection, addElection, setReady }
 }
 
 export default useElection

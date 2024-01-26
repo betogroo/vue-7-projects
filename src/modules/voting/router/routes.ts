@@ -29,21 +29,40 @@ const routes: CustomRouteRecordRaw[] = [
     },
   },
   {
+    path: '/election/:id',
+    component: () => import('../views/ElectionHome.vue'),
+    name: 'ElectionHome',
+    meta: {
+      title: 'Sistema de Votação',
+      requiresAuth: false,
+      hideNavBar: false,
+    },
+    props: true,
+    beforeEnter: async (to, from, next) => {
+      const { getElection } = useElection()
+      try {
+        const election = await getElection(7)
+        if (!election) next({ name: 'AboutView' })
+        next()
+      } catch (err) {
+        console.log(err)
+      }
+      console.log(to.params.id)
+    },
+  },
+  {
     path: '/voting/admin',
     component: () => import('../views/AdminHome.vue'),
     name: 'AdminHome',
     meta: {
-      title: 'Administração e Contabilização',
+      title: 'Administração',
       requiresAuth: true,
     },
     beforeEnter: async (to, from, next) => {
-      const { getElection } = useElection()
-      const { fetchVotes } = useVoting()
+      const { fetchElections } = useElection()
       try {
-        const election = await getElection(7)
-        if (!election) throw Error('Eleição não encontrada')
-        const votes = await fetchVotes(7)
-        if (!votes?.length) throw Error('Votos não encontrados')
+        const elections = await fetchElections()
+        if (!elections) next({ name: 'AboutView' })
         next()
       } catch (err) {
         console.log(err)
