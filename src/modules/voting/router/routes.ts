@@ -4,7 +4,7 @@ import { useElection, useVoters, useCandidates } from '../composables'
 
 const routes: CustomRouteRecordRaw[] = [
   {
-    path: '/voting',
+    path: '/voting/:id',
     component: () => import('../views/VotingHome.vue'),
     name: 'VotingHome',
     meta: {
@@ -12,13 +12,15 @@ const routes: CustomRouteRecordRaw[] = [
       requiresAuth: false,
       hideNavBar: true,
     },
-    beforeEnter: async () => {
+    props: (router) => ({ id: +router.params.id }),
+    beforeEnter: async (to) => {
+      const election_id = +to.params.id
       const { getElection } = useElection()
       const { fetchVoters } = useVoters()
       const { fetchCandidates } = useCandidates()
       try {
-        const election = await getElection(7)
-        await fetchCandidates(7)
+        const election = await getElection(election_id)
+        await fetchCandidates(election_id)
         const voters = await fetchVoters()
         if (!election)
           console.log('Eleição n]ão encontrada. Criar uma rota para erro')
