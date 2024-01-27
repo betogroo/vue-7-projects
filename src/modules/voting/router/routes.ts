@@ -13,8 +13,10 @@ const routes: CustomRouteRecordRaw[] = [
       hideNavBar: true,
     },
     props: (router) => ({ id: +router.params.id }),
-    beforeEnter: async (to) => {
+    beforeEnter: async (to, from, next) => {
       const election_id = +to.params.id
+      if (!election_id)
+        console.log('Eleição n]ão encontrada. Criar uma rota para erro')
       const { getElection } = useElection()
       const { fetchVoters } = useVoters()
       const { fetchCandidates } = useCandidates()
@@ -25,6 +27,7 @@ const routes: CustomRouteRecordRaw[] = [
         if (!election)
           console.log('Eleição n]ão encontrada. Criar uma rota para erro')
         if (!voters) console.log('Não ha eleitores')
+        next()
       } catch (err) {
         console.log(err)
       }
