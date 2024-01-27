@@ -5,6 +5,7 @@ export const candidateSchema = z.object({
   name: z.string().min(1, 'Obrigatório'),
   avatar: z.string().url('Url inválida'),
   created_at: z.string(),
+  election_id: z.number(),
 })
 
 export const candidatesSchema = z.array(candidateSchema)
@@ -34,6 +35,7 @@ export const electionSchema = z.object({
   uppercase: z.boolean().nullish(),
   ready: z.boolean().nullish(),
   organization: z.string().nullish(),
+  candidate_number_length: z.number(),
 })
 
 export type Candidate = z.infer<typeof candidateSchema>

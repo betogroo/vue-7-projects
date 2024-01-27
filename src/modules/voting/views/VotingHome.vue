@@ -5,8 +5,7 @@ import {
   DisplayCard,
   DisplayEnd,
 } from '../components'
-import { useVoting } from '../composables'
-import { useElection } from '../composables'
+import { useVoting, useElection } from '../composables'
 import { storeToRefs } from 'pinia'
 import { useElectionStore } from '../store/useElectionStore'
 
@@ -17,7 +16,7 @@ const { election } = storeToRefs(electionStore)
 const {
   numericDisplay,
   selectedCandidate,
-  candidateCard,
+  candidateCard, //
   addVote,
   resetDisplay,
   updateDisplay,
@@ -54,6 +53,7 @@ const confirmVote = async () => {
           v-else
           v-model="numericDisplay"
           :candidate="selectedCandidate"
+          :numeric-display-length="election.candidate_number_length"
           :uppercase="election.uppercase!"
           :visible="candidateCard"
         />

@@ -6,6 +6,7 @@ interface Props {
   visible: boolean
   candidate: Candidate | undefined
   uppercase: boolean
+  numericDisplayLength: number
 }
 withDefaults(defineProps<Props>(), {
   visible: false,
@@ -39,7 +40,7 @@ const displayValue = defineModel<string>()
       <NumericDisplay
         :content="displayValue"
         label="Número"
-        :length="store.candidateNumberLength"
+        :length="numericDisplayLength"
       />
 
       <CandidateDisplay

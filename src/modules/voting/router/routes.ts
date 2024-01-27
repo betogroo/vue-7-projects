@@ -1,6 +1,6 @@
 // Composables
 import { CustomRouteRecordRaw } from 'vue-router'
-import { useElection, useVoting, useVoters } from '../composables'
+import { useElection, useVoters, useCandidates } from '../composables'
 
 const routes: CustomRouteRecordRaw[] = [
   {
@@ -14,15 +14,15 @@ const routes: CustomRouteRecordRaw[] = [
     },
     beforeEnter: async () => {
       const { getElection } = useElection()
-      const { fetchCandidates } = useVoting()
       const { fetchVoters } = useVoters()
+      const { fetchCandidates } = useCandidates()
       try {
         const election = await getElection(7)
+        await fetchCandidates(7)
         const voters = await fetchVoters()
         if (!election)
           console.log('Eleição n]ão encontrada. Criar uma rota para erro')
-        if (!voters) console.log('Não a eleitores')
-        await fetchCandidates()
+        if (!voters) console.log('Não ha eleitores')
       } catch (err) {
         console.log(err)
       }
@@ -39,9 +39,13 @@ const routes: CustomRouteRecordRaw[] = [
     },
     props: (router) => ({ id: +router.params.id }),
     beforeEnter: async (to, from, next) => {
+      const election_id = +to.params.id
       const { getElection } = useElection()
+      const { fetchCandidates } = useCandidates()
       try {
-        const election = await getElection(+to.params.id)
+        const election = await getElection(election_id)
+        const candidates = await fetchCandidates(election_id)
+        console.log(candidates)
         if (!election) next({ name: 'AboutView' })
         next()
       } catch (err) {

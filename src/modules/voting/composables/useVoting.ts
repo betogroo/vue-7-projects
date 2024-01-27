@@ -2,11 +2,17 @@ import { supabase } from '@/plugins/supabase'
 import { type Candidate, candidatesSchema } from '../types/Voting'
 import { useVotingStore } from '../store/useVotingStore'
 import { useVoterStore } from '../store/useVotersStore'
+import { useCandidateStore } from '../store/useCandidateStore'
+import { useElectionStore } from '../store/useElectionStore'
 import { computed, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
 const useVoting = () => {
   const store = useVotingStore()
   const voterStore = useVoterStore()
+  const candidateStore = useCandidateStore()
+  const electionStore = useElectionStore()
+  const { election } = storeToRefs(electionStore)
 
   const numericDisplay = ref('')
   const selectedCandidate = ref<Candidate | undefined>(undefined)
@@ -73,15 +79,17 @@ const useVoting = () => {
   }
 
   const candidateCard = computed<boolean>(() => {
-    return numericDisplay.value.length === store.candidateNumberLength
+    return (
+      numericDisplay.value.length === election.value?.candidate_number_length
+    )
   })
 
   watch(
     () => numericDisplay.value,
     (newValue) => {
       selectedCandidate.value = undefined
-      if (newValue.length === store.candidateNumberLength) {
-        selectedCandidate.value = store.candidates.find(
+      if (newValue.length === election.value?.candidate_number_length) {
+        selectedCandidate.value = candidateStore.candidates.find(
           (candidate) => candidate.id === +numericDisplay.value,
         )
       }
