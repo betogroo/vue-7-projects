@@ -4,6 +4,7 @@ import { BallotBox } from '../types/Voting'
 
 export const useBallotBoxStore = defineStore('ballotBox', () => {
   const ballotBox = ref<BallotBox>()
+  const ballotsBox = ref<BallotBox[]>([])
 
-  return { ballotBox }
+  return { ballotBox, ballotsBox }
 })
