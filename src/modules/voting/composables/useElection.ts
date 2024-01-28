@@ -43,8 +43,11 @@ const useElection = () => {
         .from('election')
         .insert(values)
         .select()
+        .returns<Election[]>()
+        .single()
       if (err) throw err
       console.log(data)
+      return data.id
     } catch (err) {
       const e = err as Error
       console.log(e)

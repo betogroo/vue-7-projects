@@ -53,7 +53,7 @@ const confirmVote = async () => {
           v-else
           v-model="numericDisplay"
           :candidate="selectedCandidate"
-          :numeric-display-length="election.candidate_number_length"
+          :numeric-display-length="+election.candidate_number_length"
           :uppercase="election.uppercase!"
           :visible="candidateCard"
         />

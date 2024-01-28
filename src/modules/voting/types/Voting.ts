@@ -35,7 +35,7 @@ export const electionSchema = z.object({
   uppercase: z.boolean().nullish(),
   ready: z.boolean().nullish(),
   organization: z.string().nullish(),
-  candidate_number_length: z.number(),
+  candidate_number_length: z.number().default(3),
 })
 
 export const ballotBoxSchema = z.object({
