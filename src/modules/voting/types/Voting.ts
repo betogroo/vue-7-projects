@@ -38,7 +38,15 @@ export const electionSchema = z.object({
   candidate_number_length: z.number(),
 })
 
+export const ballotBoxSchema = z.object({
+  id: z.string().uuid(),
+  created_at: z.string(),
+  ready: z.boolean().default(false),
+  election_id: z.number(),
+})
+
 export type Candidate = z.infer<typeof candidateSchema>
 export type Votes = z.infer<typeof votesSchema>
 export type Voter = z.infer<typeof voterSchema>
 export type Election = z.infer<typeof electionSchema>
+export type BallotBox = z.infer<typeof ballotBoxSchema>
