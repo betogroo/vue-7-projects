@@ -1,7 +1,7 @@
 {
   "Pinia Options Store Boilerplate": {
     "scope": "javascript,typescript",
-    "prefix": "pinia-options",
+    "prefix": "v3-pinia-options",
     "body": [
       "import { defineStore, acceptHMRUpdate } from 'pinia'",
       "",
@@ -22,7 +22,7 @@
   },
   "Pinia Setup Store Boilerplate": {
     "scope": "javascript,typescript",
-    "prefix": "pinia-setup",
+    "prefix": "v3-pinia-setup",
     "body": [
       "import { defineStore, acceptHMRUpdate } from 'pinia'",
       "",

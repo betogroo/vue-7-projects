@@ -5,34 +5,28 @@ import {
   DisplayCard,
   DisplayEnd,
 } from '../components'
-import { useConfigStore } from '../store/useConfigStore'
-import { useVoting } from '../composables'
-import { useConfig } from '../composables'
+import { useVoting, useElection } from '../composables'
 import { storeToRefs } from 'pinia'
+import { useElectionStore } from '../store/useElectionStore'
 
-const configStore = useConfigStore()
-const { config } = storeToRefs(configStore)
+const electionStore = useElectionStore()
+const { election } = storeToRefs(electionStore)
 
 // composables
 const {
   numericDisplay,
   selectedCandidate,
-  candidateCard,
+  candidateCard, //
   addVote,
-  enableVoting,
-  fetchCandidates,
   resetDisplay,
   updateDisplay,
 } = useVoting()
-const { fetchConfig, setConfig } = useConfig()
+const { setReady } = useElection()
 
 const confirmVote = async () => {
-  await setConfig({ id: config.value?.id, ready: false })
-  await addVote(+numericDisplay.value)
+  await addVote(+numericDisplay.value, 7)
+  await setReady(7, false)
 }
-
-await fetchConfig()
-await fetchCandidates()
 </script>
 <template>
   <v-container class="pa-1 ma-1">
@@ -43,8 +37,8 @@ await fetchCandidates()
       <v-col cols="12">
         <v-sheet
           class="text-h4 text-center"
-          :class="config?.uppercase ? 'text-uppercase' : ''"
-          >{{ config?.organization }}</v-sheet
+          :class="election?.uppercase ? 'text-uppercase' : ''"
+          >{{ election?.organization }}</v-sheet
         >
       </v-col>
       <v-col
@@ -52,20 +46,21 @@ await fetchCandidates()
         cols="12"
         sm="8 "
       >
-        <template v-if="!config?.ready">
-          <DisplayEnd @release-vote="enableVoting" />
+        <template v-if="!election?.ready">
+          <DisplayEnd />
         </template>
         <DisplayCard
           v-else
           v-model="numericDisplay"
           :candidate="selectedCandidate"
-          :uppercase="config.uppercase!"
+          :numeric-display-length="+election.candidate_number_length"
+          :uppercase="election.uppercase!"
           :visible="candidateCard"
         />
       </v-col>
       <v-col class="d-flex flex-column align-center">
         <NumericKeyboard
-          :keyboard-disabled="candidateCard"
+          :keyboard-disabled="candidateCard || !election?.ready"
           @handle-click="updateDisplay"
         />
         <ActionKeyboard

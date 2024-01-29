@@ -1,45 +1,101 @@
 <script setup lang="ts">
-import { useVotingStore } from '../store/useVotingStore'
-import { useConfig, useVoting, useVoters } from '../composables'
-
-const { fetchCandidates, fetchVotes } = useVoting()
-const { setConfig, fetchConfig } = useConfig()
-const { fetchVoters } = useVoters()
-await fetchCandidates()
-
-const store = useVotingStore()
-import { useConfigStore } from '../store/useConfigStore'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+import { useElection } from '../composables'
+import { useElectionStore } from '../store/useElectionStore'
+import type { Election } from '../types/Voting'
+const electionStore = useElectionStore()
+const { elections } = storeToRefs(electionStore)
+const { addElection } = useElection()
+const router = useRouter()
 
-const configStore = useConfigStore()
-const { config } = storeToRefs(configStore)
+const formData = ref<Election>({
+  name: '',
+  date: '',
+  organization: '',
+  description: '',
+  candidate_number_length: 3,
+})
 
-const enableVoting = async () => {
-  console.log(111)
-  setConfig({ ready: true, id: config.value!.id })
+const handleSubmit = async () => {
+  try {
+    const election_id = await addElection(formData.value)
+
+    router.push({ name: 'ElectionHome', params: { id: election_id } })
+  } catch (err) {
+    const e = err as Error
+    console.log(e)
+  }
 }
-await fetchConfig()
-await fetchVotes()
+
+const headers = [
+  {
+    title: 'Data',
+    key: 'date',
+  },
+  {
+    title: 'Nome',
+    key: 'name',
+  },
+  {
+    title: 'Organização',
+    key: 'organization',
+  },
+  {
+    title: 'Descrição',
+    key: 'description',
+  },
+  {
+    title: 'Ações',
+    key: 'actions',
+  },
+]
 </script>
 
 <template>
   <h1>Administração e Contabilização</h1>
-  <v-list>
-    <v-list-item
-      v-for="item in store.candidates"
-      :key="item.id"
-      >{{ item.name }} {{ store.totalCandidateVote(item.id) }} votos
-      <span v-if="store.totalVotes">
-        {{
-          Math.trunc(
-            (store.totalCandidateVote(item.id) / store.totalVotes) * 100,
-          )
-        }}%
-      </span>
-    </v-list-item>
-  </v-list>
-  Total de votos: {{ store.totalVotes }}
-  <v-btn :to="{ name: 'VotingHome' }">Voltar à Urna</v-btn>
-  <v-btn @click="enableVoting">LiberarVoto</v-btn>
-  <v-btn @click="fetchVoters">Log Voters</v-btn>
+  <h2>Total de Eleições cadastradas: {{ electionStore.totalElections }}</h2>
+
+  <v-data-table
+    :headers="headers"
+    :items="elections"
+  >
+    <template #item.actions="{ item }">
+      <v-btn
+        icon="mdi-eye"
+        :to="{ name: 'ElectionHome', params: { id: item.id } }"
+        variant="text"
+      ></v-btn>
+    </template>
+  </v-data-table>
+  <v-card
+    variant="flat"
+    width="400"
+  >
+    <v-form @submit.prevent="handleSubmit">
+      <v-text-field
+        v-model="formData.date"
+        density="compact"
+        type="date"
+        variant="outlined"
+      />
+      <v-text-field
+        v-model="formData.name"
+        density="compact"
+        variant="outlined"
+      />
+      <v-text-field
+        v-model="formData.description"
+        density="compact"
+        variant="outlined"
+      />
+      <v-text-field
+        v-model="formData.organization"
+        density="compact"
+        variant="outlined"
+      />
+      <v-btn type="submit">Cadastrar</v-btn>
+    </v-form>
+  </v-card>
 </template>

@@ -1,11 +1,7 @@
 <script setup lang="ts">
-interface Apps {
-  title: string
-  description: string
-  name: string
-}
+import type { AppParam } from '../types/Main'
 
-defineProps<Apps>()
+defineProps<AppParam>()
 </script>
 
 <template>
@@ -15,7 +11,7 @@ defineProps<Apps>()
   >
     <v-card
       class="mx-1"
-      :to="{ name }"
+      :to="name"
       variant="outlined"
     >
       <v-card-title class="text-subtitle-1">{{ title }}</v-card-title>

@@ -1,18 +1,21 @@
 import { supabase } from '@/plugins/supabase'
 import { type Candidate, candidatesSchema } from '../types/Voting'
 import { useVotingStore } from '../store/useVotingStore'
-// import { useConfigStore } from '../store/useConfigStore'
+import { useVoterStore } from '../store/useVotersStore'
+import { useCandidateStore } from '../store/useCandidateStore'
+import { useElectionStore } from '../store/useElectionStore'
 import { computed, ref, watch } from 'vue'
-//import { useConfig } from '.'
-//const { setConfig } = useConfig()
+import { storeToRefs } from 'pinia'
 
 const useVoting = () => {
   const store = useVotingStore()
-  //const configStore = useConfigStore()
+  const voterStore = useVoterStore()
+  const candidateStore = useCandidateStore()
+  const electionStore = useElectionStore()
+  const { election } = storeToRefs(electionStore)
 
   const numericDisplay = ref('')
   const selectedCandidate = ref<Candidate | undefined>(undefined)
-  // const readyToVote = ref(true)
 
   const resetDisplay = () => {
     numericDisplay.value = ''
@@ -23,34 +26,32 @@ const useVoting = () => {
     numericDisplay.value += value
   }
 
-  const enableVoting = () => {
-    resetDisplay()
-    store.readyToVote = true
-  }
-
-  const addVote = async (candidate_id: number) => {
+  const addVote = async (candidate_id: number, election_id: number) => {
+    const voter_id = voterStore.randomVoter()
+    console.log(voter_id)
     try {
       const { error: err } = await supabase
         .from('votes')
-        .insert({ candidate_id })
+        .insert({ candidate_id, election_id, voter_id })
 
       if (err) throw Error('Não foi possível votar')
-      //await setConfig({ ready: false, id: configStore.config?.id })
       resetDisplay()
-      store.setVote(candidate_id)
-      //store.readyToVote = false
+      store.setVote(candidate_id, election_id)
     } catch (err) {
       const e = err as Error
       console.log(e)
     }
   }
 
-  const fetchVotes = async () => {
+  const fetchVotes = async (election_id: number) => {
     try {
-      const { data, error: err } = await supabase.from('votes').select('*')
+      const { data, error: err } = await supabase
+        .from('votes')
+        .select('*')
+        .eq('election_id', election_id)
       if (err) throw err
       store.votes = data
-      console.log(data)
+      return data
     } catch (err) {
       const e = err as Error
       console.log(e)
@@ -68,6 +69,7 @@ const useVoting = () => {
       if (data) {
         const parsedData = candidatesSchema.parse(data)
         store.candidates = parsedData
+        return data || null
         //console.log(data)
       }
     } catch (err) {
@@ -77,15 +79,17 @@ const useVoting = () => {
   }
 
   const candidateCard = computed<boolean>(() => {
-    return numericDisplay.value.length === store.candidateNumberLength
+    return (
+      numericDisplay.value.length === election.value?.candidate_number_length
+    )
   })
 
   watch(
     () => numericDisplay.value,
     (newValue) => {
       selectedCandidate.value = undefined
-      if (newValue.length === store.candidateNumberLength) {
-        selectedCandidate.value = store.candidates.find(
+      if (newValue.length === election.value?.candidate_number_length) {
+        selectedCandidate.value = candidateStore.candidates.find(
           (candidate) => candidate.id === +numericDisplay.value,
         )
       }
@@ -94,11 +98,9 @@ const useVoting = () => {
 
   return {
     numericDisplay,
-    // readyToVote,
     selectedCandidate,
     candidateCard,
     addVote,
-    enableVoting,
     fetchCandidates,
     fetchVotes,
     resetDisplay,

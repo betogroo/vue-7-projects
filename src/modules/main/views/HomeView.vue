@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { AppsCard } from '../components'
-import type { App } from '../types/Main'
+import { AppParam } from '../types/Main'
 
-const apps: App[] = [
+const apps: AppParam[] = [
   {
     title: 'Password Generator',
     description: 'Gere senhas seguras e difíceis de ser quebradas',
-    name: 'PasswordHome',
+    name: { name: 'PasswordHome' },
   },
   {
     title: 'Voting System',
     description: 'Sistema de votação, com contabilização de votos',
-    name: 'VotingHome',
+    name: { name: 'VotingHome', params: { id: 7 } },
   },
 ]
 </script>
@@ -19,7 +19,7 @@ const apps: App[] = [
   <v-container class="d-flex justify-center">
     <AppsCard
       v-for="app in apps"
-      :key="app.name"
+      :key="app.name.name"
       :description="app.description"
       :name="app.name"
       :title="app.title"
