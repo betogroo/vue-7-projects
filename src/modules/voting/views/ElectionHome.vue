@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { BallotBox, BallotBoxForm } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useBallotBox } from '../composables'
@@ -22,14 +23,9 @@ const { ballotsBox } = storeToRefs(ballotBoxStore)
   <h1>Administração e Contabilização {{ id }}</h1>
   <h2>{{ election?.name }} ({{ election?.organization }})</h2>
   <h3>Data da Eleição: {{ election?.date }}</h3>
-  <v-btn @click="addBallotBox(id)">Adicionar Urna</v-btn>
 
-  <v-sheet v-if="ballotsBox">
-    <v-card
-      v-for="item in ballotsBox"
-      :key="item.id"
-    >
-      Urna {{ item.id }}
-    </v-card>
-  </v-sheet>
+  <BallotBoxForm @handle-submit="(site) => addBallotBox(id, site)" />
+  <div class="d-flex flex-wrap justify-center">
+    <BallotBox :ballots-box="ballotsBox" />
+  </div>
 </template>

@@ -41,6 +41,7 @@ export const electionSchema = z.object({
 export const ballotBoxSchema = z.object({
   id: z.string().uuid(),
   created_at: z.string(),
+  site: z.string(),
   ready: z.boolean().default(false),
   election_id: z.number(),
 })

@@ -6,6 +6,8 @@ import ActionKeyboard from './ActionKeyboard.vue'
 import DisplayCard from './DisplayCard.vue'
 import DisplayEnd from './DisplayEnd.vue'
 import CandidateDisplay from './CandidateDisplay.vue'
+import BallotBox from './BallotBox.vue'
+import BallotBoxForm from './BallotBoxForm.vue'
 
 export {
   NumericBtn,
@@ -13,6 +15,8 @@ export {
   ActionKeyboard,
   TextContainer,
   NumericKeyboard,
+  BallotBox,
+  BallotBoxForm,
   CandidateDisplay,
   DisplayCard,
   DisplayEnd,
