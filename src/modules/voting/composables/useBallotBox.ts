@@ -26,7 +26,8 @@ const useBallotBox = () => {
         .from('ballot_box')
         .select('*')
         .eq('id', id)
-        .returns<BallotBox>()
+        .returns<BallotBox[]>()
+        .single()
       if (err) throw err
       ballotBoxStore.ballotBox = data
       return data
@@ -49,6 +50,30 @@ const useBallotBox = () => {
       console.log(e)
     }
   }
+
+  supabase
+    .channel('ballot_box_ready_change')
+    .on(
+      'postgres_changes',
+
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'ballot_box',
+      },
+      (event) => {
+        if (
+          ballotBoxStore.ballotBox &&
+          event.old.id === ballotBoxStore.ballotBox.id
+        ) {
+          console.log(event)
+          console.log('Vai mudar a tabela')
+          const { new: newBallotBox } = event
+          ballotBoxStore.ballotBox = newBallotBox as BallotBox
+        }
+      },
+    )
+    .subscribe()
   return { fetchBallotBox, addBallotBox, getBallotBox }
 }
 

@@ -98,10 +98,17 @@ const routes: CustomRouteRecordRaw[] = [
     props: (router) => ({ id: router.params.id }),
     beforeEnter: async (to, from, next) => {
       const { getBallotBox } = useBallotBox()
+      const { getElection } = useElection()
+      const { fetchCandidates } = useCandidates()
       const ballot_box_id = to.params.id.toString()
       try {
         const ballotBox = await getBallotBox(ballot_box_id)
-        console.log(ballotBox)
+        if (!ballotBox) throw Error('Urna não encontrada')
+        const election_id = ballotBox.election_id
+        await fetchCandidates(election_id)
+        const election = await getElection(election_id)
+
+        console.log(ballotBox, election)
         next()
       } catch (err) {
         console.log(err)

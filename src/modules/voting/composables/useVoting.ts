@@ -1,7 +1,6 @@
 import { supabase } from '@/plugins/supabase'
-import { type Candidate, candidatesSchema } from '../types/Voting'
+import { type Candidate, candidatesSchema, Vote } from '../types/Voting'
 import { useVotingStore } from '../store/useVotingStore'
-import { useVoterStore } from '../store/useVotersStore'
 import { useCandidateStore } from '../store/useCandidateStore'
 import { useElectionStore } from '../store/useElectionStore'
 import { computed, ref, watch } from 'vue'
@@ -9,7 +8,6 @@ import { storeToRefs } from 'pinia'
 
 const useVoting = () => {
   const store = useVotingStore()
-  const voterStore = useVoterStore()
   const candidateStore = useCandidateStore()
   const electionStore = useElectionStore()
   const { election } = storeToRefs(electionStore)
@@ -26,17 +24,13 @@ const useVoting = () => {
     numericDisplay.value += value
   }
 
-  const addVote = async (candidate_id: number, election_id: number) => {
-    const voter_id = voterStore.randomVoter()
-    console.log(voter_id)
+  const addVote = async (vote: Vote) => {
     try {
-      const { error: err } = await supabase
-        .from('votes')
-        .insert({ candidate_id, election_id, voter_id })
+      const { error: err } = await supabase.from('votes').insert(vote)
 
       if (err) throw Error('Não foi possível votar')
       resetDisplay()
-      store.setVote(candidate_id, election_id)
+      store.setVote(vote)
     } catch (err) {
       const e = err as Error
       console.log(e)

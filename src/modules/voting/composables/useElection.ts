@@ -26,7 +26,7 @@ const useElection = () => {
         .from('election')
         .select('*')
         .eq('id', id)
-        .returns<Election>()
+        .returns<Election[]>()
         .single()
       if (err) throw err
       store.election = data

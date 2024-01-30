@@ -5,7 +5,7 @@ import {
   DisplayCard,
   DisplayEnd,
 } from '../components'
-import { useVoting, useElection } from '../composables'
+import { useVoting } from '../composables'
 import { storeToRefs } from 'pinia'
 import { useElectionStore } from '../store/useElectionStore'
 
@@ -17,16 +17,16 @@ const {
   numericDisplay,
   selectedCandidate,
   candidateCard, //
-  addVote,
+  //addVote,
   resetDisplay,
   updateDisplay,
 } = useVoting()
-const { setReady } = useElection()
+// const { setReady } = useElection()
 
-const confirmVote = async () => {
+/* const confirmVote = async () => {
   await addVote(+numericDisplay.value, 7)
   await setReady(7, false)
-}
+} */
 </script>
 <template>
   <v-container class="pa-1 ma-1">
@@ -66,11 +66,9 @@ const confirmVote = async () => {
         <ActionKeyboard
           :confirm-disabled="!candidateCard || selectedCandidate === undefined"
           :reset-disabled="!numericDisplay.length"
-          @handle-confirm="confirmVote"
           @handle-reset="resetDisplay"
         />
       </v-col>
     </v-row>
-    <v-btn :to="{ name: 'AdminHome' }">Admin</v-btn>
   </v-container>
 </template>
