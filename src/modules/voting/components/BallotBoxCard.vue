@@ -19,6 +19,11 @@ defineProps<Props>()
     <v-responsive :aspect-ratio="16 / 9">
       <v-card-subtitle>{{ item.id }}</v-card-subtitle>
       <v-card-text>Pronta da voto: {{ item.ready }} </v-card-text>
+      <v-card-actions
+        ><v-btn :to="{ name: 'BallotBoxView', params: { id: item.id } }"
+          >Ir para urna</v-btn
+        ></v-card-actions
+      >
     </v-responsive>
   </v-card>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { BallotBox, BallotBoxForm } from '../components'
+import { BallotBoxCard, BallotBoxForm } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useBallotBox } from '../composables'
@@ -26,6 +26,6 @@ const { ballotsBox } = storeToRefs(ballotBoxStore)
 
   <BallotBoxForm @handle-submit="(site) => addBallotBox(id, site)" />
   <div class="d-flex flex-wrap justify-center">
-    <BallotBox :ballots-box="ballotsBox" />
+    <BallotBoxCard :ballots-box="ballotsBox" />
   </div>
 </template>

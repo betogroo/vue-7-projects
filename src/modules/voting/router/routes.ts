@@ -87,6 +87,28 @@ const routes: CustomRouteRecordRaw[] = [
       //console.log(store)
     },
   },
+  {
+    path: '/voting/ballotbox/:id',
+    component: () => import('../views/BallotBoxView.vue'),
+    name: 'BallotBoxView',
+    meta: {
+      title: 'Urna',
+      requiresAuth: true,
+    },
+    props: (router) => ({ id: router.params.id }),
+    beforeEnter: async (to, from, next) => {
+      const { getBallotBox } = useBallotBox()
+      const ballot_box_id = to.params.id.toString()
+      try {
+        const ballotBox = await getBallotBox(ballot_box_id)
+        console.log(ballotBox)
+        next()
+      } catch (err) {
+        console.log(err)
+      }
+      //console.log(store)
+    },
+  },
 ]
 
 export default routes
