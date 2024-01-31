@@ -212,4 +212,25 @@
       "}",
     ],
   },
+  "Try/Catch - Supabase": {
+    "scope": "javascript, typescript",
+    "prefix": "v3-try-catch-supabase",
+    "body": [
+      "try {",
+      "\tconst { data, error: err } = await supabase",
+      "\t.from('$1')",
+      "\n",
+      "\tif (err) throw err",
+      "\tconsole.log(data)",
+      "} catch (err) {",
+      "\tconst e = err as Error",
+      "\tconsole.log(e)",
+      "}",
+    ],
+  },
+  "Import Use Composable": {
+    "scope": "javascript, typescript",
+    "prefix": "v3-use-composable",
+    "body": ["import { $1 } from '../store/$1'", "const {$2} = $1"],
+  },
 }

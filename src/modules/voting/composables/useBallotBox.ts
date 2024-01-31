@@ -20,11 +20,28 @@ const useBallotBox = () => {
     }
   }
 
-  const addBallotBox = async (election_id: number) => {
+  const getBallotBox = async (id: string) => {
     try {
       const { data, error: err } = await supabase
         .from('ballot_box')
-        .insert({ election_id })
+        .select('*')
+        .eq('id', id)
+        .returns<BallotBox[]>()
+        .single()
+      if (err) throw err
+      ballotBoxStore.ballotBox = data
+      return data
+    } catch (err) {
+      const e = err as Error
+      console.log(e)
+    }
+  }
+
+  const addBallotBox = async (election_id: number, site: string) => {
+    try {
+      const { data, error: err } = await supabase
+        .from('ballot_box')
+        .insert({ election_id, site })
       if (err) throw err
       await fetchBallotBox(election_id)
       console.log(data)
@@ -33,7 +50,47 @@ const useBallotBox = () => {
       console.log(e)
     }
   }
-  return { fetchBallotBox, addBallotBox }
+
+  const setBalootBoxReady = async (id: string, ready: boolean) => {
+    try {
+      const { data, error: err } = await supabase
+        .from('ballot_box')
+        .update({
+          ready,
+        })
+        .eq('id', id)
+      if (err) throw err
+      console.log(data)
+    } catch (err) {
+      const e = err as Error
+      console.log(e)
+    }
+  }
+
+  supabase
+    .channel('ballot_box_ready_change')
+    .on(
+      'postgres_changes',
+
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'ballot_box',
+      },
+      (event) => {
+        if (
+          ballotBoxStore.ballotBox &&
+          event.old.id === ballotBoxStore.ballotBox.id
+        ) {
+          console.log(event)
+          console.log('Vai mudar a tabela')
+          const { new: newBallotBox } = event
+          ballotBoxStore.ballotBox = newBallotBox as BallotBox
+        }
+      },
+    )
+    .subscribe()
+  return { fetchBallotBox, addBallotBox, getBallotBox, setBalootBoxReady }
 }
 
 export default useBallotBox

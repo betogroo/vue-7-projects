@@ -1,76 +1,83 @@
 <script setup lang="ts">
-import {
-  NumericKeyboard,
-  ActionKeyboard,
-  DisplayCard,
-  DisplayEnd,
-} from '../components'
-import { useVoting, useElection } from '../composables'
 import { storeToRefs } from 'pinia'
+import type { Election } from '../types/Voting'
+import { useRouter } from 'vue-router'
+import { useElection } from '../composables'
+import { ElectionForm } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
-
 const electionStore = useElectionStore()
-const { election } = storeToRefs(electionStore)
+const { elections } = storeToRefs(electionStore)
+const { addElection } = useElection()
+const router = useRouter()
 
-// composables
-const {
-  numericDisplay,
-  selectedCandidate,
-  candidateCard, //
-  addVote,
-  resetDisplay,
-  updateDisplay,
-} = useVoting()
-const { setReady } = useElection()
-
-const confirmVote = async () => {
-  await addVote(+numericDisplay.value, 7)
-  await setReady(7, false)
+const handleSubmit = async (data: Election) => {
+  try {
+    const election_id = await addElection(data)
+    router.push({ name: 'ElectionHome', params: { id: election_id } })
+  } catch (err) {
+    const e = err as Error
+    console.log(e)
+  }
 }
+
+const handleDelete = (id: number) => {
+  console.log(id)
+}
+
+const headers = [
+  {
+    title: 'Data',
+    key: 'date',
+  },
+  {
+    title: 'Nome',
+    key: 'name',
+  },
+  {
+    title: 'Organização',
+    key: 'organization',
+  },
+  {
+    title: 'Descrição',
+    key: 'description',
+  },
+  {
+    title: 'Ações',
+    key: 'actions',
+  },
+]
 </script>
+
 <template>
-  <v-container class="pa-1 ma-1">
-    <v-row
-      justify="center"
-      no-gutters
-    >
-      <v-col cols="12">
-        <v-sheet
-          class="text-h4 text-center"
-          :class="election?.uppercase ? 'text-uppercase' : ''"
-          >{{ election?.organization }}</v-sheet
-        >
-      </v-col>
-      <v-col
-        class="text-center d-flex align-center justify-center"
-        cols="12"
-        sm="8 "
+  <h1>Administração e Contabilização</h1>
+  <h2>Total de Eleições cadastradas: {{ electionStore.totalElections }}</h2>
+
+  <v-data-table
+    :headers="headers"
+    :items="elections"
+  >
+    <template #item.actions="{ item }">
+      <div
+        v-if="item.id"
+        class="d-flex"
       >
-        <template v-if="!election?.ready">
-          <DisplayEnd />
-        </template>
-        <DisplayCard
-          v-else
-          v-model="numericDisplay"
-          :candidate="selectedCandidate"
-          :numeric-display-length="+election.candidate_number_length"
-          :uppercase="election.uppercase!"
-          :visible="candidateCard"
-        />
-      </v-col>
-      <v-col class="d-flex flex-column align-center">
-        <NumericKeyboard
-          :keyboard-disabled="candidateCard || !election?.ready"
-          @handle-click="updateDisplay"
-        />
-        <ActionKeyboard
-          :confirm-disabled="!candidateCard || selectedCandidate === undefined"
-          :reset-disabled="!numericDisplay.length"
-          @handle-confirm="confirmVote"
-          @handle-reset="resetDisplay"
-        />
-      </v-col>
-    </v-row>
-    <v-btn :to="{ name: 'AdminHome' }">Admin</v-btn>
-  </v-container>
+        <v-btn
+          icon="mdi-eye"
+          :to="{ name: 'ElectionHome', params: { id: item.id } }"
+          variant="text"
+        ></v-btn>
+        <v-btn
+          icon="mdi-delete"
+          variant="text"
+          @click="handleDelete(item.id)"
+        ></v-btn>
+      </div>
+    </template>
+  </v-data-table>
+  <v-card
+    variant="flat"
+    width="400"
+  >
+    <ElectionForm @handle-submit="(data) => handleSubmit(data)" />
+  </v-card>
 </template>

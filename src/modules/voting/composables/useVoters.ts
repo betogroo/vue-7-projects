@@ -18,7 +18,14 @@ const useVoters = () => {
     }
   }
 
-  return { fetchVoters }
+  const getRandomVoter = async () => {
+    const voters = await fetchVoters()
+    if (!voters) return
+    const index = Math.floor(Math.random() * voters!.length)
+    return voters[index].id
+  }
+
+  return { fetchVoters, getRandomVoter }
 }
 
 export default useVoters
