@@ -51,6 +51,22 @@ const useBallotBox = () => {
     }
   }
 
+  const setBalootBoxReady = async (id: string, ready: boolean) => {
+    try {
+      const { data, error: err } = await supabase
+        .from('ballot_box')
+        .update({
+          ready,
+        })
+        .eq('id', id)
+      if (err) throw err
+      console.log(data)
+    } catch (err) {
+      const e = err as Error
+      console.log(e)
+    }
+  }
+
   supabase
     .channel('ballot_box_ready_change')
     .on(
@@ -74,7 +90,7 @@ const useBallotBox = () => {
       },
     )
     .subscribe()
-  return { fetchBallotBox, addBallotBox, getBallotBox }
+  return { fetchBallotBox, addBallotBox, getBallotBox, setBalootBoxReady }
 }
 
 export default useBallotBox

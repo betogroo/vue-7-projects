@@ -8,7 +8,7 @@ import {
 } from '../components'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useElectionStore } from '../store/useElectionStore'
-import { useVoting, useVoters } from '../composables'
+import { useVoting, useVoters, useBallotBox } from '../composables'
 import { Vote } from '../types/Voting'
 interface Props {
   id: string
@@ -25,12 +25,14 @@ const {
   updateDisplay,
 } = useVoting()
 //const { setReady } = useElection()
+const { setBalootBoxReady } = useBallotBox()
 const { getRandomVoter } = useVoters()
 
 const ballotBoxStore = useBallotBoxStore()
 const electionStore = useElectionStore()
 const { election } = storeToRefs(electionStore)
 const { ballotBox } = storeToRefs(ballotBoxStore)
+
 const confirmVote = async () => {
   const voter = await getRandomVoter() // only for test
   if (!election.value!.id) return
@@ -40,8 +42,9 @@ const confirmVote = async () => {
     ballot_box_id: ballotBox.value!.id,
     candidate_id: +numericDisplay.value,
   }
-  await addVote(vote)
-  console.log(vote)
+  const recordedVote = await addVote(vote)
+  if (recordedVote) await setBalootBoxReady(ballotBox.value!.id, false)
+  console.log(vote, recordedVote)
   resetDisplay()
 }
 
