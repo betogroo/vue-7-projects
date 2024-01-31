@@ -228,4 +228,9 @@
       "}",
     ],
   },
+  "Import Use Composable": {
+    "scope": "javascript, typescript",
+    "prefix": "v3-use-composable",
+    "body": ["import { $1 } from '../store/$1'", "const {$2} = $1"],
+  },
 }
