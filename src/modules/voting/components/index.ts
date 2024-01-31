@@ -8,6 +8,7 @@ import DisplayEnd from './DisplayEnd.vue'
 import CandidateDisplay from './CandidateDisplay.vue'
 import BallotBoxCard from './BallotBoxCard.vue'
 import BallotBoxForm from './BallotBoxForm.vue'
+import ElectionForm from './ElectionForm.vue'
 
 export {
   NumericBtn,
@@ -20,4 +21,5 @@ export {
   CandidateDisplay,
   DisplayCard,
   DisplayEnd,
+  ElectionForm,
 }

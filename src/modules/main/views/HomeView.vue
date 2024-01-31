@@ -11,7 +11,7 @@ const apps: AppParam[] = [
   {
     title: 'Voting System',
     description: 'Sistema de votação, com contabilização de votos',
-    name: { name: 'VotingHome', params: { id: 7 } },
+    name: { name: 'VotingHome' },
   },
 ]
 </script>
