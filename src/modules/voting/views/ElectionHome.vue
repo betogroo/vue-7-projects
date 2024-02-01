@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { BallotBoxCard, BallotBoxForm } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
+import { useVoterStore } from '../store/useVoterStore'
 import { useBallotBox } from '../composables'
 
 interface Props {
@@ -14,9 +15,12 @@ defineProps<Props>()
 const { addBallotBox } = useBallotBox()
 
 const electionStore = useElectionStore()
-const { election } = storeToRefs(electionStore)
 const ballotBoxStore = useBallotBoxStore()
+const voterStore = useVoterStore()
+
 const { ballotsBox } = storeToRefs(ballotBoxStore)
+const { election } = storeToRefs(electionStore)
+const { voters } = storeToRefs(voterStore)
 </script>
 
 <template>
@@ -26,6 +30,9 @@ const { ballotsBox } = storeToRefs(ballotBoxStore)
 
   <BallotBoxForm @handle-submit="(site) => addBallotBox(id, site)" />
   <div class="d-flex flex-wrap justify-center">
-    <BallotBoxCard :ballots-box="ballotsBox" />
+    <BallotBoxCard
+      :ballots-box="ballotsBox"
+      :voters="voters"
+    />
   </div>
 </template>

@@ -1,6 +1,6 @@
 import { supabase } from '@/plugins/supabase'
 import { Voter } from '../types/Voting'
-import { useVoterStore } from '../store/useVotersStore'
+import { useVoterStore } from '../store/useVoterStore'
 const useVoters = () => {
   const store = useVoterStore()
   const fetchVoters = async () => {

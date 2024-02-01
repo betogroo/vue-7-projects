@@ -1,6 +1,11 @@
 // Composables
 import { CustomRouteRecordRaw } from 'vue-router'
-import { useElection, useCandidates, useBallotBox } from '../composables'
+import {
+  useElection,
+  useCandidates,
+  useBallotBox,
+  useVoters,
+} from '../composables'
 
 const routes: CustomRouteRecordRaw[] = [
   {
@@ -18,11 +23,13 @@ const routes: CustomRouteRecordRaw[] = [
       const { getElection } = useElection()
       const { fetchCandidates } = useCandidates()
       const { fetchBallotBox } = useBallotBox()
+      const { fetchVoters } = useVoters()
       try {
         const election = await getElection(election_id)
         const candidates = await fetchCandidates(election_id)
         const ballotBox = await fetchBallotBox(election_id)
-        console.log(candidates, ballotBox)
+        const voters = await fetchVoters()
+        console.log({ candidates, ballotBox, voters })
         if (!election) next({ name: 'AboutView' })
         next()
       } catch (err) {

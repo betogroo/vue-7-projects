@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { BallotBox } from '../types/Voting'
+import { ref } from 'vue'
+import type { BallotBox, Voter } from '../types/Voting'
 
 interface Props {
   ballotsBox: BallotBox[] | undefined
+  voters: Voter[]
 }
 defineProps<Props>()
+
+const test = ref()
 </script>
 
 <template>
@@ -18,12 +22,27 @@ defineProps<Props>()
   >
     <v-responsive :aspect-ratio="16 / 9">
       <v-card-subtitle>{{ item.id }}</v-card-subtitle>
-      <v-card-text>Pronta da voto: {{ item.ready }} </v-card-text>
+      <v-card-text>
+        <template v-if="item.ready">Liberado</template>
+        <template v-else>
+          <v-autocomplete
+            v-model="test"
+            base-color="white"
+            density="compact"
+            item-title="ra"
+            item-value="id"
+            :items="voters"
+            label="Candidatos"
+            variant="outlined"
+          ></v-autocomplete
+        ></template>
+      </v-card-text>
       <v-card-actions
         ><v-btn :to="{ name: 'BallotBoxView', params: { id: item.id } }"
           >Ir para urna</v-btn
         ></v-card-actions
       >
+      {{ test }}
     </v-responsive>
   </v-card>
 </template>
