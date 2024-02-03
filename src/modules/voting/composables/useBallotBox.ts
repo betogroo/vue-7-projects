@@ -51,7 +51,7 @@ const useBallotBox = () => {
     }
   }
 
-  const setBalootBoxReady = async (id: string, ready: boolean) => {
+  const setBallotBoxReady = async (id: string, ready: string | null) => {
     try {
       const { data, error: err } = await supabase
         .from('ballot_box')
@@ -90,7 +90,7 @@ const useBallotBox = () => {
       },
     )
     .subscribe()
-  return { fetchBallotBox, addBallotBox, getBallotBox, setBalootBoxReady }
+  return { fetchBallotBox, addBallotBox, getBallotBox, setBallotBoxReady }
 }
 
 export default useBallotBox

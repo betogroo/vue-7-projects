@@ -25,7 +25,7 @@ const {
   updateDisplay,
 } = useVoting()
 //const { setReady } = useElection()
-const { setBalootBoxReady } = useBallotBox()
+const { setBallotBoxReady } = useBallotBox()
 const { getRandomVoter } = useVoters()
 
 const ballotBoxStore = useBallotBoxStore()
@@ -43,7 +43,7 @@ const confirmVote = async () => {
     candidate_id: +numericDisplay.value,
   }
   const recordedVote = await addVote(vote)
-  if (recordedVote) await setBalootBoxReady(ballotBox.value!.id, false)
+  if (recordedVote) await setBallotBoxReady(ballotBox.value!.id, null)
   console.log(vote, recordedVote)
   resetDisplay()
 }
