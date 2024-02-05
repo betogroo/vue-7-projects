@@ -96,6 +96,7 @@ console.log(ballotBox.value)
     </v-row>
     <v-row>
       <v-col>id da urna: {{ ballotBox?.id }}</v-col>
+      <v-col>id do votante: {{ ballotBox?.ready }}</v-col>
     </v-row>
   </v-container>
 </template>

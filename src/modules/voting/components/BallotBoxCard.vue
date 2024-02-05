@@ -23,7 +23,9 @@ const test = ref()
     <v-responsive :aspect-ratio="16 / 9">
       <v-card-subtitle>{{ item.id }}</v-card-subtitle>
       <v-card-text>
-        <template v-if="item.ready">Liberado</template>
+        <template v-if="item.ready"
+          >Liberado para o usuario {{ item.ready }}</template
+        >
         <template v-else>
           <v-autocomplete
             v-model="test"
