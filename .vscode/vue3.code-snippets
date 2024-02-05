@@ -91,6 +91,15 @@
     "prefix": "v3-computed",
     "body": ["const ${1:name} = computed(() => {", "\treturn", "})"],
   },
+  "Vue Computed Params": {
+    "scope": "javascript,typescript",
+    "prefix": "v3-computed-params",
+    "body": [
+      "const ${1:name} = computed(() => (${2:param}: ${3:type}) => {",
+      "\treturn",
+      "})",
+    ],
+  },
   "Vue 3 Define Props": {
     "scope": "javascript,typescript",
     "prefix": "v3-sfc-props",
