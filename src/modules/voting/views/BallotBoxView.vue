@@ -10,10 +10,6 @@ import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useElectionStore } from '../store/useElectionStore'
 import { useVoting, useVoters, useBallotBox } from '../composables'
 import { Vote } from '../types/Voting'
-interface Props {
-  id: string
-}
-defineProps<Props>()
 
 //composable
 const {
@@ -83,7 +79,7 @@ console.log(ballotBox.value)
       </v-col>
       <v-col class="d-flex flex-column align-center">
         <NumericKeyboard
-          :keyboard-disabled="candidateCard || !election?.ready"
+          :keyboard-disabled="candidateCard || !ballotBox?.ready"
           @handle-click="updateDisplay"
         />
         <ActionKeyboard
