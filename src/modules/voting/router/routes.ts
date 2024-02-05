@@ -61,8 +61,6 @@ const routes: CustomRouteRecordRaw[] = [
   },
   {
     path: '/voting/ballotbox/:id',
-    component: () => import('../views/BallotBoxView.vue'),
-    name: 'BallotBoxView',
     meta: {
       title: 'Urna',
       requiresAuth: true,
@@ -73,6 +71,7 @@ const routes: CustomRouteRecordRaw[] = [
       const { getElection } = useElection()
       const { fetchCandidates } = useCandidates()
       const ballot_box_id = to.params.id.toString()
+      console.log(to)
       try {
         const ballotBox = await getBallotBox(ballot_box_id)
         if (!ballotBox) throw Error('Urna não encontrada')
@@ -87,6 +86,19 @@ const routes: CustomRouteRecordRaw[] = [
       }
       //console.log(store)
     },
+    children: [
+      {
+        name: 'BallotBoxView',
+        path: 'urna',
+        component: () => import('../views/BallotBoxView.vue'),
+        props: (router) => ({ id: router.params.id }),
+      },
+      {
+        name: 'BallotBoxAdmin',
+        path: 'admin',
+        component: () => import('../views/BallotBoxAdmin.vue'),
+      },
+    ],
   },
 ]
 

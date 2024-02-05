@@ -39,11 +39,18 @@ const test = ref()
           ></v-autocomplete
         ></template>
       </v-card-text>
-      <v-card-actions
-        ><v-btn :to="{ name: 'BallotBoxView', params: { id: item.id } }"
+      <v-card-actions class="d-flex flex-column">
+        <v-btn
+          block
+          :to="{ name: 'BallotBoxView', params: { id: item.id } }"
           >Ir para urna</v-btn
-        ></v-card-actions
-      >
+        >
+        <v-btn
+          block
+          :to="{ name: 'BallotBoxAdmin', params: { id: item.id } }"
+          >Monitorar</v-btn
+        >
+      </v-card-actions>
       {{ test }}
     </v-responsive>
   </v-card>
