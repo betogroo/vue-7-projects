@@ -5,12 +5,14 @@ import { useElectionStore } from '../store/useElectionStore'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useVoterStore } from '../store/useVoterStore'
 import { useBallotBox } from '../composables'
+import { ref } from 'vue'
+import { Candidate } from '../types/Voting'
 
 interface Props {
   id: number
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const { addBallotBox } = useBallotBox()
 
@@ -21,6 +23,18 @@ const voterStore = useVoterStore()
 const { ballotsBox } = storeToRefs(ballotBoxStore)
 const { election } = storeToRefs(electionStore)
 const { voters } = storeToRefs(voterStore)
+
+const formData = ref<Candidate>({
+  id: 0,
+  avatar: '',
+  election_id: props.id,
+  name: '',
+  created_at: '',
+  candidate_number: '',
+})
+const addCandidate = () => {
+  console.log(formData.value)
+}
 </script>
 
 <template>
@@ -43,5 +57,14 @@ const { voters } = storeToRefs(voterStore)
     >
       {{ name }}
     </v-card-text>
+  </v-card>
+  <v-card title="Inserir Candidatos">
+    <v-form @submit.prevent="addCandidate">
+      <v-otp-input
+        v-model="formData.candidate_number"
+        :length="election?.candidate_number_length"
+      ></v-otp-input>
+      <v-btn type="submit">Cadastrar</v-btn>
+    </v-form>
   </v-card>
 </template>
