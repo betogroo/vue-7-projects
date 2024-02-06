@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const candidateSchema = z.object({
   id: z.string().uuid().nullish(),
-  created_at: z.string(),
+  created_at: z.string().nullish(),
   name: z.string().min(1, 'Obrigatório'),
   avatar: z.string().url('Url inválida').default(''),
   election_id: z.number(),

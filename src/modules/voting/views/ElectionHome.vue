@@ -4,7 +4,7 @@ import { BallotBoxCard, BallotBoxForm } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useVoterStore } from '../store/useVoterStore'
-import { useBallotBox } from '../composables'
+import { useBallotBox, useCandidates } from '../composables'
 import { ref } from 'vue'
 import { Candidate } from '../types/Voting'
 
@@ -15,6 +15,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const { addBallotBox } = useBallotBox()
+const { addCandidate } = useCandidates()
 
 const electionStore = useElectionStore()
 const ballotBoxStore = useBallotBoxStore()
@@ -25,15 +26,13 @@ const { election } = storeToRefs(electionStore)
 const { voters } = storeToRefs(voterStore)
 
 const formData = ref<Candidate>({
-  id: '',
-  avatar: '',
+  avatar: 'sss',
   election_id: props.id,
   name: '',
-  created_at: '',
   candidate_number: '',
 })
-const addCandidate = () => {
-  console.log(formData.value)
+const handleSubmit = async () => {
+  await addCandidate(formData.value)
 }
 </script>
 
@@ -59,11 +58,12 @@ const addCandidate = () => {
     </v-card-text>
   </v-card>
   <v-card title="Inserir Candidatos">
-    <v-form @submit.prevent="addCandidate">
+    <v-form @submit.prevent="handleSubmit">
       <v-otp-input
         v-model="formData.candidate_number"
         :length="election?.candidate_number_length"
       ></v-otp-input>
+      <v-text-field v-model="formData.name"></v-text-field>
       <v-btn type="submit">Cadastrar</v-btn>
     </v-form>
   </v-card>

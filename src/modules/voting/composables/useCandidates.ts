@@ -28,7 +28,7 @@ const useCandidates = () => {
   const addCandidate = async (candidate: Candidate) => {
     try {
       const { data, error: err } = await supabase
-        .from('candidate')
+        .from('candidates')
         .insert(candidate)
         .select()
         .returns<Candidate>()
