@@ -70,6 +70,7 @@ const routes: CustomRouteRecordRaw[] = [
       const { getBallotBox } = useBallotBox()
       const { getElection } = useElection()
       const { fetchCandidates } = useCandidates()
+      const { fetchVoters } = useVoters()
       const ballot_box_id = to.params.id.toString()
       console.log(to)
       try {
@@ -77,6 +78,7 @@ const routes: CustomRouteRecordRaw[] = [
         if (!ballotBox) throw Error('Urna não encontrada')
         const election_id = ballotBox.election_id
         await fetchCandidates(election_id)
+        await fetchVoters()
         const election = await getElection(election_id)
 
         console.log(ballotBox, election)

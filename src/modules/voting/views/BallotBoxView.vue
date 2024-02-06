@@ -8,7 +8,7 @@ import {
 } from '../components'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useElectionStore } from '../store/useElectionStore'
-import { useVoting, useVoters, useBallotBox } from '../composables'
+import { useVoting, useBallotBox } from '../composables'
 import { Vote } from '../types/Voting'
 
 //composable
@@ -22,7 +22,7 @@ const {
 } = useVoting()
 //const { setReady } = useElection()
 const { setBallotBoxReady } = useBallotBox()
-const { getRandomVoter } = useVoters()
+// const { getRandomVoter } = useVoters()
 
 const ballotBoxStore = useBallotBoxStore()
 const electionStore = useElectionStore()
@@ -30,10 +30,10 @@ const { election } = storeToRefs(electionStore)
 const { ballotBox } = storeToRefs(ballotBoxStore)
 
 const confirmVote = async () => {
-  const voter = await getRandomVoter() // only for test
+  // const voter = await getRandomVoter() // only for test
   if (!election.value!.id) return
   const vote: Vote = {
-    voter_id: voter,
+    voter_id: ballotBox.value?.ready,
     election_id: election.value!.id,
     ballot_box_id: ballotBox.value!.id,
     candidate_id: +numericDisplay.value,
