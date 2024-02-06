@@ -30,9 +30,18 @@ const { voters } = storeToRefs(voterStore)
 
   <BallotBoxForm @handle-submit="(site) => addBallotBox(id, site)" />
   <div class="d-flex flex-wrap justify-center">
-    <BallotBoxCard
-      :ballots-box="ballotsBox"
-      :voters="voters"
-    />
+    <BallotBoxCard :ballots-box="ballotsBox" />
   </div>
+
+  <v-card
+    title="Eleitores"
+    variant="flat"
+  >
+    <v-card-text
+      v-for="{ name, id } in voters"
+      :key="id"
+    >
+      {{ name }}
+    </v-card-text>
+  </v-card>
 </template>
