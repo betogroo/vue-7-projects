@@ -1,11 +1,12 @@
 import { z } from 'zod'
 
 export const candidateSchema = z.object({
-  id: z.number(),
+  id: z.number().nullish(),
   created_at: z.string(),
   name: z.string().min(1, 'Obrigatório'),
   avatar: z.string().url('Url inválida').nullable().default(null),
   election_id: z.number(),
+  candidate_number: z.string().nullish(),
 })
 
 export const candidatesSchema = z.array(candidateSchema)

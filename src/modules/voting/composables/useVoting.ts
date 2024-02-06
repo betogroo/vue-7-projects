@@ -91,7 +91,7 @@ const useVoting = () => {
       selectedCandidate.value = undefined
       if (newValue.length === election.value?.candidate_number_length) {
         selectedCandidate.value = candidateStore.candidates.find(
-          (candidate) => candidate.id === +numericDisplay.value,
+          (candidate) => candidate.candidate_number === numericDisplay.value,
         )
       }
     },
