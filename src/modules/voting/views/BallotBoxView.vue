@@ -31,12 +31,12 @@ const { ballotBox } = storeToRefs(ballotBoxStore)
 
 const confirmVote = async () => {
   // const voter = await getRandomVoter() // only for test
-  if (!election.value!.id) return
+  if (!election.value!.id || !selectedCandidate.value!.id) return
   const vote: Vote = {
     voter_id: ballotBox.value?.ready,
     election_id: election.value!.id,
     ballot_box_id: ballotBox.value!.id,
-    candidate_id: +numericDisplay.value,
+    candidate_id: selectedCandidate.value!.id,
   }
   const recordedVote = await addVote(vote)
   if (recordedVote) await setBallotBoxReady(ballotBox.value!.id, null)
@@ -93,6 +93,7 @@ console.log(ballotBox.value)
     <v-row>
       <v-col>id da urna: {{ ballotBox?.id }}</v-col>
       <v-col>id do votante: {{ ballotBox?.ready }}</v-col>
+      <v-col>Candidato Selecionado: {{ selectedCandidate }}</v-col>
     </v-row>
   </v-container>
 </template>

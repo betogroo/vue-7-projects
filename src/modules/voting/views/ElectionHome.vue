@@ -25,7 +25,7 @@ const { election } = storeToRefs(electionStore)
 const { voters } = storeToRefs(voterStore)
 
 const formData = ref<Candidate>({
-  id: 0,
+  id: '',
   avatar: '',
   election_id: props.id,
   name: '',
