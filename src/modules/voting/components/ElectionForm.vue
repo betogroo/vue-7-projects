@@ -7,7 +7,6 @@ const $emit = defineEmits<{
 }>()
 
 const formData = ref<Election>({
-  id: 0,
   name: '',
   date: '',
   organization: '',
@@ -50,6 +49,13 @@ const handleSubmit = () => {
       label="Nome da Instituição"
       variant="outlined"
     />
+    <v-select
+      v-model="formData.candidate_number_length"
+      clearable
+      :items="[1, 2, 3, 4, 5]"
+      label="Números do Candidato"
+      variant="outlined"
+    ></v-select>
     <v-btn type="submit">Cadastrar</v-btn>
   </v-form>
 </template>

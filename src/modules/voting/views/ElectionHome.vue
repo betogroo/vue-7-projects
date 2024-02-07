@@ -24,13 +24,11 @@ const handleSubmit = async (candidate: Candidate) => {
 </script>
 
 <template>
-  <v-container v-if="election && election.id">
+  <v-container v-if="election">
     <h1>Administração e Contabilização {{ election.id }}</h1>
-    <h2>{{ election?.name }} ({{ election?.organization }})</h2>
+    <h2>{{ election.name }} ({{ election.organization }})</h2>
     <h3>Data da Eleição: {{ election?.date }}</h3>
-    <BallotBoxForm
-      @handle-submit="(site) => addBallotBox(election!.id, site)"
-    />
+    <BallotBoxForm @handle-submit="(site) => addBallotBox(election.id, site)" />
     <div class="d-flex flex-wrap justify-center">
       <BallotBoxCard :ballots-box="ballotsBox" />
     </div>
@@ -51,4 +49,5 @@ const handleSubmit = async (candidate: Candidate) => {
       @add-candidate="(value) => handleSubmit(value)"
     />
   </v-container>
+  <v-container v-else>Nada a Mostrar</v-container>
 </template>

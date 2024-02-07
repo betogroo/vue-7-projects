@@ -30,10 +30,11 @@ const routes: CustomRouteRecordRaw[] = [
         const ballotBox = await fetchBallotBox(election_id)
         const voters = await fetchVoters()
         console.log({ candidates, ballotBox, voters })
-        if (!election) next({ name: 'AboutView' })
+        if (!election) throw Error('Eleição não encontrada')
         next()
       } catch (err) {
         console.log(err)
+        next({ name: 'NotFoundVoting' })
       }
       console.log(to.params.id)
     },
@@ -101,6 +102,15 @@ const routes: CustomRouteRecordRaw[] = [
         component: () => import('../views/BallotBoxAdmin.vue'),
       },
     ],
+  },
+  {
+    path: '/voting/notfound',
+    name: 'NotFoundVoting',
+    component: () => import('../views/NotFoundElection.vue'),
+    meta: {
+      requiresAuth: false,
+      title: 'Não encontrado',
+    },
   },
 ]
 
