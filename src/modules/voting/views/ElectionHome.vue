@@ -7,12 +7,6 @@ import { useVoterStore } from '../store/useVoterStore'
 import { useBallotBox, useCandidates } from '../composables'
 import { Candidate } from '../types/Voting'
 
-interface Props {
-  id: number
-}
-
-defineProps<Props>()
-
 const { addBallotBox } = useBallotBox()
 const { addCandidate } = useCandidates()
 
@@ -30,11 +24,13 @@ const handleSubmit = async (candidate: Candidate) => {
 </script>
 
 <template>
-  <v-container v-if="election">
-    <h1>Administração e Contabilização {{ id }}</h1>
+  <v-container v-if="election && election.id">
+    <h1>Administração e Contabilização {{ election.id }}</h1>
     <h2>{{ election?.name }} ({{ election?.organization }})</h2>
     <h3>Data da Eleição: {{ election?.date }}</h3>
-    <BallotBoxForm @handle-submit="(site) => addBallotBox(id, site)" />
+    <BallotBoxForm
+      @handle-submit="(site) => addBallotBox(election!.id, site)"
+    />
     <div class="d-flex flex-wrap justify-center">
       <BallotBoxCard :ballots-box="ballotsBox" />
     </div>

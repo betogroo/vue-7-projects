@@ -17,7 +17,7 @@ const routes: CustomRouteRecordRaw[] = [
       requiresAuth: false,
       hideNavBar: false,
     },
-    props: (router) => ({ id: +router.params.id }),
+    //props: (router) => ({ id: +router.params.id }),
     beforeEnter: async (to, from, next) => {
       const election_id = +to.params.id
       const { getElection } = useElection()

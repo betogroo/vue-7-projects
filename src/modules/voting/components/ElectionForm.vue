@@ -7,6 +7,7 @@ const $emit = defineEmits<{
 }>()
 
 const formData = ref<Election>({
+  id: 0,
   name: '',
   date: '',
   organization: '',
