@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BallotBox } from '../types/Voting'
+import type { BallotBox } from '../types/Voting'
 
 interface Props {
   ballotsBox: BallotBox[] | undefined
@@ -18,12 +18,19 @@ defineProps<Props>()
   >
     <v-responsive :aspect-ratio="16 / 9">
       <v-card-subtitle>{{ item.id }}</v-card-subtitle>
-      <v-card-text>Pronta da voto: {{ item.ready }} </v-card-text>
-      <v-card-actions
-        ><v-btn :to="{ name: 'BallotBoxView', params: { id: item.id } }"
+      <v-card-text> </v-card-text>
+      <v-card-actions class="d-flex flex-column">
+        <v-btn
+          block
+          :to="{ name: 'BallotBoxView', params: { id: item.id } }"
           >Ir para urna</v-btn
-        ></v-card-actions
-      >
+        >
+        <v-btn
+          block
+          :to="{ name: 'BallotBoxAdmin', params: { id: item.id } }"
+          >Monitorar</v-btn
+        >
+      </v-card-actions>
     </v-responsive>
   </v-card>
 </template>

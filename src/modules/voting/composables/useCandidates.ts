@@ -25,7 +25,23 @@ const useCandidates = () => {
     }
   }
 
-  return { fetchCandidates }
+  const addCandidate = async (candidate: Candidate) => {
+    try {
+      const { data, error: err } = await supabase
+        .from('candidates')
+        .insert(candidate)
+        .select()
+        .returns<Candidate>()
+      if (err) throw err
+      console.log(data)
+      return data.id
+    } catch (err) {
+      const e = err as Error
+      console.log(e)
+    }
+  }
+
+  return { fetchCandidates, addCandidate }
 }
 
 export default useCandidates

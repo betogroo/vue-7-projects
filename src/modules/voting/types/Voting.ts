@@ -1,11 +1,12 @@
 import { z } from 'zod'
 
 export const candidateSchema = z.object({
-  id: z.number(),
+  id: z.string().uuid().nullish(),
+  created_at: z.string().nullish(),
   name: z.string().min(1, 'Obrigatório'),
-  avatar: z.string().url('Url inválida'),
-  created_at: z.string(),
+  avatar: z.string().url('Url inválida').default(''),
   election_id: z.number(),
+  candidate_number: z.string(),
 })
 
 export const candidatesSchema = z.array(candidateSchema)
@@ -13,7 +14,7 @@ export const candidatesSchema = z.array(candidateSchema)
 export const voteSchema = z.object({
   id: z.string().uuid().nullish(),
   created_at: z.string().nullish(),
-  candidate_id: z.number(),
+  candidate_id: z.string().uuid(),
   election_id: z.number(),
   voter_id: z.string().uuid().nullish(),
   ballot_box_id: z.string().uuid(),
@@ -42,7 +43,7 @@ export const ballotBoxSchema = z.object({
   id: z.string().uuid(),
   created_at: z.string(),
   site: z.string(),
-  ready: z.boolean().default(false),
+  ready: z.nullable(z.string()).default(null),
   election_id: z.number(),
 })
 

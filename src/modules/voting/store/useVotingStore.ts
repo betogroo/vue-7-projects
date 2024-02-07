@@ -17,7 +17,7 @@ export const useVotingStore = defineStore('voting', () => {
 
   const totalVotes = computed<number>(() => votes.value.length)
 
-  const totalCandidateVote = computed(() => (candidate_id: number) => {
+  const totalCandidateVote = computed(() => (candidate_id: string) => {
     return votes.value.filter((item) => item.candidate_id === candidate_id)
       .length
   })

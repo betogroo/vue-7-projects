@@ -51,7 +51,7 @@ const useBallotBox = () => {
     }
   }
 
-  const setBalootBoxReady = async (id: string, ready: boolean) => {
+  const setBallotBoxReady = async (id: string, ready: string | null) => {
     try {
       const { data, error: err } = await supabase
         .from('ballot_box')
@@ -87,10 +87,19 @@ const useBallotBox = () => {
           const { new: newBallotBox } = event
           ballotBoxStore.ballotBox = newBallotBox as BallotBox
         }
+        if (ballotBoxStore.ballotsBox) {
+          console.log(event)
+          const { old, new: newBallotBox } = event
+          const index = ballotBoxStore.ballotsBox.findIndex(
+            (item) => item.id === old.id,
+          )
+          ballotBoxStore.ballotsBox[index] = newBallotBox as BallotBox
+          console.log(newBallotBox.id, index)
+        }
       },
     )
     .subscribe()
-  return { fetchBallotBox, addBallotBox, getBallotBox, setBalootBoxReady }
+  return { fetchBallotBox, addBallotBox, getBallotBox, setBallotBoxReady }
 }
 
 export default useBallotBox

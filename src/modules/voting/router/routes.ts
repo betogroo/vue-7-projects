@@ -1,6 +1,11 @@
 // Composables
 import { CustomRouteRecordRaw } from 'vue-router'
-import { useElection, useCandidates, useBallotBox } from '../composables'
+import {
+  useElection,
+  useCandidates,
+  useBallotBox,
+  useVoters,
+} from '../composables'
 
 const routes: CustomRouteRecordRaw[] = [
   {
@@ -18,11 +23,13 @@ const routes: CustomRouteRecordRaw[] = [
       const { getElection } = useElection()
       const { fetchCandidates } = useCandidates()
       const { fetchBallotBox } = useBallotBox()
+      const { fetchVoters } = useVoters()
       try {
         const election = await getElection(election_id)
         const candidates = await fetchCandidates(election_id)
         const ballotBox = await fetchBallotBox(election_id)
-        console.log(candidates, ballotBox)
+        const voters = await fetchVoters()
+        console.log({ candidates, ballotBox, voters })
         if (!election) next({ name: 'AboutView' })
         next()
       } catch (err) {
@@ -54,8 +61,6 @@ const routes: CustomRouteRecordRaw[] = [
   },
   {
     path: '/voting/ballotbox/:id',
-    component: () => import('../views/BallotBoxView.vue'),
-    name: 'BallotBoxView',
     meta: {
       title: 'Urna',
       requiresAuth: true,
@@ -65,12 +70,15 @@ const routes: CustomRouteRecordRaw[] = [
       const { getBallotBox } = useBallotBox()
       const { getElection } = useElection()
       const { fetchCandidates } = useCandidates()
+      const { fetchVoters } = useVoters()
       const ballot_box_id = to.params.id.toString()
+      console.log(to)
       try {
         const ballotBox = await getBallotBox(ballot_box_id)
         if (!ballotBox) throw Error('Urna não encontrada')
         const election_id = ballotBox.election_id
         await fetchCandidates(election_id)
+        await fetchVoters()
         const election = await getElection(election_id)
 
         console.log(ballotBox, election)
@@ -80,6 +88,19 @@ const routes: CustomRouteRecordRaw[] = [
       }
       //console.log(store)
     },
+    children: [
+      {
+        name: 'BallotBoxView',
+        path: 'urna',
+        component: () => import('../views/BallotBoxView.vue'),
+        props: (router) => ({ id: router.params.id }),
+      },
+      {
+        name: 'BallotBoxAdmin',
+        path: 'admin',
+        component: () => import('../views/BallotBoxAdmin.vue'),
+      },
+    ],
   },
 ]
 

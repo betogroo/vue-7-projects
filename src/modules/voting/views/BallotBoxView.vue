@@ -8,12 +8,8 @@ import {
 } from '../components'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useElectionStore } from '../store/useElectionStore'
-import { useVoting, useVoters, useBallotBox } from '../composables'
+import { useVoting, useBallotBox } from '../composables'
 import { Vote } from '../types/Voting'
-interface Props {
-  id: string
-}
-defineProps<Props>()
 
 //composable
 const {
@@ -25,8 +21,8 @@ const {
   updateDisplay,
 } = useVoting()
 //const { setReady } = useElection()
-const { setBalootBoxReady } = useBallotBox()
-const { getRandomVoter } = useVoters()
+const { setBallotBoxReady } = useBallotBox()
+// const { getRandomVoter } = useVoters()
 
 const ballotBoxStore = useBallotBoxStore()
 const electionStore = useElectionStore()
@@ -34,16 +30,16 @@ const { election } = storeToRefs(electionStore)
 const { ballotBox } = storeToRefs(ballotBoxStore)
 
 const confirmVote = async () => {
-  const voter = await getRandomVoter() // only for test
-  if (!election.value!.id) return
+  // const voter = await getRandomVoter() // only for test
+  if (!election.value!.id || !selectedCandidate.value!.id) return
   const vote: Vote = {
-    voter_id: voter,
+    voter_id: ballotBox.value?.ready,
     election_id: election.value!.id,
     ballot_box_id: ballotBox.value!.id,
-    candidate_id: +numericDisplay.value,
+    candidate_id: selectedCandidate.value!.id,
   }
   const recordedVote = await addVote(vote)
-  if (recordedVote) await setBalootBoxReady(ballotBox.value!.id, false)
+  if (recordedVote) await setBallotBoxReady(ballotBox.value!.id, null)
   console.log(vote, recordedVote)
   resetDisplay()
 }
@@ -83,7 +79,7 @@ console.log(ballotBox.value)
       </v-col>
       <v-col class="d-flex flex-column align-center">
         <NumericKeyboard
-          :keyboard-disabled="candidateCard || !election?.ready"
+          :keyboard-disabled="candidateCard || !ballotBox?.ready"
           @handle-click="updateDisplay"
         />
         <ActionKeyboard
@@ -96,6 +92,8 @@ console.log(ballotBox.value)
     </v-row>
     <v-row>
       <v-col>id da urna: {{ ballotBox?.id }}</v-col>
+      <v-col>id do votante: {{ ballotBox?.ready }}</v-col>
+      <v-col>Candidato Selecionado: {{ selectedCandidate }}</v-col>
     </v-row>
   </v-container>
 </template>
