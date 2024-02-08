@@ -53,10 +53,10 @@ const routes: CustomRouteRecordRaw[] = [
       try {
         const elections = await fetchElections()
         if (!elections || !elections.length)
-          throw Error('Não foram encontradas eleições')
+          throw new Error('Não foram encontradas eleições')
         next()
       } catch (err) {
-        console.log(err)
+        console.error(err)
         next({ name: 'NotFoundVoting' })
       }
     },

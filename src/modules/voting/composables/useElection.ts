@@ -5,18 +5,22 @@ const useElection = () => {
   const store = useElectionStore()
   const fetchElections = async () => {
     try {
-      const { data, error: err } = await supabase
+      const { data: elections, error: err } = await supabase
         .from('election')
         .select('*')
         .returns<Election[]>()
         .order('id')
-      if (err) throw err
-      if (!data.length) throw Error('Nenhuma eleição cadastrada!')
-      store.elections = data
-      return data
+      if (err)
+        throw new Error(
+          `Erro ao buscar as eleições: ${err.message} (${err.code})`,
+        )
+      if (!elections || !elections.length)
+        throw Error('Nenhuma eleição cadastrada!')
+      store.elections = elections
+      return elections
     } catch (err) {
       const e = err as Error
-      console.log(e)
+      console.error(e.message)
     }
   }
 
