@@ -9,6 +9,27 @@ import {
 
 const routes: CustomRouteRecordRaw[] = [
   {
+    path: '/voting',
+    component: () => import('../views/VotingHome.vue'),
+    name: 'VotingHome',
+    meta: {
+      title: 'Sistema de Votação',
+      requiresAuth: true,
+    },
+    beforeEnter: async (to, from, next) => {
+      const { fetchElections } = useElection()
+      try {
+        const elections = await fetchElections()
+        if (!elections || !elections.length)
+          throw new Error('Não foram encontradas eleições')
+        next()
+      } catch (err) {
+        console.error(err)
+        next({ name: 'NotFoundVoting' })
+      }
+    },
+  },
+  {
     path: '/election/:id',
     component: () => import('../views/ElectionHome.vue'),
     name: 'ElectionHome',
@@ -36,27 +57,6 @@ const routes: CustomRouteRecordRaw[] = [
         next()
       } catch (err) {
         console.log('Erro: ', err)
-        next({ name: 'NotFoundVoting' })
-      }
-    },
-  },
-  {
-    path: '/voting',
-    component: () => import('../views/VotingHome.vue'),
-    name: 'VotingHome',
-    meta: {
-      title: 'Sistema de Votação',
-      requiresAuth: true,
-    },
-    beforeEnter: async (to, from, next) => {
-      const { fetchElections } = useElection()
-      try {
-        const elections = await fetchElections()
-        if (!elections || !elections.length)
-          throw new Error('Não foram encontradas eleições')
-        next()
-      } catch (err) {
-        console.error(err)
         next({ name: 'NotFoundVoting' })
       }
     },
