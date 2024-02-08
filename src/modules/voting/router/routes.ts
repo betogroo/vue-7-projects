@@ -25,18 +25,19 @@ const routes: CustomRouteRecordRaw[] = [
       const { fetchBallotBox } = useBallotBox()
       const { fetchVoters } = useVoters()
       try {
-        const election = await getElection(election_id)
-        const candidates = await fetchCandidates(election_id)
-        const ballotBox = await fetchBallotBox(election_id)
-        const voters = await fetchVoters()
-        console.log({ candidates, ballotBox, voters })
-        if (!election) throw Error('Eleição não encontrada')
+        const [election, candidates, ballotsBox, voters] = await Promise.all([
+          await getElection(election_id),
+          await fetchCandidates(election_id),
+          await fetchBallotBox(election_id),
+          await fetchVoters(),
+        ])
+        if (!election || !candidates || !ballotsBox || !voters)
+          throw Error('Algumas das consultas falharam')
         next()
       } catch (err) {
-        console.log(err)
+        console.log('Erro: ', err)
         next({ name: 'NotFoundVoting' })
       }
-      console.log(to.params.id)
     },
   },
   {
@@ -51,13 +52,13 @@ const routes: CustomRouteRecordRaw[] = [
       const { fetchElections } = useElection()
       try {
         const elections = await fetchElections()
-        if (!elections) next({ name: 'AboutView' })
+        if (!elections || !elections.length)
+          throw Error('Não foram encontradas eleições')
         next()
       } catch (err) {
         console.log(err)
-        next({ name: 'AboutView' })
+        next({ name: 'NotFoundVoting' })
       }
-      //console.log(store)
     },
   },
   {
@@ -73,16 +74,18 @@ const routes: CustomRouteRecordRaw[] = [
       const { fetchCandidates } = useCandidates()
       const { fetchVoters } = useVoters()
       const ballot_box_id = to.params.id.toString()
-      console.log(to)
       try {
-        const ballotBox = await getBallotBox(ballot_box_id)
+        const [ballotBox, voters] = await Promise.all([
+          await getBallotBox(ballot_box_id),
+          await fetchVoters(),
+        ])
         if (!ballotBox) throw Error('Urna não encontrada')
         const election_id = ballotBox.election_id
-        await fetchCandidates(election_id)
-        await fetchVoters()
-        const election = await getElection(election_id)
-
-        console.log(ballotBox, election)
+        const [candidates, election] = await Promise.all([
+          await fetchCandidates(election_id),
+          await getElection(election_id),
+        ])
+        console.log(ballotBox, voters, candidates, election)
         next()
       } catch (err) {
         console.log(err)
