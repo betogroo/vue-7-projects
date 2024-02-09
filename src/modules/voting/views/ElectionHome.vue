@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { BallotBoxCard, BallotBoxForm, CandidateForm } from '../components'
+import {
+  BallotBoxCard,
+  BallotBoxForm,
+  CandidateForm,
+  CandidateList,
+} from '../components'
 import { useElectionStore } from '../store/useElectionStore'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useVoterStore } from '../store/useVoterStore'
+import { useCandidateStore } from '../store/useCandidateStore'
 import { useBallotBox, useCandidates } from '../composables'
 import { Candidate } from '../types/Voting'
 
@@ -13,9 +19,11 @@ const { addBallotBox } = useBallotBox()
 const electionStore = useElectionStore()
 const ballotBoxStore = useBallotBoxStore()
 const voterStore = useVoterStore()
+const candidateStore = useCandidateStore()
 
 const { ballotsBox } = storeToRefs(ballotBoxStore)
 const { election } = storeToRefs(electionStore)
+const { candidates } = storeToRefs(candidateStore)
 const { voters } = storeToRefs(voterStore)
 
 const handleSubmit = async (candidate: Candidate) => {
@@ -50,6 +58,7 @@ const handleSubmit = async (candidate: Candidate) => {
       :election_id="election.id!"
       @add-candidate="(value) => handleSubmit(value)"
     />
+    <CandidateList :candidates="candidates" />
   </v-container>
   <v-container v-else>Nada a Mostrar</v-container>
 </template>

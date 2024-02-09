@@ -2,12 +2,13 @@
 import type { BallotBox } from '../types/Voting'
 
 interface Props {
-  ballotsBox: BallotBox[] | undefined
+  ballotsBox: BallotBox[]
 }
 defineProps<Props>()
 </script>
 
 <template>
+  <v-card v-if="!ballotsBox.length">Ainda não temos urnas cadastradas</v-card>
   <v-card
     v-for="item in ballotsBox"
     :key="item.id"

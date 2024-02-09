@@ -47,11 +47,13 @@ const routes: CustomRouteRecordRaw[] = [
           useBallotBox().fetchBallotBox(election_id),
           useVoters().fetchVoters(),
         ])
-        if (!election || !candidates || !ballotsBox || !voters)
-          throw Error('Algumas das consultas falharam')
+        if (!election) throw Error('Erro ao carregar a eleição')
+        if (!candidates) throw Error('Erro ao carregar os candidatos')
+        if (!ballotsBox) throw Error('Erro ao carregar as urnas')
+        if (!voters) throw Error('Erro ao carregar os eleitores')
         next()
       } catch (err) {
-        console.log('Erro: ', err)
+        console.error(err)
         next({ name: 'NotFoundVoting' })
       }
     },
@@ -80,7 +82,8 @@ const routes: CustomRouteRecordRaw[] = [
         if (!voters) throw new Error('Não foi possível listar os eleitores')
         next()
       } catch (err) {
-        console.log(err)
+        console.error(err)
+        next({ name: 'NotFoundVoting' })
       }
     },
     children: [
