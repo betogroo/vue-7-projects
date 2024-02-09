@@ -17,9 +17,9 @@ const routes: CustomRouteRecordRaw[] = [
       requiresAuth: true,
     },
     beforeEnter: async (to, from, next) => {
-      const { fetchElections } = useElection()
+      // const { fetchElections } = useElection()
       try {
-        const elections = await fetchElections()
+        const elections = await useElection().fetchElections()
         if (!elections || !elections.length)
           throw new Error('Não foram encontradas eleições')
         next()
@@ -41,16 +41,12 @@ const routes: CustomRouteRecordRaw[] = [
     //props: (router) => ({ id: +router.params.id }),
     beforeEnter: async (to, from, next) => {
       const election_id = +to.params.id
-      const { getElection } = useElection()
-      const { fetchCandidates } = useCandidates()
-      const { fetchBallotBox } = useBallotBox()
-      const { fetchVoters } = useVoters()
       try {
         const [election, candidates, ballotsBox, voters] = await Promise.all([
-          await getElection(election_id),
-          await fetchCandidates(election_id),
-          await fetchBallotBox(election_id),
-          await fetchVoters(),
+          useElection().getElection(election_id),
+          useCandidates().fetchCandidates(election_id),
+          useBallotBox().fetchBallotBox(election_id),
+          useVoters().fetchVoters(),
         ])
         if (!election || !candidates || !ballotsBox || !voters)
           throw Error('Algumas das consultas falharam')
