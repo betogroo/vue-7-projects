@@ -46,7 +46,6 @@ const useBallotBox = () => {
         .select('*')
         .returns<BallotBox>()
       if (err) throw err
-      await fetchBallotBox(election_id)
       console.log(data)
     } catch (err) {
       const e = err as Error

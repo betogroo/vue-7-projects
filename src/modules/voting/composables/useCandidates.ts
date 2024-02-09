@@ -33,7 +33,6 @@ const useCandidates = () => {
         .select()
         .returns<Candidate>()
       if (err) throw err
-      await fetchCandidates(data.election_id)
       console.log(data)
       return data.id
     } catch (err) {

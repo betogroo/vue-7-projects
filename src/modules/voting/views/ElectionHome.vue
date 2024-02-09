@@ -13,7 +13,7 @@ import { useCandidateStore } from '../store/useCandidateStore'
 import { useBallotBox, useCandidates } from '../composables'
 import { Candidate } from '../types/Voting'
 
-const { addBallotBox } = useBallotBox()
+// const { addBallotBox } = useBallotBox()
 // const { addCandidate } = useCandidates()
 
 const electionStore = useElectionStore()
@@ -26,8 +26,18 @@ const { election } = storeToRefs(electionStore)
 const { candidates } = storeToRefs(candidateStore)
 const { voters } = storeToRefs(voterStore)
 
-const handleSubmit = async (candidate: Candidate) => {
-  useCandidates().addCandidate(candidate)
+const handleCandidates = async (candidate: Candidate) => {
+  await Promise.all([
+    useCandidates().addCandidate(candidate),
+    useCandidates().fetchCandidates(candidate.election_id),
+  ])
+}
+
+const handleBallotBox = async (election_id: number, site: string) => {
+  await Promise.all([
+    useBallotBox().addBallotBox(election_id, site),
+    useBallotBox().fetchBallotBox(election_id),
+  ])
 }
 </script>
 
@@ -37,7 +47,7 @@ const handleSubmit = async (candidate: Candidate) => {
     <h2>{{ election.name }} ({{ election.organization }})</h2>
     <h3>Data da Eleição: {{ election.date }}</h3>
     <BallotBoxForm
-      @handle-submit="(site) => addBallotBox(election.id!, site)"
+      @handle-submit="(site) => handleBallotBox(election.id!, site)"
     />
     <div class="d-flex flex-wrap justify-center">
       <BallotBoxCard :ballots-box="ballotsBox" />
@@ -56,7 +66,7 @@ const handleSubmit = async (candidate: Candidate) => {
     <CandidateForm
       :candidate_number_length="election.candidate_number_length"
       :election_id="election.id!"
-      @add-candidate="(value) => handleSubmit(value)"
+      @add-candidate="(value) => handleCandidates(value)"
     />
     <CandidateList :candidates="candidates" />
   </v-container>
