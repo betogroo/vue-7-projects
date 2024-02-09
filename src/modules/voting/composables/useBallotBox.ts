@@ -37,15 +37,14 @@ const useBallotBox = () => {
     }
   }
 
-  const addBallotBox = async (
-    election_id: number | undefined | null,
-    site: string,
-  ) => {
+  const addBallotBox = async (election_id: number, site: string) => {
     try {
       if (!election_id) throw Error('Não há eleição selecionada')
       const { data, error: err } = await supabase
         .from('ballot_box')
         .insert({ election_id, site })
+        .select('*')
+        .returns<BallotBox>()
       if (err) throw err
       await fetchBallotBox(election_id)
       console.log(data)
