@@ -64,7 +64,6 @@ const routes: CustomRouteRecordRaw[] = [
       title: 'Urna',
       requiresAuth: true,
     },
-    props: (router) => ({ id: router.params.id }),
     beforeEnter: async (to, from, next) => {
       const ballot_box_id = to.params.id.toString()
       try {
@@ -91,7 +90,6 @@ const routes: CustomRouteRecordRaw[] = [
         name: 'BallotBoxView',
         path: 'urna',
         component: () => import('../views/BallotBoxView.vue'),
-        props: (router) => ({ id: router.params.id }),
       },
       {
         name: 'BallotBoxAdmin',
