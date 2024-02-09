@@ -4,25 +4,46 @@ import type { Election } from '../types/Voting'
 import { useElection } from '../composables'
 import { ElectionForm } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
+import { ref } from 'vue'
 const electionStore = useElectionStore()
 const { elections } = storeToRefs(electionStore)
-const { addElection, fetchElections } = useElection()
+const { addElection, fetchElections, deleteElection } = useElection()
+
+const dialogDelete = ref(false)
+const deleteId = ref(-1)
 
 const handleElection = async (data: Election) => {
   try {
-    const [election, elections] = await Promise.all([
-      addElection(data),
-      fetchElections(),
-    ])
-    console.log(election), elections
+    await addElection(data)
+    await fetchElections()
   } catch (err) {
     const e = err as Error
     console.error(e)
   }
 }
 
+const closeDelete = () => {
+  deleteId.value = -1
+  dialogDelete.value = false
+}
+
+const deleteItemConfirm = async () => {
+  try {
+    await deleteElection(deleteId.value)
+    await fetchElections()
+    closeDelete()
+  } catch (err) {
+    const e = err as Error
+    console.error(e)
+  }
+  console.log(deleteId.value)
+  closeDelete()
+}
+
 const handleDelete = (id: number) => {
-  console.log(id)
+  deleteId.value = -1
+  dialogDelete.value = true
+  deleteId.value = id
 }
 
 const headers = [
@@ -61,6 +82,32 @@ const headers = [
   >
     <template #top>
       <v-toolbar density="compact">
+        <v-dialog
+          v-model="dialogDelete"
+          max-width="500px"
+        >
+          <v-card>
+            <v-card-title class="text-h5"
+              >Tem certeza que deseja excluir este item?</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="closeDelete"
+                >Cancelar</v-btn
+              >
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="deleteItemConfirm"
+                >Sim</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-toolbar-title>Eleições Cadastradas</v-toolbar-title>
         <v-divider
           class="mx-4"

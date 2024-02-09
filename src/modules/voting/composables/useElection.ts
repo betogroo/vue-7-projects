@@ -14,6 +14,7 @@ const useElection = () => {
         throw new Error(
           `Erro ao buscar as eleições: ${err.message} (${err.code})`,
         )
+      console.log('passou aqui')
       store.elections = elections
       return elections
     } catch (err) {
@@ -71,7 +72,23 @@ const useElection = () => {
       console.log(value)
     } catch (err) {
       const e = err as Error
-      console.log(e)
+      console.error(e)
+    }
+  }
+
+  const deleteElection = async (id: number) => {
+    try {
+      const { error: err } = await supabase
+        .from('election')
+        .delete()
+        .eq('id', id)
+      if (err)
+        throw new Error(
+          `Erro ao tentar excluir a eleição: ${err.message} (${err.code})`,
+        )
+    } catch (err) {
+      const e = err as Error
+      console.error(e)
     }
   }
 
@@ -106,7 +123,7 @@ const useElection = () => {
     )
     .subscribe()
 
-  return { fetchElections, getElection, addElection, setReady }
+  return { fetchElections, getElection, addElection, setReady, deleteElection }
 }
 
 export default useElection
