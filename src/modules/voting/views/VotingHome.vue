@@ -1,22 +1,23 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import type { Election } from '../types/Voting'
-import { useRouter } from 'vue-router'
 import { useElection } from '../composables'
 import { ElectionForm } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
 const electionStore = useElectionStore()
 const { elections } = storeToRefs(electionStore)
-const { addElection } = useElection()
-const router = useRouter()
+const { addElection, fetchElections } = useElection()
 
-const handleSubmit = async (data: Election) => {
+const handleElection = async (data: Election) => {
   try {
-    const election_id = await addElection(data)
-    router.push({ name: 'ElectionHome', params: { id: election_id } })
+    const [election, elections] = await Promise.all([
+      addElection(data),
+      fetchElections(),
+    ])
+    console.log(election), elections
   } catch (err) {
     const e = err as Error
-    console.log(e)
+    console.error(e)
   }
 }
 
@@ -53,9 +54,24 @@ const headers = [
   <h2>Total de Eleições cadastradas: {{ electionStore.totalElections }}</h2>
 
   <v-data-table
+    v-if="elections.length"
+    density="compact"
     :headers="headers"
     :items="elections"
   >
+    <template #top>
+      <v-toolbar density="compact">
+        <v-toolbar-title>Eleições Cadastradas</v-toolbar-title>
+        <v-divider
+          class="mx-4"
+          inset
+          vertical
+        ></v-divider>
+        <v-spacer></v-spacer>
+        <v-btn prepend-icon="mdi-plus">Nova Eleição</v-btn>
+      </v-toolbar>
+    </template>
+
     <template #item.actions="{ item }">
       <div
         v-if="item.id"
@@ -74,10 +90,11 @@ const headers = [
       </div>
     </template>
   </v-data-table>
+  <div v-else>Nada</div>
   <v-card
     variant="flat"
     width="400"
   >
-    <ElectionForm @handle-submit="(data) => handleSubmit(data)" />
+    <ElectionForm @handle-submit="(data) => handleElection(data)" />
   </v-card>
 </template>

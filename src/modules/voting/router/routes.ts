@@ -19,8 +19,7 @@ const routes: CustomRouteRecordRaw[] = [
     beforeEnter: async (to, from, next) => {
       try {
         const elections = await useElection().fetchElections()
-        if (!elections || !elections.length)
-          throw new Error('Não foram encontradas eleições')
+        if (!elections) throw new Error('Não foram encontradas eleições')
         next()
       } catch (err) {
         console.error(err)

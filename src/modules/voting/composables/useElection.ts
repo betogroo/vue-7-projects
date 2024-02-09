@@ -14,8 +14,6 @@ const useElection = () => {
         throw new Error(
           `Erro ao buscar as eleições: ${err.message} (${err.code})`,
         )
-      if (!elections || !elections.length)
-        throw new Error('Nenhuma eleição cadastrada!')
       store.elections = elections
       return elections
     } catch (err) {
