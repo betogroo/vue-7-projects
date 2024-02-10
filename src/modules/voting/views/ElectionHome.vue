@@ -27,17 +27,13 @@ const { candidates } = storeToRefs(candidateStore)
 const { voters } = storeToRefs(voterStore)
 
 const handleCandidates = async (candidate: Candidate) => {
-  await Promise.all([
-    useCandidates().addCandidate(candidate),
-    useCandidates().fetchCandidates(candidate.election_id),
-  ])
+  await useCandidates().addCandidate(candidate)
+  await useCandidates().fetchCandidates(candidate.election_id)
 }
 
 const handleBallotBox = async (election_id: number, site: string) => {
-  await Promise.all([
-    useBallotBox().addBallotBox(election_id, site),
-    useBallotBox().fetchBallotBox(election_id),
-  ])
+  await useBallotBox().addBallotBox(election_id, site)
+  await useBallotBox().fetchBallotBox(election_id)
 }
 </script>
 
