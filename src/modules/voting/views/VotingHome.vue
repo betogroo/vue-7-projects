@@ -12,10 +12,16 @@ const { addElection, fetchElections, deleteElection } = useElection()
 const dialogDelete = ref(false)
 const deleteId = ref(-1)
 
+const dialog = ref(false)
+const close = () => {
+  dialog.value = false
+}
+
 const handleElection = async (data: Election) => {
   try {
     await addElection(data)
     await fetchElections()
+    dialog.value = false
   } catch (err) {
     const e = err as Error
     console.error(e)
@@ -82,6 +88,49 @@ const headers = [
   >
     <template #top>
       <v-toolbar density="compact">
+        <v-toolbar-title>Eleições Cadastradas</v-toolbar-title>
+        <v-divider
+          class="mx-4"
+          inset
+          vertical
+        ></v-divider>
+        <v-spacer></v-spacer>
+        <v-dialog
+          v-model="dialog"
+          max-width="500px"
+        >
+          <template v-slot:activator="{ props }">
+            <v-btn
+              class="mb-2"
+              color="primary"
+              v-bind="props"
+            >
+              Cadastrar Eleição
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="text-h5">Cadastrar Eleição</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-container>
+                <ElectionForm @handle-submit="(data) => handleElection(data)" />
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="close"
+              >
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-dialog
           v-model="dialogDelete"
           max-width="500px"
@@ -108,14 +157,6 @@ const headers = [
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-toolbar-title>Eleições Cadastradas</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
-        <v-spacer></v-spacer>
-        <v-btn prepend-icon="mdi-plus">Nova Eleição</v-btn>
       </v-toolbar>
     </template>
 
@@ -142,6 +183,5 @@ const headers = [
     variant="flat"
     width="400"
   >
-    <ElectionForm @handle-submit="(data) => handleElection(data)" />
   </v-card>
 </template>
