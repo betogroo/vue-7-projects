@@ -5,35 +5,42 @@ const useElection = () => {
   const store = useElectionStore()
   const fetchElections = async () => {
     try {
-      const { data, error: err } = await supabase
+      const { data: elections, error: err } = await supabase
         .from('election')
         .select('*')
         .returns<Election[]>()
         .order('id')
-      if (err) throw err
-      if (!data.length) throw Error('Nenhuma eleição cadastrada!')
-      store.elections = data
-      return data
+      if (err)
+        throw new Error(
+          `Erro ao buscar as eleições: ${err.message} (${err.code})`,
+        )
+      console.log('passou aqui')
+      store.elections = elections
+      return elections
     } catch (err) {
       const e = err as Error
-      console.log(e)
+      console.error(e.message)
     }
   }
 
   const getElection = async (id: number) => {
     try {
-      const { data, error: err } = await supabase
+      const { data: election, error: err } = await supabase
         .from('election')
         .select('*')
         .eq('id', id)
         .returns<Election[]>()
         .single()
-      if (err) throw err
-      store.election = data
-      return data || null
+      if (err)
+        throw new Error(
+          `Erro ao buscar a eleição: ${err.message} (${err.code})`,
+        )
+      if (!election) throw new Error('Erro ao carregar a eleição!')
+      store.election = election
+      return election
     } catch (err) {
       const e = err as Error
-      console.log(e)
+      console.error(e)
     }
   }
 
@@ -65,7 +72,23 @@ const useElection = () => {
       console.log(value)
     } catch (err) {
       const e = err as Error
-      console.log(e)
+      console.error(e)
+    }
+  }
+
+  const deleteElection = async (id: number) => {
+    try {
+      const { error: err } = await supabase
+        .from('election')
+        .delete()
+        .eq('id', id)
+      if (err)
+        throw new Error(
+          `Erro ao tentar excluir a eleição: ${err.message} (${err.code})`,
+        )
+    } catch (err) {
+      const e = err as Error
+      console.error(e)
     }
   }
 
@@ -100,7 +123,7 @@ const useElection = () => {
     )
     .subscribe()
 
-  return { fetchElections, getElection, addElection, setReady }
+  return { fetchElections, getElection, addElection, setReady, deleteElection }
 }
 
 export default useElection

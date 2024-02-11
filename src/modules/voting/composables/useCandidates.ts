@@ -1,24 +1,25 @@
 import { supabase } from '@/plugins/supabase'
 import { type Candidate, candidatesSchema } from '../types/Voting'
 import { useCandidateStore } from '../store/useCandidateStore'
+const table = 'candidates'
 
 const useCandidates = () => {
   const store = useCandidateStore()
   const fetchCandidates = async (election_id: number) => {
     try {
-      const { data, error: err } = await supabase
-        .from('candidates')
+      const { data: candidates, error: err } = await supabase
+        .from(table)
         .select('*')
         .order('name')
         .eq('election_id', election_id)
         .returns<Candidate[]>()
-      if (err) throw err
-      if (data) {
-        const parsedData = candidatesSchema.parse(data)
-        store.candidates = parsedData
-        return data || null
-        //console.log(data)
-      }
+      if (err)
+        throw new Error(
+          `Erro ao buscar os Candidatos: ${err.message} (${err.code})`,
+        )
+      if (!candidates) throw new Error('Nenhum candidato cadastrado!')
+      store.candidates = candidatesSchema.parse(candidates)
+      return candidates
     } catch (err) {
       const e = err as Error
       console.log(e)
@@ -28,7 +29,7 @@ const useCandidates = () => {
   const addCandidate = async (candidate: Candidate) => {
     try {
       const { data, error: err } = await supabase
-        .from('candidates')
+        .from(table)
         .insert(candidate)
         .select()
         .returns<Candidate>()

@@ -6,11 +6,11 @@ import { AppBar } from '@/shared/components'
 <template>
   <v-app>
     <AppBar v-if="!route.meta.hideNavBar" />
-    <v-main>
-      <Suspense>
-        <template #fallback>Loading</template>
+    <Suspense>
+      <v-main>
         <RouterView />
-      </Suspense>
-    </v-main>
+      </v-main>
+      <template #fallback>Loading</template>
+    </Suspense>
   </v-app>
 </template>

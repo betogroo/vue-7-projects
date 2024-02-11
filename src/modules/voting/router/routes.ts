@@ -9,36 +9,6 @@ import {
 
 const routes: CustomRouteRecordRaw[] = [
   {
-    path: '/election/:id',
-    component: () => import('../views/ElectionHome.vue'),
-    name: 'ElectionHome',
-    meta: {
-      title: 'Sistema de Votação',
-      requiresAuth: false,
-      hideNavBar: false,
-    },
-    props: (router) => ({ id: +router.params.id }),
-    beforeEnter: async (to, from, next) => {
-      const election_id = +to.params.id
-      const { getElection } = useElection()
-      const { fetchCandidates } = useCandidates()
-      const { fetchBallotBox } = useBallotBox()
-      const { fetchVoters } = useVoters()
-      try {
-        const election = await getElection(election_id)
-        const candidates = await fetchCandidates(election_id)
-        const ballotBox = await fetchBallotBox(election_id)
-        const voters = await fetchVoters()
-        console.log({ candidates, ballotBox, voters })
-        if (!election) next({ name: 'AboutView' })
-        next()
-      } catch (err) {
-        console.log(err)
-      }
-      console.log(to.params.id)
-    },
-  },
-  {
     path: '/voting',
     component: () => import('../views/VotingHome.vue'),
     name: 'VotingHome',
@@ -47,16 +17,44 @@ const routes: CustomRouteRecordRaw[] = [
       requiresAuth: true,
     },
     beforeEnter: async (to, from, next) => {
-      const { fetchElections } = useElection()
       try {
-        const elections = await fetchElections()
-        if (!elections) next({ name: 'AboutView' })
+        const elections = await useElection().fetchElections()
+        if (!elections) throw new Error('Não foram encontradas eleições')
         next()
       } catch (err) {
-        console.log(err)
-        next({ name: 'AboutView' })
+        console.error(err)
+        next({ name: 'NotFoundVoting' })
       }
-      //console.log(store)
+    },
+  },
+  {
+    path: '/election/:id',
+    component: () => import('../views/ElectionHome.vue'),
+    name: 'ElectionHome',
+    meta: {
+      title: 'Sistema de Votação',
+      requiresAuth: false,
+      hideNavBar: false,
+    },
+    //props: (router) => ({ id: +router.params.id }),
+    beforeEnter: async (to, from, next) => {
+      const election_id = +to.params.id
+      try {
+        const [election, candidates, ballotsBox, voters] = await Promise.all([
+          useElection().getElection(election_id),
+          useCandidates().fetchCandidates(election_id),
+          useBallotBox().fetchBallotBox(election_id),
+          useVoters().fetchVoters(),
+        ])
+        if (!election) throw Error('Erro ao carregar a eleição')
+        if (!candidates) throw Error('Erro ao carregar os candidatos')
+        if (!ballotsBox) throw Error('Erro ao carregar as urnas')
+        if (!voters) throw Error('Erro ao carregar os eleitores')
+        next()
+      } catch (err) {
+        console.error(err)
+        next({ name: 'NotFoundVoting' })
+      }
     },
   },
   {
@@ -65,35 +63,32 @@ const routes: CustomRouteRecordRaw[] = [
       title: 'Urna',
       requiresAuth: true,
     },
-    props: (router) => ({ id: router.params.id }),
     beforeEnter: async (to, from, next) => {
-      const { getBallotBox } = useBallotBox()
-      const { getElection } = useElection()
-      const { fetchCandidates } = useCandidates()
-      const { fetchVoters } = useVoters()
       const ballot_box_id = to.params.id.toString()
-      console.log(to)
       try {
-        const ballotBox = await getBallotBox(ballot_box_id)
-        if (!ballotBox) throw Error('Urna não encontrada')
+        const ballotBox = await useBallotBox().getBallotBox(ballot_box_id)
+        if (!ballotBox) throw new Error('Urna não encontrada')
         const election_id = ballotBox.election_id
-        await fetchCandidates(election_id)
-        await fetchVoters()
-        const election = await getElection(election_id)
-
-        console.log(ballotBox, election)
+        const [candidates, election, voters] = await Promise.all([
+          useCandidates().fetchCandidates(election_id),
+          useElection().getElection(election_id),
+          useVoters().fetchVoters(),
+        ])
+        if (!election) throw new Error('Eleição não encontrada')
+        if (!candidates)
+          throw new Error('Não foi possível listar os candidatos')
+        if (!voters) throw new Error('Não foi possível listar os eleitores')
         next()
       } catch (err) {
-        console.log(err)
+        console.error(err)
+        next({ name: 'NotFoundVoting' })
       }
-      //console.log(store)
     },
     children: [
       {
         name: 'BallotBoxView',
         path: 'urna',
         component: () => import('../views/BallotBoxView.vue'),
-        props: (router) => ({ id: router.params.id }),
       },
       {
         name: 'BallotBoxAdmin',
@@ -101,6 +96,15 @@ const routes: CustomRouteRecordRaw[] = [
         component: () => import('../views/BallotBoxAdmin.vue'),
       },
     ],
+  },
+  {
+    path: '/voting/notfound',
+    name: 'NotFoundVoting',
+    component: () => import('../views/NotFoundElection.vue'),
+    meta: {
+      requiresAuth: false,
+      title: 'Não encontrado',
+    },
   },
 ]
 
