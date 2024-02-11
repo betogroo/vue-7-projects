@@ -13,7 +13,10 @@ import ElectionTable from './ElectionTable.vue'
 import CandidateForm from './CandidateForm.vue'
 import CandidateList from './CandidateList.vue'
 
+import { AppGenericTable } from '@/shared/components'
+
 export {
+  AppGenericTable,
   NumericBtn,
   NumericDisplay,
   ActionKeyboard,

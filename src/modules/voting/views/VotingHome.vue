@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import type { Election } from '../types/Voting'
+import type { Election, TableHeader } from '../types/Voting'
 import { useElection } from '../composables'
-import { ElectionTable, ElectionForm } from '../components'
+import { ElectionForm, AppGenericTable as ElectionTable } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
 import { ref } from 'vue'
 const electionStore = useElectionStore()
@@ -31,18 +31,47 @@ const deleteItemConfirm = async (election_id: string) => {
     console.error(e)
   }
 }
+
+const electionTableHeader: TableHeader[] = [
+  {
+    title: 'Data',
+    key: 'date',
+  },
+  {
+    title: 'Nome',
+    key: 'name',
+  },
+  {
+    title: 'Organização',
+    key: 'organization',
+  },
+  {
+    title: 'Descrição',
+    key: 'description',
+  },
+  {
+    title: 'Ações',
+    key: 'actions',
+  },
+]
 </script>
 
 <template>
   <h1>Administração e Contabilização</h1>
   <h2>Total de Eleições cadastradas: {{ electionStore.totalElections }}</h2>
+
   <ElectionTable
     v-model="dialog"
-    :elections="elections"
+    :aim-view="'ElectionHome'"
+    :headers="electionTableHeader"
+    :table-data="elections"
+    table-subject="Eleição"
+    title="Eleições Cadastradas"
     @delete-item-confirm="(id) => deleteItemConfirm(id)"
-    @handle-election="(data) => handleElection(data)"
   >
-    <ElectionForm @handle-submit="(data) => handleElection(data)" />
+    <template #addForm>
+      <ElectionForm @handle-submit="(data) => handleElection(data)" />
+    </template>
   </ElectionTable>
   <v-card
     variant="flat"

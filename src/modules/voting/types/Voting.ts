@@ -1,4 +1,6 @@
 import { z } from 'zod'
+// shared
+export type { TableHeader } from '@/shared/types/App'
 
 export const candidateSchema = z.object({
   id: z.string().uuid().nullish(),
