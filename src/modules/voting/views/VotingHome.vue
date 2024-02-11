@@ -22,7 +22,7 @@ const handleElection = async (data: Election) => {
   }
 }
 
-const deleteItemConfirm = async (election_id: number) => {
+const deleteItemConfirm = async (election_id: string) => {
   try {
     await deleteElection(election_id)
     await fetchElections()

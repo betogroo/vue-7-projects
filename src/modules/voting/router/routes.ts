@@ -38,7 +38,7 @@ const routes: CustomRouteRecordRaw[] = [
     },
     //props: (router) => ({ id: +router.params.id }),
     beforeEnter: async (to, from, next) => {
-      const election_id = +to.params.id
+      const election_id = to.params.id.toString()
       try {
         const [election, candidates, ballotsBox, voters] = await Promise.all([
           useElection().getElection(election_id),
