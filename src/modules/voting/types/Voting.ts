@@ -5,7 +5,7 @@ export const candidateSchema = z.object({
   created_at: z.string().nullish(),
   name: z.string().min(1, 'Obrigatório'),
   avatar: z.string().url('Url inválida').default(''),
-  election_id: z.number(),
+  election_id: z.string(),
   candidate_number: z.string(),
 })
 
@@ -15,7 +15,7 @@ export const voteSchema = z.object({
   id: z.string().uuid().nullish(),
   created_at: z.string().nullish(),
   candidate_id: z.string().uuid(),
-  election_id: z.number(),
+  election_id: z.string(),
   voter_id: z.string().uuid().nullish(),
   ballot_box_id: z.string().uuid(),
 })
@@ -28,7 +28,7 @@ export const voterSchema = z.object({
 })
 
 export const electionSchema = z.object({
-  id: z.number().optional(),
+  id: z.string().uuid().optional(),
   created_at: z.string().nullish(),
   date: z.string(),
   name: z.string().min(1, 'Obrigatório'),
@@ -44,7 +44,7 @@ export const ballotBoxSchema = z.object({
   created_at: z.string(),
   site: z.string(),
   ready: z.nullable(z.string()).default(null),
-  election_id: z.number(),
+  election_id: z.string(),
 })
 
 export type Candidate = z.infer<typeof candidateSchema>

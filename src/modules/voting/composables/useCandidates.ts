@@ -5,7 +5,7 @@ const table = 'candidates'
 
 const useCandidates = () => {
   const store = useCandidateStore()
-  const fetchCandidates = async (election_id: number) => {
+  const fetchCandidates = async (election_id: string) => {
     try {
       const { data: candidates, error: err } = await supabase
         .from(table)

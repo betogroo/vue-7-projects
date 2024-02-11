@@ -31,7 +31,7 @@ const handleCandidates = async (candidate: Candidate) => {
   await useCandidates().fetchCandidates(candidate.election_id)
 }
 
-const handleBallotBox = async (election_id: number, site: string) => {
+const handleBallotBox = async (election_id: string, site: string) => {
   await useBallotBox().addBallotBox(election_id, site)
   await useBallotBox().fetchBallotBox(election_id)
 }

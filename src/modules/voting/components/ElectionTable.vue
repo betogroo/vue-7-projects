@@ -7,18 +7,18 @@ interface Props {
 }
 defineProps<Props>()
 const $emit = defineEmits<{
-  'delete-item-confirm': [election_id: number]
+  'delete-item-confirm': [election_id: string]
   'handle-election': [election: Election]
 }>()
 const dialogDelete = ref(false)
-const deleteId = ref(-1)
+const deleteId = ref<string>('')
 const dialog = defineModel<boolean>()
 const close = () => {
   dialog.value = false
 }
 
-const handleDelete = (id: number) => {
-  deleteId.value = -1
+const handleDelete = (id: string) => {
+  deleteId.value = ''
   dialogDelete.value = true
   deleteId.value = id
 }
@@ -29,11 +29,11 @@ const handleDelete = (id: number) => {
 } */
 
 const closeDelete = () => {
-  deleteId.value = -1
+  deleteId.value = ''
   dialogDelete.value = false
 }
 
-const deleteItemConfirm = (election_id: number) => {
+const deleteItemConfirm = (election_id: string) => {
   $emit('delete-item-confirm', election_id)
   closeDelete()
 }
@@ -64,7 +64,6 @@ const headers = [
 
 <template>
   <v-data-table
-    v-if="elections.length"
     density="compact"
     :headers="headers"
     :items="elections"

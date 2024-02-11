@@ -4,7 +4,7 @@ import { Candidate } from '../types/Voting'
 
 interface Props {
   candidate_number_length: number
-  election_id: number
+  election_id: string
 }
 const props = defineProps<Props>()
 

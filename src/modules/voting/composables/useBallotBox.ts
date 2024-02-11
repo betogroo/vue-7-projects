@@ -4,7 +4,7 @@ import { useBallotBoxStore } from '../store/useBallotBoxStore'
 
 const useBallotBox = () => {
   const ballotBoxStore = useBallotBoxStore()
-  const fetchBallotBox = async (election_id: number) => {
+  const fetchBallotBox = async (election_id: string) => {
     try {
       const { data, error: err } = await supabase
         .from('ballot_box')
@@ -37,7 +37,7 @@ const useBallotBox = () => {
     }
   }
 
-  const addBallotBox = async (election_id: number, site: string) => {
+  const addBallotBox = async (election_id: string, site: string) => {
     try {
       if (!election_id) throw Error('Não há eleição selecionada')
       const { data, error: err } = await supabase

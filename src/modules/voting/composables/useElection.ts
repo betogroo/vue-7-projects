@@ -23,7 +23,7 @@ const useElection = () => {
     }
   }
 
-  const getElection = async (id: number) => {
+  const getElection = async (id: string) => {
     try {
       const { data: election, error: err } = await supabase
         .from('election')
@@ -61,7 +61,7 @@ const useElection = () => {
     }
   }
 
-  const setReady = async (id: number, value: boolean) => {
+  const setReady = async (id: string, value: boolean) => {
     try {
       const { data, error: err } = await supabase
         .from('election')
@@ -76,7 +76,7 @@ const useElection = () => {
     }
   }
 
-  const deleteElection = async (id: number) => {
+  const deleteElection = async (id: string) => {
     try {
       const { error: err } = await supabase
         .from('election')
