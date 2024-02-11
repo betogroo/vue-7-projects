@@ -50,6 +50,7 @@ const deleteItemConfirm = (election_id: string) => {
     :headers="headers"
     :items="tableData"
   >
+    <template #no-data>Sem dados a exibir</template>
     <template #top>
       <v-toolbar density="compact">
         <v-toolbar-title v-if="title">{{ title }}</v-toolbar-title>
