@@ -143,5 +143,11 @@ const deleteItemConfirm = (election_id: string) => {
         ></v-btn>
       </div>
     </template>
+    <template #item.additionalColumn="{ item }">
+      <slot
+        :item="item"
+        name="plus"
+      ></slot>
+    </template>
   </v-data-table>
 </template>

@@ -9,6 +9,7 @@ import {
 import { useElectionStore } from '../store/useElectionStore'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useCandidateStore } from '../store/useCandidateStore'
+import { useVotingStore } from '../store/useVotingStore'
 import { useBallotBox, useCandidates } from '../composables'
 import { Candidate, TableHeader } from '../types/Voting'
 import { ref } from 'vue'
@@ -19,6 +20,7 @@ import { ref } from 'vue'
 const electionStore = useElectionStore()
 const ballotBoxStore = useBallotBoxStore()
 const candidateStore = useCandidateStore()
+const votingStore = useVotingStore()
 
 const { ballotsBox } = storeToRefs(ballotBoxStore)
 const { election } = storeToRefs(electionStore)
@@ -44,6 +46,10 @@ const candidateTableHeader: TableHeader[] = [
   {
     title: 'Identificação Única',
     key: 'id',
+  },
+  {
+    title: 'Votos',
+    key: 'additionalColumn',
   },
 ]
 
@@ -126,6 +132,9 @@ const handleBallotBox = async (election_id: string, site: string) => {
               :election_id="election.id!"
               @add-candidate="(value) => handleCandidates(value)"
           /></template>
+          <template #plus="props">{{
+            votingStore.totalCandidateVote(props.item.id!)
+          }}</template>
         </CandidateTable>
       </v-col>
     </v-row>

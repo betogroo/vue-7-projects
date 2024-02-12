@@ -5,6 +5,7 @@ import {
   useCandidates,
   useBallotBox,
   useVoters,
+  useVoting,
 } from '../composables'
 
 const routes: CustomRouteRecordRaw[] = [
@@ -44,6 +45,7 @@ const routes: CustomRouteRecordRaw[] = [
           useElection().getElection(election_id),
           useCandidates().fetchCandidates(election_id),
           useBallotBox().fetchBallotBox(election_id),
+          useVoting().fetchVotes(election_id),
           useVoters().fetchVoters(),
         ])
         if (!election) throw Error('Erro ao carregar a eleição')
