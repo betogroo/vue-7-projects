@@ -5,13 +5,15 @@ import {
   BallotBoxForm,
   CandidateForm,
   CandidateList,
+  AppGenericTable as CandidateTable,
 } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useVoterStore } from '../store/useVoterStore'
 import { useCandidateStore } from '../store/useCandidateStore'
 import { useBallotBox, useCandidates } from '../composables'
-import { Candidate } from '../types/Voting'
+import { Candidate, TableHeader } from '../types/Voting'
+import { ref } from 'vue'
 
 // const { addBallotBox } = useBallotBox()
 // const { addCandidate } = useCandidates()
@@ -26,10 +28,27 @@ const { election } = storeToRefs(electionStore)
 const { candidates } = storeToRefs(candidateStore)
 const { voters } = storeToRefs(voterStore)
 
+const formCandidateDialog = ref(false)
 const handleCandidates = async (candidate: Candidate) => {
   await useCandidates().addCandidate(candidate)
   await useCandidates().fetchCandidates(candidate.election_id)
+  formCandidateDialog.value = false
 }
+
+const candidateTableHeader: TableHeader[] = [
+  {
+    title: 'Nome',
+    key: 'name',
+  },
+  {
+    title: 'Numero',
+    key: 'candidate_number',
+  },
+  {
+    title: 'Identificação Única',
+    key: 'id',
+  },
+]
 
 const handleBallotBox = async (election_id: string, site: string) => {
   await useBallotBox().addBallotBox(election_id, site)
@@ -59,12 +78,21 @@ const handleBallotBox = async (election_id: string, site: string) => {
         {{ name }}
       </v-card-text>
     </v-card>
-    <CandidateForm
-      :candidate_number_length="election.candidate_number_length"
-      :election_id="election.id!"
-      @add-candidate="(value) => handleCandidates(value)"
-    />
+
     <CandidateList :candidates="candidates" />
+    <CandidateTable
+      v-model="formCandidateDialog"
+      :headers="candidateTableHeader"
+      :table-data="candidates"
+      table-subject="Candidato"
+    >
+      <template #addForm
+        ><CandidateForm
+          :candidate_number_length="election.candidate_number_length"
+          :election_id="election.id!"
+          @add-candidate="(value) => handleCandidates(value)"
+      /></template>
+    </CandidateTable>
   </v-container>
   <v-container v-else>Nada a Mostrar</v-container>
 </template>

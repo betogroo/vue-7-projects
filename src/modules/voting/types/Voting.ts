@@ -1,7 +1,9 @@
 import { z } from 'zod'
+// shared
+export type { TableHeader } from '@/shared/types/App'
 
 export const candidateSchema = z.object({
-  id: z.string().uuid().nullish(),
+  id: z.string().uuid().optional(),
   created_at: z.string().nullish(),
   name: z.string().min(1, 'Obrigatório'),
   avatar: z.string().url('Url inválida').default(''),
