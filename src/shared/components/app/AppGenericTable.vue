@@ -86,7 +86,9 @@ const deleteItemConfirm = (election_id: string) => {
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                variant="text"
+                block
+                color="warning"
+                variant="outlined"
                 @click="closeDialogForm"
               >
                 Cancelar

@@ -31,36 +31,37 @@ const testIfNumberIsAvailable = () => {
 </script>
 
 <template>
-  <v-card
-    max-width="500"
-    title="Inserir Candidatos"
-  >
-    <v-form @submit.prevent="handleSubmit">
-      <v-row
-        align="center"
-        no-gutters
-      >
-        <v-col cols="6">Número do Candidato</v-col>
-        <v-col>
-          <v-otp-input
-            v-model="formData.candidate_number"
-            label="Número do Candidato"
-            :length="candidate_number_length"
-            width="200"
-            @finish="testIfNumberIsAvailable"
-          ></v-otp-input>
-        </v-col>
-        <v-col cols="12">
-          <v-text-field
-            ref="nameRef"
-            v-model="formData.name"
-            label="Nome do Candidato"
-          ></v-text-field>
-        </v-col>
-        <v-col>
-          <v-btn type="submit">Cadastrar</v-btn>
-        </v-col>
-      </v-row>
-    </v-form>
-  </v-card>
+  <v-form @submit.prevent="handleSubmit">
+    <v-row
+      align="center"
+      no-gutters
+    >
+      <v-col cols="6">Número do Candidato</v-col>
+      <v-col>
+        <v-otp-input
+          v-model="formData.candidate_number"
+          label="Número do Candidato"
+          :length="candidate_number_length"
+          width="200"
+          @finish="testIfNumberIsAvailable"
+        ></v-otp-input>
+      </v-col>
+      <v-col cols="12">
+        <v-text-field
+          ref="nameRef"
+          v-model="formData.name"
+          label="Nome do Candidato"
+        ></v-text-field>
+      </v-col>
+      <v-col>
+        <v-btn
+          block
+          color="primary"
+          type="submit"
+          variant="elevated"
+          >Cadastrar</v-btn
+        >
+      </v-col>
+    </v-row>
+  </v-form>
 </template>

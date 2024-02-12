@@ -27,7 +27,9 @@ const onSubmit = () => {
       >
         <v-text-field
           v-model="site"
+          density="compact"
           :hide-details="true"
+          label="Local da Urna"
         ></v-text-field>
       </v-col>
       <v-col>
