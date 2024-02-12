@@ -91,6 +91,11 @@ const routes: CustomRouteRecordRaw[] = [
         name: 'BallotBoxView',
         path: 'urna',
         component: () => import('../views/BallotBoxView.vue'),
+        meta: {
+          requiresAuth: false,
+          hideNavBar: true,
+          title: 'Urna Eletrônica',
+        },
       },
       {
         name: 'BallotBoxAdmin',

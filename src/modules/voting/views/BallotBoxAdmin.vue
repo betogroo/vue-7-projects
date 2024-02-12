@@ -42,7 +42,7 @@ const releaseVote = async () => {
         item-title="ra"
         item-value="id"
         :items="voters"
-        label="Candidatos"
+        label="Eleitores"
         type="number"
         variant="outlined"
       ></v-autocomplete
