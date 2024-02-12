@@ -15,10 +15,8 @@ defineProps<Props>()
     class="ma-1"
     :title="item.site || ''"
     variant="outlined"
-    width="250"
   >
     <v-responsive :aspect-ratio="16 / 9">
-      <v-card-subtitle>{{ item.id }}</v-card-subtitle>
       <v-card-text> </v-card-text>
       <v-card-actions class="d-flex flex-column">
         <v-btn
