@@ -58,6 +58,10 @@ const handleBallotBox = async (election_id: string, site: string) => {
   await useBallotBox().fetchBallotBox(election_id)
   formBallotBoxDialog.value = false
 }
+
+const disableBallotBox = async (ballot_box_id: string) => {
+  await useBallotBox().setBallotBoxReady(ballot_box_id, null)
+}
 </script>
 
 <template>
@@ -115,7 +119,10 @@ const handleBallotBox = async (election_id: string, site: string) => {
         </v-toolbar>
 
         <div class="d-flex flex-wrap justify-center mt-3">
-          <BallotBoxCard :ballots-box="ballotsBox" />
+          <BallotBoxCard
+            :ballots-box="ballotsBox"
+            @handle-disable="(value) => disableBallotBox(value)"
+          />
         </div>
       </v-col>
       <v-col>
