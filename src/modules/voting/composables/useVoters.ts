@@ -28,7 +28,6 @@ const useVoters = () => {
       const _usedVoters =
         '(' + usedVoters.map((item) => `${item.voter_id}`).join(',') + ')'
 
-      console.log(_usedVoters)
       return _usedVoters
     } catch (err) {
       const e = err as Error
@@ -50,6 +49,25 @@ const useVoters = () => {
       console.log(e)
     }
   }
+
+  const getVoterByRa = async (election_id: string, voter_ra: string | null) => {
+    try {
+      const usedVoters = await fetchUsedVoters(election_id)
+      const { data, error: err } = await supabase
+        .from('voters')
+        .select('id, name, ra')
+        .not('id', 'in', usedVoters)
+        .eq('ra', voter_ra)
+        .single()
+      if (err) throw err
+      //store.availableVoters = data
+      console.log(data)
+      return data
+    } catch (err) {
+      const e = err as Error
+      console.log(e)
+    }
+  }
   const getRandomVoter = async () => {
     const voters = await fetchVoters()
     if (!voters) return
@@ -57,7 +75,7 @@ const useVoters = () => {
     return voters[index].id
   }
 
-  return { fetchVoters, fetchAvailableVoters, getRandomVoter }
+  return { fetchVoters, fetchAvailableVoters, getRandomVoter, getVoterByRa }
 }
 
 export default useVoters
