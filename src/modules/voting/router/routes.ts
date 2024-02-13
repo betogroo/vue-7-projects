@@ -75,6 +75,7 @@ const routes: CustomRouteRecordRaw[] = [
           useCandidates().fetchCandidates(election_id),
           useElection().getElection(election_id),
           useVoters().fetchVoters(),
+          useVoters().fetchAvailableVoters(election_id),
         ])
         if (!election) throw new Error('Eleição não encontrada')
         if (!candidates)

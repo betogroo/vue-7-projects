@@ -1,5 +1,5 @@
 import { supabase } from '@/plugins/supabase'
-import { type Candidate, candidatesSchema, Vote } from '../types/Voting'
+import { type Candidate, Vote } from '../types/Voting'
 import { useVotingStore } from '../store/useVotingStore'
 import { useCandidateStore } from '../store/useCandidateStore'
 import { useElectionStore } from '../store/useElectionStore'
@@ -59,7 +59,7 @@ const useVoting = () => {
     }
   }
 
-  const fetchCandidates = async () => {
+  /* const fetchCandidates = async () => {
     try {
       const { data, error: err } = await supabase
         .from('candidates')
@@ -77,7 +77,7 @@ const useVoting = () => {
       const e = err as Error
       console.log(e)
     }
-  }
+  } */
 
   const candidateCard = computed<boolean>(() => {
     return (
@@ -102,7 +102,7 @@ const useVoting = () => {
     selectedCandidate,
     candidateCard,
     addVote,
-    fetchCandidates,
+    // fetchCandidates,
     fetchVotes,
     resetDisplay,
     updateDisplay,

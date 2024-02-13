@@ -12,7 +12,7 @@ const { ballotBox } = storeToRefs(ballotBoxStore)
 
 const { setBallotBoxReady } = useBallotBox()
 
-const { voters } = storeToRefs(voterStore)
+const { voters, availableVoters } = storeToRefs(voterStore)
 const voter_ra = ref<string>()
 
 const voter = computed(() =>
@@ -41,7 +41,7 @@ const releaseVote = async () => {
         density="compact"
         item-title="ra"
         item-value="id"
-        :items="voters"
+        :items="availableVoters"
         label="Eleitores"
         type="number"
         variant="outlined"
