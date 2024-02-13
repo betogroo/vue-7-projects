@@ -6,14 +6,15 @@ const useBallotBox = () => {
   const ballotBoxStore = useBallotBoxStore()
   const fetchBallotBox = async (election_id: string) => {
     try {
-      const { data, error: err } = await supabase
+      const { data: ballotsBox, error: err } = await supabase
         .from('ballot_box')
         .select('*')
         .eq('election_id', election_id)
         .returns<BallotBox[]>()
-      if (err) throw err
-      ballotBoxStore.ballotsBox = data
-      return data
+      if (err || !ballotsBox)
+        throw new Error(`Erro ao buscar as urna: ${err.message} (${err.code})`)
+      ballotBoxStore.ballotsBox = ballotsBox
+      return ballotsBox
     } catch (err) {
       const e = err as Error
       console.log(e)
@@ -22,15 +23,16 @@ const useBallotBox = () => {
 
   const getBallotBox = async (id: string) => {
     try {
-      const { data, error: err } = await supabase
+      const { data: ballotBox, error: err } = await supabase
         .from('ballot_box')
         .select('*')
         .eq('id', id)
         .returns<BallotBox[]>()
         .single()
-      if (err) throw err
-      ballotBoxStore.ballotBox = data
-      return data
+      if (err || !ballotBox)
+        throw new Error(`Erro ao buscar as urna: ${err.message} (${err.code})`)
+      ballotBoxStore.ballotBox = ballotBox
+      return ballotBox
     } catch (err) {
       const e = err as Error
       console.log(e)
@@ -39,14 +41,17 @@ const useBallotBox = () => {
 
   const addBallotBox = async (election_id: string, site: string) => {
     try {
-      if (!election_id) throw Error('Não há eleição selecionada')
-      const { data, error: err } = await supabase
+      if (!election_id) throw new Error('Erro ao tentar criar a urna:')
+      const { data: ballotBox, error: err } = await supabase
         .from('ballot_box')
         .insert({ election_id, site })
         .select('*')
         .returns<BallotBox>()
-      if (err) throw err
-      console.log(data)
+      if (err || !ballotBox)
+        throw new Error(
+          `Erro ao tentar criar a urna: ${err.message} (${err.code})`,
+        )
+      console.log(ballotBox)
     } catch (err) {
       const e = err as Error
       console.log(e)

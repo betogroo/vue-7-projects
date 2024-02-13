@@ -21,7 +21,7 @@ const voter = computed(() =>
 
 const releaseVote = async () => {
   console.log(voter.value?.id)
-  await setBallotBoxReady(ballotBox.value!.id, voter.value!.id)
+  await setBallotBoxReady(ballotBox.value.id, voter.value!.id)
 }
 </script>
 
