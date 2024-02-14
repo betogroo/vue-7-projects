@@ -71,6 +71,7 @@ watch(
       <template v-else>
         <v-btn
           block
+          class="mb-3"
           color="success"
           :disabled="form"
           @click="newRelease"
