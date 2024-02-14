@@ -3,8 +3,11 @@ import type { BallotBox } from '../types/Voting'
 
 interface Props {
   ballotsBox: BallotBox[]
+  isLoading: boolean
 }
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  isLoading: false,
+})
 
 const $emit = defineEmits<{
   'handle-disable': [ballot_box_id: string]
@@ -22,6 +25,7 @@ const handleDisable = (ballot_box_id: string) => {
     :key="item.id"
     class="ma-1"
     :color="item.ready ? 'green' : 'red'"
+    :loading="item.ready ? true : false"
     :title="item.site || ''"
     variant="outlined"
   >

@@ -33,7 +33,6 @@ const resetRelease = async () => {
 }
 
 const releaseVote = async () => {
-  console.log(voter.value?.id)
   await setBallotBoxReady(ballotBox.value.id, voter.value!.id)
   await fetchAvailableVoters(ballotBox.value.election_id)
 }
