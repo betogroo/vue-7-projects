@@ -24,7 +24,7 @@ export const voteSchema = z.object({
 
 export const voterSchema = z.object({
   id: z.string(),
-  created_at: z.string(),
+  created_at: z.string().optional(),
   name: z.string().min(1, 'Obrigatório'),
   ra: z.number(),
 })

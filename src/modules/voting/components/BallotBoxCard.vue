@@ -3,8 +3,19 @@ import type { BallotBox } from '../types/Voting'
 
 interface Props {
   ballotsBox: BallotBox[]
+  isLoading: boolean
 }
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  isLoading: false,
+})
+
+const $emit = defineEmits<{
+  'handle-disable': [ballot_box_id: string]
+}>()
+
+const handleDisable = (ballot_box_id: string) => {
+  $emit('handle-disable', ballot_box_id)
+}
 </script>
 
 <template>
@@ -13,6 +24,8 @@ defineProps<Props>()
     v-for="item in ballotsBox"
     :key="item.id"
     class="ma-1"
+    :color="item.ready ? 'green' : 'red'"
+    :loading="item.ready ? true : false"
     :title="item.site || ''"
     variant="outlined"
   >
@@ -28,6 +41,12 @@ defineProps<Props>()
           block
           :to="{ name: 'BallotBoxAdmin', params: { id: item.id } }"
           >Monitorar</v-btn
+        >
+        <v-btn
+          v-if="item.ready"
+          block
+          @click="handleDisable(item.id)"
+          >Desabilitar</v-btn
         >
       </v-card-actions>
     </v-responsive>

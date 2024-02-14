@@ -75,6 +75,7 @@ const routes: CustomRouteRecordRaw[] = [
           useCandidates().fetchCandidates(election_id),
           useElection().getElection(election_id),
           useVoters().fetchVoters(),
+          useVoters().fetchAvailableVoters(election_id),
         ])
         if (!election) throw new Error('Eleição não encontrada')
         if (!candidates)
@@ -91,6 +92,11 @@ const routes: CustomRouteRecordRaw[] = [
         name: 'BallotBoxView',
         path: 'urna',
         component: () => import('../views/BallotBoxView.vue'),
+        meta: {
+          requiresAuth: false,
+          hideNavBar: true,
+          title: 'Urna Eletrônica',
+        },
       },
       {
         name: 'BallotBoxAdmin',
