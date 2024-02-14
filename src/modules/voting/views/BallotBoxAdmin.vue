@@ -4,13 +4,14 @@ import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useVoterStore } from '../store/useVoterStore'
 import { useBallotBox, useVoters } from '../composables'
 
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const ballotBoxStore = useBallotBoxStore()
 const voterStore = useVoterStore()
 const { ballotBox } = storeToRefs(ballotBoxStore)
 
 const { setBallotBoxReady } = useBallotBox()
+const { fetchAvailableVoters } = useVoters()
 
 const { voters, availableVoters } = storeToRefs(voterStore)
 const voter_ra = ref<string | null>(null)
@@ -22,7 +23,7 @@ const voter = computed(() =>
 
 const newRelease = async () => {
   form.value = true
-  await useVoters().fetchAvailableVoters(ballotBox.value.election_id)
+  await fetchAvailableVoters(ballotBox.value.election_id)
 }
 
 const resetRelease = async () => {
@@ -34,14 +35,21 @@ const resetRelease = async () => {
 const releaseVote = async () => {
   console.log(voter.value?.id)
   await setBallotBoxReady(ballotBox.value.id, voter.value!.id)
-  await useVoters().fetchAvailableVoters(ballotBox.value.election_id)
+  await fetchAvailableVoters(ballotBox.value.election_id)
 }
+
+watch(
+  () => ballotBox.value.ready,
+  async (newValue) => {
+    if (newValue === null) await resetRelease()
+  },
+)
 </script>
 
 <template>
   <v-container
     v-if="ballotBox"
-    class="justify-center fill-height w-75"
+    class="justify-center fill-height w-100"
   >
     <v-card
       class="fill-height w-100 pa-4"
@@ -85,8 +93,12 @@ const releaseVote = async () => {
         <v-sheet v-if="voter">
           <v-list>
             <v-list-item>
-              <v-list-item-title>{{ voter.name }}</v-list-item-title>
-              <v-list-item-subtitle>{{ voter.ra }}</v-list-item-subtitle>
+              <v-list-item-title class="text-h5">{{
+                voter.name
+              }}</v-list-item-title>
+              <v-list-item-subtitle class="text-h6">{{
+                voter.ra
+              }}</v-list-item-subtitle>
               <template v-slot:append>
                 <v-btn
                   class="mx-2"

@@ -14,8 +14,8 @@ import { useBallotBox, useCandidates } from '../composables'
 import { Candidate, TableHeader } from '../types/Voting'
 import { ref } from 'vue'
 
-// const { addBallotBox } = useBallotBox()
-// const { addCandidate } = useCandidates()
+const { addBallotBox, setBallotBoxReady, fetchBallotBox } = useBallotBox()
+const { addCandidate, fetchCandidates } = useCandidates()
 
 const electionStore = useElectionStore()
 const ballotBoxStore = useBallotBoxStore()
@@ -29,8 +29,8 @@ const { candidates } = storeToRefs(candidateStore)
 const formCandidateDialog = ref(false)
 const formBallotBoxDialog = ref(false)
 const handleCandidates = async (candidate: Candidate) => {
-  await useCandidates().addCandidate(candidate)
-  await useCandidates().fetchCandidates(candidate.election_id)
+  await addCandidate(candidate)
+  await fetchCandidates(candidate.election_id)
   formCandidateDialog.value = false
 }
 
@@ -54,13 +54,13 @@ const candidateTableHeader: TableHeader[] = [
 ]
 
 const handleBallotBox = async (election_id: string, site: string) => {
-  await useBallotBox().addBallotBox(election_id, site)
-  await useBallotBox().fetchBallotBox(election_id)
+  await addBallotBox(election_id, site)
+  await fetchBallotBox(election_id)
   formBallotBoxDialog.value = false
 }
 
 const disableBallotBox = async (ballot_box_id: string) => {
-  await useBallotBox().setBallotBoxReady(ballot_box_id, null)
+  await setBallotBoxReady(ballot_box_id, null)
 }
 </script>
 

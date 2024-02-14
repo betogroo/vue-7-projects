@@ -60,14 +60,13 @@ const useBallotBox = () => {
 
   const setBallotBoxReady = async (id: string, ready: string | null) => {
     try {
-      const { data, error: err } = await supabase
+      const { error: err } = await supabase
         .from('ballot_box')
         .update({
           ready,
         })
         .eq('id', id)
       if (err) throw err
-      console.log(data)
     } catch (err) {
       const e = err as Error
       console.log(e)
@@ -101,7 +100,6 @@ const useBallotBox = () => {
             (item) => item.id === old.id,
           )
           ballotBoxStore.ballotsBox[index] = newBallotBox as BallotBox
-          console.log(newBallotBox.id, index)
         }
       },
     )
