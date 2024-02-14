@@ -43,7 +43,8 @@ const useVoters = () => {
         .not('id', 'in', usedVoters)
       if (err) throw err
       store.availableVoters = data
-      console.log(data)
+      //console.log(data, usedVoters)
+      return data
     } catch (err) {
       const e = err as Error
       console.log(e)
@@ -75,7 +76,13 @@ const useVoters = () => {
     return voters[index].id
   }
 
-  return { fetchVoters, fetchAvailableVoters, getRandomVoter, getVoterByRa }
+  return {
+    fetchVoters,
+    fetchAvailableVoters,
+    getRandomVoter,
+    getVoterByRa,
+    fetchUsedVoters,
+  }
 }
 
 export default useVoters
