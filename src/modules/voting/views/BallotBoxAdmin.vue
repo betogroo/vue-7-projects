@@ -4,7 +4,8 @@ import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useVoterStore } from '../store/useVoterStore'
 import { useBallotBox, useVoters } from '../composables'
 
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
+import { Voter } from '../types/Voting'
 
 const ballotBoxStore = useBallotBoxStore()
 const voterStore = useVoterStore()
@@ -13,13 +14,10 @@ const { ballotBox } = storeToRefs(ballotBoxStore)
 const { setBallotBoxReady } = useBallotBox()
 const { fetchAvailableVoters } = useVoters()
 
-const { voters, availableVoters } = storeToRefs(voterStore)
-const voter_ra = ref<string | null>(null)
+const { availableVoters } = storeToRefs(voterStore)
+const voter_ra = ref<string>('')
+const voter = ref<Voter | null>(null)
 const form = ref(false)
-
-const voter = computed(() =>
-  voters.value.find((item) => item.id === voter_ra.value),
-)
 
 const newRelease = async () => {
   form.value = true
@@ -28,8 +26,10 @@ const newRelease = async () => {
 
 const resetRelease = async () => {
   await setBallotBoxReady(ballotBox.value.id, null)
-  voter_ra.value = null
+  await fetchAvailableVoters(ballotBox.value.election_id)
+  voter_ra.value = ''
   form.value = false
+  voter.value = null
 }
 
 const releaseVote = async () => {
@@ -37,10 +37,19 @@ const releaseVote = async () => {
   await fetchAvailableVoters(ballotBox.value.election_id)
 }
 
+const searchVoter = async () => {
+  if (!voter_ra.value) voter.value = null
+  voter.value =
+    availableVoters.value.find((item) => item.ra === +voter_ra.value) || null
+  console.log(voter.value)
+}
+
 watch(
   () => ballotBox.value.ready,
   async (newValue) => {
-    if (newValue === null) await resetRelease()
+    if (newValue === null) {
+      await resetRelease()
+    }
   },
 )
 </script>
@@ -78,17 +87,17 @@ watch(
           >Nova Liberação</v-btn
         >
         <v-sheet v-if="!voter && form">
-          <v-autocomplete
-            v-model="voter_ra"
-            base-color="white"
-            density="compact"
-            item-title="ra"
-            item-value="id"
-            :items="availableVoters"
-            label="Selecione um Eleitor"
-            type="number"
-            variant="outlined"
-          ></v-autocomplete>
+          <v-form @submit.prevent="searchVoter">
+            <v-text-field
+              v-model.number="voter_ra"
+              type="number"
+            ></v-text-field>
+            <v-btn
+              :disabled="voter_ra === null"
+              type="submit"
+              >Pesquisar Eleitor</v-btn
+            >
+          </v-form>
         </v-sheet>
         <v-sheet v-if="voter">
           <v-list>
