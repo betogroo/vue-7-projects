@@ -3,11 +3,8 @@ import type { BallotBox } from '../types/Voting'
 
 interface Props {
   ballotsBox: BallotBox[]
-  isLoading: boolean
 }
-withDefaults(defineProps<Props>(), {
-  isLoading: false,
-})
+defineProps<Props>()
 
 const $emit = defineEmits<{
   'handle-disable': [ballot_box_id: string]
