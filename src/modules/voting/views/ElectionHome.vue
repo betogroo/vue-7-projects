@@ -10,7 +10,7 @@ import { useElectionStore } from '../store/useElectionStore'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useCandidateStore } from '../store/useCandidateStore'
 import { useVotingStore } from '../store/useVotingStore'
-import { useBallotBox, useCandidates } from '../composables'
+import { useBallotBox, useCandidates, useHelpers } from '../composables'
 import { Candidate, TableHeader } from '../types/Voting'
 import { ref } from 'vue'
 
@@ -69,7 +69,7 @@ const disableBallotBox = async (ballot_box_id: string) => {
     <h1>Administração e Contabilização</h1>
     <h2>{{ election.name }} ({{ election.organization }})</h2>
     <h3>{{ election.description }}</h3>
-    <h4>Data da Eleição: {{ election.date }}</h4>
+    <h4>Eleição em {{ useHelpers().dateBr(election.date, 'long') }}</h4>
     <v-row
       class="mt-3"
       no-gutters
