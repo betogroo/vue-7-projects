@@ -13,12 +13,12 @@ const { ballotBox } = storeToRefs(ballotBoxStore)
 const { setBallotBoxReady } = useBallotBox()
 const { fetchAvailableVoters } = useVoters()
 
-const { voters, availableVoters } = storeToRefs(voterStore)
+const { availableVoters } = storeToRefs(voterStore)
 const voter_ra = ref<string | null>(null)
 const form = ref(false)
 
 const voter = computed(() =>
-  voters.value.find((item) => item.id === voter_ra.value),
+  availableVoters.value.find((item) => item.id === voter_ra.value),
 )
 
 const newRelease = async () => {
@@ -28,6 +28,7 @@ const newRelease = async () => {
 
 const resetRelease = async () => {
   await setBallotBoxReady(ballotBox.value.id, null)
+  await fetchAvailableVoters(ballotBox.value.election_id)
   voter_ra.value = null
   form.value = false
 }
@@ -40,7 +41,9 @@ const releaseVote = async () => {
 watch(
   () => ballotBox.value.ready,
   async (newValue) => {
-    if (newValue === null) await resetRelease()
+    if (newValue === null) {
+      await resetRelease()
+    }
   },
 )
 </script>
