@@ -4,4 +4,13 @@ import useElection from './useElection'
 import useCandidates from './useCandidates'
 import useBallotBox from './useBallotBox'
 
-export { useBallotBox, useCandidates, useElection, useVoters, useVoting }
+import { useHelpers } from '@/shared/composables'
+
+export {
+  useBallotBox,
+  useCandidates,
+  useElection,
+  useVoters,
+  useVoting,
+  useHelpers,
+}
