@@ -1,3 +1,5 @@
+import { format } from '@formkit/tempo'
+
 const useHelpers = () => {
   const fetchData = (key: string) => {
     const data = JSON.parse(localStorage.getItem(key) || '{}')
@@ -51,6 +53,11 @@ const useHelpers = () => {
   const timestampToDate = (date: number) =>
     new Date(date).toLocaleDateString('pt-BR')
 
+  type DateFormat = 'long' | 'medium' | 'short' | 'full'
+
+  const dateBr = (date: string, dateFormat: DateFormat = 'short') =>
+    format(date, dateFormat)
+
   const lastColumnGrid = <T>(item: T[], index: number) => {
     return item.length % 2 !== 0 && index === item.length - 1 ? 12 : 6
   }
@@ -59,6 +66,7 @@ const useHelpers = () => {
     existingData,
     deleteItem,
     delay,
+    dateBr,
     generateRandomColor,
     localCurrency,
     timestampToDate,
