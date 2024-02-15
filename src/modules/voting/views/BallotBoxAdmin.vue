@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { useBallotBoxStore } from '../store/useBallotBoxStore'
 import { useVoterStore } from '../store/useVoterStore'
-import { useBallotBox, useVoters } from '../composables'
+import { useBallotBox, useVoters, useHelpers } from '../composables'
 
 import { ref, watch } from 'vue'
 import { Voter } from '../types/Voting'
@@ -18,6 +18,8 @@ const { availableVoters } = storeToRefs(voterStore)
 const voter_ra = ref<string>('')
 const voter = ref<Voter | null>(null)
 const form = ref(false)
+const error = ref('')
+const loading = ref(false)
 
 const newRelease = async () => {
   form.value = true
@@ -38,10 +40,20 @@ const releaseVote = async () => {
 }
 
 const searchVoter = async () => {
+  error.value = ''
+  loading.value = true
+  await useHelpers().delay()
   if (!voter_ra.value) voter.value = null
-  voter.value =
+
+  const result =
     availableVoters.value.find((item) => item.ra === +voter_ra.value) || null
-  console.log(voter.value)
+  loading.value = false
+  if (!result) {
+    error.value = 'Eleitor não encontrado!'
+    voter_ra.value = ''
+    return
+  }
+  voter.value = result
 }
 
 watch(
@@ -89,13 +101,19 @@ watch(
         <v-sheet v-if="!voter && form">
           <v-form @submit.prevent="searchVoter">
             <v-text-field
-              v-model.number="voter_ra"
+              v-model="voter_ra"
               type="number"
             ></v-text-field>
             <v-btn
-              :disabled="voter_ra === null"
+              :disabled="voter_ra.length < 8"
+              :loading="loading"
               type="submit"
               >Pesquisar Eleitor</v-btn
+            >
+            <v-alert
+              v-if="error"
+              color="error"
+              >{{ error }}</v-alert
             >
           </v-form>
         </v-sheet>
