@@ -15,6 +15,7 @@
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/logo.png"
   },
   "dependencies": {
+    "@formkit/tempo": "^0.0.8",
     "@mdi/font": "7.4.47",
     "@supabase/supabase-js": "^2.39.3",
     "@vueuse/core": "^10.7.2",

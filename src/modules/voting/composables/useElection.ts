@@ -1,5 +1,6 @@
 import { supabase } from '@/plugins/supabase'
 import { useElectionStore } from '../store/useElectionStore'
+import { format } from '@formkit/tempo'
 import type { Election } from '../types/Voting'
 const useElection = () => {
   const store = useElectionStore()
@@ -14,6 +15,7 @@ const useElection = () => {
         throw new Error(
           `Erro ao buscar as eleições: ${err.message} (${err.code})`,
         )
+      elections.map((item) => (item.date = format(item.date, 'short')))
       console.log('passou aqui')
       store.elections = elections
       return elections
