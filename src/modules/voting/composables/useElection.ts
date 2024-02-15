@@ -1,7 +1,9 @@
 import { supabase } from '@/plugins/supabase'
 import { useElectionStore } from '../store/useElectionStore'
-import { format } from '@formkit/tempo'
+import { useHelpers } from '@/shared/composables'
 import type { Election } from '../types/Voting'
+
+const { dateBr } = useHelpers()
 const useElection = () => {
   const store = useElectionStore()
   const fetchElections = async () => {
@@ -15,7 +17,7 @@ const useElection = () => {
         throw new Error(
           `Erro ao buscar as eleições: ${err.message} (${err.code})`,
         )
-      elections.map((item) => (item.date = format(item.date, 'short')))
+      elections.map((item) => (item.date = dateBr(item.date)))
       console.log('passou aqui')
       store.elections = elections
       return elections
