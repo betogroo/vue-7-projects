@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useBallotBoxStore } from '../store/useBallotBoxStore'
-import { useVoterStore } from '../store/useVoterStore'
 import { useBallotBox, useVoters, useHelpers } from '../composables'
+import { useBallotBoxStore, useVoterStore } from '../store'
 
 import { ref, watch } from 'vue'
 import { Voter } from '../types/Voting'
 
-const ballotBoxStore = useBallotBoxStore()
-const voterStore = useVoterStore()
-const { ballotBox } = storeToRefs(ballotBoxStore)
-
 const { setBallotBoxReady } = useBallotBox()
 const { fetchAvailableVoters } = useVoters()
 
+const ballotBoxStore = useBallotBoxStore()
+const { ballotBox } = storeToRefs(ballotBoxStore)
+const voterStore = useVoterStore()
 const { availableVoters } = storeToRefs(voterStore)
+
 const voter_ra = ref<string>('')
 const voter = ref<Voter | null>(null)
 const form = ref(false)

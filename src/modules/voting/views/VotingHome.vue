@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import type { Election, TableHeader } from '../types/Voting'
 import { useElection } from '../composables'
 import { ElectionForm, AppGenericTable as ElectionTable } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
-import { ref } from 'vue'
-const electionStore = useElectionStore()
-const { elections } = storeToRefs(electionStore)
+
 const { addElection, fetchElections, deleteElection } = useElection()
+const electionStore = useElectionStore()
+
+const { elections } = storeToRefs(electionStore)
 
 const dialog = ref(false)
 

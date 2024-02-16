@@ -6,16 +6,19 @@ import {
   CandidateForm,
   AppGenericTable as CandidateTable,
 } from '../components'
-import { useElectionStore } from '../store/useElectionStore'
-import { useBallotBoxStore } from '../store/useBallotBoxStore'
-import { useCandidateStore } from '../store/useCandidateStore'
-import { useVotingStore } from '../store/useVotingStore'
+import {
+  useBallotBoxStore,
+  useCandidateStore,
+  useElectionStore,
+  useVotingStore,
+} from '../store'
+
 import { useBallotBox, useCandidates, useHelpers } from '../composables'
 import { Candidate, TableHeader } from '../types/Voting'
 import { ref } from 'vue'
 
 const { addBallotBox, setBallotBoxReady, fetchBallotBox } = useBallotBox()
-const { addCandidate, fetchCandidates } = useCandidates()
+const { addCandidate: _addCandidate, fetchCandidates } = useCandidates()
 
 const electionStore = useElectionStore()
 const ballotBoxStore = useBallotBoxStore()
@@ -28,8 +31,9 @@ const { candidates } = storeToRefs(candidateStore)
 
 const formCandidateDialog = ref(false)
 const formBallotBoxDialog = ref(false)
-const handleCandidates = async (candidate: Candidate) => {
-  await addCandidate(candidate)
+
+const addCandidate = async (candidate: Candidate) => {
+  await _addCandidate(candidate)
   await fetchCandidates(candidate.election_id)
   formCandidateDialog.value = false
 }
@@ -137,7 +141,7 @@ const disableBallotBox = async (ballot_box_id: string) => {
             ><CandidateForm
               :candidate_number_length="election.candidate_number_length"
               :election_id="election.id!"
-              @add-candidate="(value) => handleCandidates(value)"
+              @add-candidate="(value) => addCandidate(value)"
           /></template>
           <template #plus="props">{{
             votingStore.totalCandidateVote(props.item.id!)
