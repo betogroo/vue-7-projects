@@ -6,10 +6,12 @@ import { computed, ref } from 'vue'
 
 const { dateBr, delay } = useHelpers()
 const useElection = () => {
+  const isPending = ref(false)
   const elections = ref<Election[]>([])
   const store = useElectionStore()
   const fetchElections = async () => {
-    await delay(1)
+    isPending.value = true
+    await delay(2000)
     try {
       const { data: _elections, error: err } = await supabase
         .from('election')
@@ -22,6 +24,7 @@ const useElection = () => {
         )
       _elections.map((item) => (item.date = dateBr(item.date)))
       elections.value = _elections
+      isPending.value = false
       //store.elections = _elections
       return elections
     } catch (err) {
@@ -133,6 +136,7 @@ const useElection = () => {
     .subscribe()
 
   return {
+    isPending,
     elections,
     totalElections,
     fetchElections,
