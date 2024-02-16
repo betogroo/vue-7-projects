@@ -2,13 +2,16 @@ import { supabase } from '@/plugins/supabase'
 import { useElectionStore } from '../store/useElectionStore'
 import { useHelpers } from '@/shared/composables'
 import type { Election } from '../types/Voting'
+import { computed, ref } from 'vue'
 
-const { dateBr } = useHelpers()
+const { dateBr, delay } = useHelpers()
 const useElection = () => {
+  const elections = ref<Election[]>([])
   const store = useElectionStore()
   const fetchElections = async () => {
+    await delay(1)
     try {
-      const { data: elections, error: err } = await supabase
+      const { data: _elections, error: err } = await supabase
         .from('election')
         .select('*')
         .returns<Election[]>()
@@ -17,9 +20,9 @@ const useElection = () => {
         throw new Error(
           `Erro ao buscar as eleições: ${err.message} (${err.code})`,
         )
-      elections.map((item) => (item.date = dateBr(item.date)))
-      console.log('passou aqui')
-      store.elections = elections
+      _elections.map((item) => (item.date = dateBr(item.date)))
+      elections.value = _elections
+      //store.elections = _elections
       return elections
     } catch (err) {
       const e = err as Error
@@ -96,6 +99,8 @@ const useElection = () => {
     }
   }
 
+  const totalElections = computed(() => elections.value.length)
+
   supabase
     .channel('election')
     .on(
@@ -127,7 +132,15 @@ const useElection = () => {
     )
     .subscribe()
 
-  return { fetchElections, getElection, addElection, setReady, deleteElection }
+  return {
+    elections,
+    totalElections,
+    fetchElections,
+    getElection,
+    addElection,
+    setReady,
+    deleteElection,
+  }
 }
 
 export default useElection

@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
 import type { Election, TableHeader } from '../types/Voting'
 import { useElection } from '../composables'
 import { ElectionForm, AppGenericTable as ElectionTable } from '../components'
-import { useElectionStore } from '../store/useElectionStore'
 
-const { addElection, fetchElections, deleteElection } = useElection()
-const electionStore = useElectionStore()
-
-const { elections } = storeToRefs(electionStore)
+const { elections, addElection, fetchElections, deleteElection } = useElection()
 
 const dialog = ref(false)
 
@@ -56,12 +51,11 @@ const electionTableHeader: TableHeader[] = [
     key: 'actions',
   },
 ]
+
+await fetchElections()
 </script>
 
 <template>
-  <h1>Administração e Contabilização</h1>
-  <h2>Total de Eleições cadastradas: {{ electionStore.totalElections }}</h2>
-
   <ElectionTable
     v-model="dialog"
     :aim-view="'ElectionHome'"
@@ -75,9 +69,4 @@ const electionTableHeader: TableHeader[] = [
       <ElectionForm @handle-submit="(data) => handleElection(data)" />
     </template>
   </ElectionTable>
-  <v-card
-    variant="flat"
-    width="400"
-  >
-  </v-card>
 </template>
