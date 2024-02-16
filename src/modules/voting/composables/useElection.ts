@@ -4,13 +4,20 @@ import { useHelpers } from '@/shared/composables'
 import type { Election } from '../types/Voting'
 import { computed, ref } from 'vue'
 
+interface ComposableError {
+  name?: string
+  error?: Error
+}
+
 const { dateBr, delay } = useHelpers()
 const useElection = () => {
   const isPending = ref(false)
+  const error = ref<ComposableError | null>()
   const elections = ref<Election[]>([])
   const store = useElectionStore()
   const fetchElections = async () => {
     isPending.value = true
+    error.value = null
     await delay(2000)
     try {
       const { data: _elections, error: err } = await supabase
@@ -25,11 +32,15 @@ const useElection = () => {
       _elections.map((item) => (item.date = dateBr(item.date)))
       elections.value = _elections
       isPending.value = false
-      //store.elections = _elections
       return elections
     } catch (err) {
       const e = err as Error
-      console.error(e.message)
+      error.value = {
+        name: 'fetchElection',
+        error: e,
+      }
+      isPending.value = false
+      console.error(error.value)
     }
   }
 
@@ -139,6 +150,7 @@ const useElection = () => {
     isPending,
     elections,
     totalElections,
+    error,
     fetchElections,
     getElection,
     addElection,

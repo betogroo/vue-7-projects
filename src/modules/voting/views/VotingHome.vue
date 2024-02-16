@@ -4,8 +4,14 @@ import type { Election, TableHeader } from '../types/Voting'
 import { useElection } from '../composables'
 import { ElectionForm, AppGenericTable as ElectionTable } from '../components'
 
-const { isPending, elections, addElection, fetchElections, deleteElection } =
-  useElection()
+const {
+  isPending,
+  elections,
+  error,
+  addElection,
+  fetchElections,
+  deleteElection,
+} = useElection()
 
 const dialog = ref(false)
 
@@ -64,19 +70,24 @@ onBeforeMount(async () => {
       <v-skeleton-loader type="table"></v-skeleton-loader>
     </template>
     <template v-else>
-      <ElectionTable
-        v-model="dialog"
-        :aim-view="'ElectionHome'"
-        :headers="electionTableHeader"
-        :table-data="elections"
-        table-subject="Eleição"
-        title="Eleições Cadastradas"
-        @delete-item-confirm="(id) => deleteItemConfirm(id)"
-      >
-        <template #addForm>
-          <ElectionForm @handle-submit="(data) => handleElection(data)" />
-        </template>
-      </ElectionTable>
+      <template v-if="error">
+        <v-alert type="error">{{ error.error?.message }}</v-alert>
+      </template>
+      <template v-else>
+        <ElectionTable
+          v-model="dialog"
+          :aim-view="'ElectionHome'"
+          :headers="electionTableHeader"
+          :table-data="elections"
+          table-subject="Eleição"
+          title="Eleições Cadastradas"
+          @delete-item-confirm="(id) => deleteItemConfirm(id)"
+        >
+          <template #addForm>
+            <ElectionForm @handle-submit="(data) => handleElection(data)" />
+          </template>
+        </ElectionTable>
+      </template>
     </template>
   </v-container>
 </template>
