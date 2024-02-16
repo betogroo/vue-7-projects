@@ -1,36 +1,32 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import type { Vote } from '../types/Voting'
 import {
   NumericKeyboard,
   ActionKeyboard,
   DisplayCard,
   DisplayEnd,
 } from '../components'
-import { useBallotBoxStore } from '../store/useBallotBoxStore'
-import { useElectionStore } from '../store/useElectionStore'
 import { useVoting, useBallotBox } from '../composables'
-import { Vote } from '../types/Voting'
+import { useBallotBoxStore, useElectionStore } from '../store'
 
 //composable
 const {
   numericDisplay,
   selectedCandidate,
-  candidateCard, //
+  candidateCard,
   addVote,
   resetDisplay,
   updateDisplay,
 } = useVoting()
-//const { setReady } = useElection()
 const { setBallotBoxReady } = useBallotBox()
-// const { getRandomVoter } = useVoters()
 
 const ballotBoxStore = useBallotBoxStore()
+const { ballotBox } = storeToRefs(ballotBoxStore)
 const electionStore = useElectionStore()
 const { election } = storeToRefs(electionStore)
-const { ballotBox } = storeToRefs(ballotBoxStore)
 
 const confirmVote = async () => {
-  // const voter = await getRandomVoter() // only for test
   if (!election.value!.id || !selectedCandidate.value!.id) return
   const vote: Vote = {
     voter_id: ballotBox.value?.ready,
@@ -43,8 +39,6 @@ const confirmVote = async () => {
   console.log(vote, recordedVote)
   resetDisplay()
 }
-
-console.log(ballotBox.value)
 </script>
 
 <template>
