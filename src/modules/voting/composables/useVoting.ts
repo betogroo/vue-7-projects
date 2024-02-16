@@ -1,13 +1,11 @@
-import { supabase } from '@/plugins/supabase'
-import { type Candidate, Vote } from '../types/Voting'
-import { useVotingStore } from '../store/useVotingStore'
-import { useCandidateStore } from '../store/useCandidateStore'
-import { useElectionStore } from '../store/useElectionStore'
 import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
+import { supabase } from '@/plugins/supabase'
+import { type Candidate, Vote } from '../types/Voting'
+import { useVotingStore, useCandidateStore, useElectionStore } from '../store'
 
 const useVoting = () => {
-  const store = useVotingStore()
+  const votingStore = useVotingStore()
   const candidateStore = useCandidateStore()
   const electionStore = useElectionStore()
   const { election } = storeToRefs(electionStore)
@@ -34,7 +32,7 @@ const useVoting = () => {
         .single()
       if (err) throw Error('Não foi possível votar')
       if (data) {
-        store.setVote(vote)
+        votingStore.setVote(vote)
         resetDisplay()
         return data
       }
@@ -51,7 +49,7 @@ const useVoting = () => {
         .select('*')
         .eq('election_id', election_id)
       if (err) throw err
-      store.votes = data
+      votingStore.votes = data
       return data
     } catch (err) {
       const e = err as Error
@@ -59,29 +57,9 @@ const useVoting = () => {
     }
   }
 
-  /* const fetchCandidates = async () => {
-    try {
-      const { data, error: err } = await supabase
-        .from('candidates')
-        .select('*')
-        .order('name')
-        .returns<Candidate[]>()
-      if (err) throw err
-      if (data) {
-        const parsedData = candidatesSchema.parse(data)
-        store.candidates = parsedData
-        return data || null
-        //console.log(data)
-      }
-    } catch (err) {
-      const e = err as Error
-      console.log(e)
-    }
-  } */
-
   const candidateCard = computed<boolean>(() => {
     return (
-      numericDisplay.value.length === election.value?.candidate_number_length
+      numericDisplay.value.length === election.value.candidate_number_length
     )
   })
 
@@ -89,7 +67,7 @@ const useVoting = () => {
     () => numericDisplay.value,
     (newValue) => {
       selectedCandidate.value = undefined
-      if (newValue.length === election.value?.candidate_number_length) {
+      if (newValue.length === election.value.candidate_number_length) {
         selectedCandidate.value = candidateStore.candidates.find(
           (candidate) => candidate.candidate_number === numericDisplay.value,
         )
