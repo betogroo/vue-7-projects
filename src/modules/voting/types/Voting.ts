@@ -30,7 +30,7 @@ export const voterSchema = z.object({
 })
 
 export const electionSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid(),
   created_at: z.string().nullish(),
   date: z.string(),
   name: z.string().min(1, 'Obrigatório'),

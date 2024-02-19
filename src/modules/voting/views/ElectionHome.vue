@@ -62,10 +62,6 @@ const addCandidate = async (candidate: Candidate) => {
   await fetchCandidates(candidate.election_id)
   formCandidateDialog.value = false
 }
-const releaseElection = async () => {
-  console.log('release election', election.value.id)
-  await setReady(election.value.id!, true)
-}
 
 const handleBallotBox = async (election_id: string, site: string) => {
   await addBallotBox(election_id, site)
@@ -98,7 +94,9 @@ const validElection = computed(() => {
         v-if="!election.ready && validElection"
         class="text-right pa-1 mb-3"
         cols="12"
-        ><v-btn @click="releaseElection">Liberar Eleição</v-btn></v-col
+        ><v-btn @click="setReady(election.id, true)"
+          >Liberar Eleição</v-btn
+        ></v-col
       >
       <v-col cols="12">
         <v-toolbar density="compact">
