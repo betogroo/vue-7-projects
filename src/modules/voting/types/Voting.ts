@@ -31,7 +31,7 @@ export const voterSchema = z.object({
 
 export const electionSchema = z.object({
   id: z.string().uuid(),
-  created_at: z.string().nullish(),
+  created_at: z.string(),
   date: z.string(),
   name: z.string().min(1, 'Obrigatório'),
   description: z.string(),
@@ -40,6 +40,13 @@ export const electionSchema = z.object({
   organization: z.string().nullish(),
   candidate_number_length: z.number().default(3),
 })
+
+const insertElectionSchema = electionSchema.merge(
+  z.object({
+    id: z.string().uuid().optional(),
+    created_at: z.string().optional(),
+  }),
+)
 
 export const ballotBoxSchema = z.object({
   id: z.string().uuid(),
@@ -53,4 +60,5 @@ export type Candidate = z.infer<typeof candidateSchema>
 export type Vote = z.infer<typeof voteSchema>
 export type Voter = z.infer<typeof voterSchema>
 export type Election = z.infer<typeof electionSchema>
+export type ElectionInsert = z.infer<typeof insertElectionSchema>
 export type BallotBox = z.infer<typeof ballotBoxSchema>

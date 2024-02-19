@@ -6,7 +6,7 @@ export const useElectionStore = defineStore('election', () => {
   const elections = ref<Election[]>([])
   const election = ref<Election>({
     id: '',
-    created_at: undefined,
+    created_at: '',
     candidate_number_length: 3,
     date: '',
     description: '',
