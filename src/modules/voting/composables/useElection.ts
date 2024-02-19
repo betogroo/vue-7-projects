@@ -127,7 +127,13 @@ const useElection = () => {
     )
     .subscribe()
 
-  return { fetchElections, getElection, addElection, setReady, deleteElection }
+  return {
+    fetchElections,
+    getElection,
+    addElection,
+    setReady,
+    deleteElection,
+  }
 }
 
 export default useElection
