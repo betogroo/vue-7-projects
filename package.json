@@ -18,9 +18,11 @@
     "@formkit/tempo": "^0.0.8",
     "@mdi/font": "7.4.47",
     "@supabase/supabase-js": "^2.39.6",
+    "@vee-validate/zod": "^4.12.5",
     "@vueuse/core": "^10.7.2",
     "core-js": "^3.36.0",
     "roboto-fontface": "*",
+    "vee-validate": "^4.12.5",
     "vue": "^3.4.19",
     "vuetify": "^3.5.4"
   },
