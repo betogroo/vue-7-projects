@@ -17,7 +17,7 @@ const routes: CustomRouteRecordRaw[] = [
       title: 'Sistema de Votação',
       requiresAuth: true,
     },
-    beforeEnter: async (to, from, next) => {
+    /* beforeEnter: async (to, from, next) => {
       try {
         const elections = await useElection().fetchElections()
         if (!elections) throw new Error('Não foram encontradas eleições')
@@ -26,7 +26,7 @@ const routes: CustomRouteRecordRaw[] = [
         console.error(err)
         next({ name: 'NotFoundVoting' })
       }
-    },
+    }, */
   },
   {
     path: '/election/:id',

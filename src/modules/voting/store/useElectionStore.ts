@@ -5,8 +5,8 @@ import { computed, ref } from 'vue'
 export const useElectionStore = defineStore('election', () => {
   const elections = ref<Election[]>([])
   const election = ref<Election>({
-    id: undefined,
-    created_at: undefined,
+    id: '',
+    created_at: '',
     candidate_number_length: 3,
     date: '',
     description: '',

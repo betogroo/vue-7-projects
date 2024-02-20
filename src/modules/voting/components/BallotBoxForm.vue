@@ -34,6 +34,7 @@ const onSubmit = () => {
       </v-col>
       <v-col>
         <v-btn
+          color="primary"
           :disabled="site === '' || site.length < 6"
           type="submit"
           >Adicionar Urna</v-btn

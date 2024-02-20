@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import type { Election, TableHeader } from '../types/Voting'
+import { onBeforeMount, ref } from 'vue'
+// import { storeToRefs } from 'pinia'
+import type { ElectionInsert, TableHeader } from '../types/Voting'
 import { useElection } from '../composables'
 import { ElectionForm, AppGenericTable as ElectionTable } from '../components'
 import { useElectionStore } from '../store/useElectionStore'
 
-const { addElection, fetchElections, deleteElection } = useElection()
+const { addElection, fetchElections, deleteElection, elections } = useElection()
 const electionStore = useElectionStore()
 
-const { elections } = storeToRefs(electionStore)
+// const { elections } = storeToRefs(electionStore)
 
 const dialog = ref(false)
 
-const handleElection = async (data: Election) => {
+const handleElection = async (data: ElectionInsert) => {
   try {
     await addElection(data)
     await fetchElections()
@@ -56,6 +56,10 @@ const electionTableHeader: TableHeader[] = [
     key: 'actions',
   },
 ]
+
+onBeforeMount(async () => {
+  await fetchElections()
+})
 </script>
 
 <template>

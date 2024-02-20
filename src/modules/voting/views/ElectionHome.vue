@@ -13,12 +13,18 @@ import {
   useVotingStore,
 } from '../store'
 
-import { useBallotBox, useCandidates, useHelpers } from '../composables'
+import {
+  useBallotBox,
+  useCandidates,
+  useHelpers,
+  useElection,
+} from '../composables'
 import { Candidate, TableHeader } from '../types/Voting'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const { addBallotBox, setBallotBoxReady, fetchBallotBox } = useBallotBox()
 const { addCandidate: _addCandidate, fetchCandidates } = useCandidates()
+const { setReady } = useElection()
 
 const electionStore = useElectionStore()
 const ballotBoxStore = useBallotBoxStore()
@@ -31,12 +37,6 @@ const { candidates } = storeToRefs(candidateStore)
 
 const formCandidateDialog = ref(false)
 const formBallotBoxDialog = ref(false)
-
-const addCandidate = async (candidate: Candidate) => {
-  await _addCandidate(candidate)
-  await fetchCandidates(candidate.election_id)
-  formCandidateDialog.value = false
-}
 
 const candidateTableHeader: TableHeader[] = [
   {
@@ -57,6 +57,12 @@ const candidateTableHeader: TableHeader[] = [
   },
 ]
 
+const addCandidate = async (candidate: Candidate) => {
+  await _addCandidate(candidate)
+  await fetchCandidates(candidate.election_id)
+  formCandidateDialog.value = false
+}
+
 const handleBallotBox = async (election_id: string, site: string) => {
   await addBallotBox(election_id, site)
   await fetchBallotBox(election_id)
@@ -66,6 +72,12 @@ const handleBallotBox = async (election_id: string, site: string) => {
 const disableBallotBox = async (ballot_box_id: string) => {
   await setBallotBoxReady(ballot_box_id, null)
 }
+
+const validElection = computed(() => {
+  const requiredBallotBoxLength = ballotsBox.value.length ? true : false
+  const requireCandidateLength = candidates.value.length > 1 ? true : false
+  return requireCandidateLength && requiredBallotBoxLength ? true : false
+})
 </script>
 
 <template>
@@ -78,6 +90,14 @@ const disableBallotBox = async (ballot_box_id: string) => {
       class="mt-3"
       no-gutters
     >
+      <v-col
+        v-if="!election.ready && validElection"
+        class="text-right pa-1 mb-3"
+        cols="12"
+        ><v-btn @click="setReady(election.id, true)"
+          >Liberar Eleição</v-btn
+        ></v-col
+      >
       <v-col cols="12">
         <v-toolbar density="compact">
           <v-toolbar-title>Urnas</v-toolbar-title>

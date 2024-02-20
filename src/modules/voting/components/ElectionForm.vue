@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Election } from '../types/Voting'
+import { ElectionInsert } from '../types/Voting'
 
 const $emit = defineEmits<{
-  'handle-submit': [value: Election]
+  'handle-submit': [value: ElectionInsert]
 }>()
 
-const formData = ref<Election>({
-  name: 'Nome da Eleição',
+const formData = ref<ElectionInsert>({
   date: '2024-03-22',
-  organization: 'Escola do Sylvio Tor 4',
+  organization: 'Organização',
   description: 'Descrição sucinta do objeto da eleição',
   candidate_number_length: 3,
   uppercase: false,
+  name: 'Nome da Eleição',
+  ready: false,
 })
 
 const handleSubmit = () => {
@@ -79,8 +80,13 @@ const handleSubmit = () => {
           label="Letras em Caixa Alta?"
         ></v-switch>
       </v-col>
+      <v-col class="text-right">
+        <v-btn
+          color="primary"
+          type="submit"
+          >Cadastrar</v-btn
+        >
+      </v-col>
     </v-row>
-
-    <v-btn type="submit">Cadastrar</v-btn>
   </v-form>
 </template>
