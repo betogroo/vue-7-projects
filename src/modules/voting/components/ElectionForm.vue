@@ -8,11 +8,11 @@ const $emit = defineEmits<{
 
 const formData = ref<ElectionInsert>({
   date: '2024-03-22',
-  organization: 'Escola do Sylvio Tor 4',
+  organization: 'Organização',
   description: 'Descrição sucinta do objeto da eleição',
   candidate_number_length: 3,
   uppercase: false,
-  name: '',
+  name: 'Nome da Eleição',
   ready: false,
 })
 

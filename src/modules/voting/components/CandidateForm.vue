@@ -53,9 +53,8 @@ const testIfNumberIsAvailable = () => {
           label="Nome do Candidato"
         ></v-text-field>
       </v-col>
-      <v-col>
+      <v-col class="text-right">
         <v-btn
-          block
           color="primary"
           type="submit"
           variant="elevated"
