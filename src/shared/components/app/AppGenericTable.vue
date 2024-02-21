@@ -52,8 +52,13 @@ const deleteItemConfirm = (election_id: string) => {
   >
     <template #no-data
       ><div class="py-2 d-flex justify-center">
-        <slot name="noData"></slot></div
-    ></template>
+        <slot
+          v-if="$slots.noData"
+          name="noData"
+        ></slot>
+        <div v-else>Nenhum dado a exibir</div>
+      </div></template
+    >
     <template #top>
       <v-toolbar density="compact">
         <v-toolbar-title v-if="title">{{ title }}</v-toolbar-title>

@@ -17,7 +17,11 @@ const handleDisable = (ballot_box_id: string) => {
 
 <template>
   <template v-if="!ballotsBox.length">
-    <slot name="noData"></slot>
+    <slot
+      v-if="$slots.noData"
+      name="noData"
+    ></slot>
+    <div v-else>Nenhum dado a exibir</div>
   </template>
   <v-card
     v-for="item in ballotsBox"
