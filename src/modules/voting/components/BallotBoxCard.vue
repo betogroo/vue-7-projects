@@ -17,13 +17,7 @@ const handleDisable = (ballot_box_id: string) => {
 
 <template>
   <template v-if="!ballotsBox.length">
-    <v-alert
-      class="mb-3"
-      color="error"
-      max-width="300"
-      variant="outlined"
-      >Ainda não temos urnas cadastradas</v-alert
-    >
+    <slot name="noData"></slot>
   </template>
   <v-card
     v-for="item in ballotsBox"
