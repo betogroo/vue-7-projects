@@ -9,13 +9,13 @@ import CandidateDisplay from './CandidateDisplay.vue'
 import BallotBoxCard from './BallotBoxCard.vue'
 import BallotBoxForm from './BallotBoxForm.vue'
 import ElectionForm from './ElectionForm.vue'
-import ElectionTable from './ElectionTable.vue'
 import CandidateForm from './CandidateForm.vue'
 import CandidateList from './CandidateList.vue'
 
-import { AppGenericTable } from '@/shared/components'
+import { AppGenericTable, AppAlertError } from '@/shared/components'
 
 export {
+  AppAlertError,
   AppGenericTable,
   NumericBtn,
   NumericDisplay,
@@ -28,7 +28,6 @@ export {
   DisplayCard,
   DisplayEnd,
   ElectionForm,
-  ElectionTable,
   CandidateForm,
   CandidateList,
 }

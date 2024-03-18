@@ -2,6 +2,8 @@ import { z } from 'zod'
 // shared
 export type { TableHeader } from '@/shared/types/App'
 
+const required_error = 'Campo Obrigatório'
+
 export const candidateSchema = z.object({
   id: z.string().uuid().optional(),
   created_at: z.string().nullish(),
@@ -32,16 +34,19 @@ export const voterSchema = z.object({
 export const electionSchema = z.object({
   id: z.string().uuid(),
   created_at: z.string(),
-  date: z.string(),
-  name: z.string().min(1, 'Obrigatório'),
-  description: z.string(),
-  uppercase: z.boolean().nullish(),
-  ready: z.boolean().nullish(),
-  organization: z.string().nullish(),
-  candidate_number_length: z.number().default(3),
+  date: z.string({ required_error }),
+  name: z.string({ required_error }),
+  description: z.string({ required_error }),
+  uppercase: z.boolean().default(false),
+  ready: z.boolean().default(false),
+  organization: z.string({ required_error }).min(1, 'Obrigatório'),
+  candidate_number_length: z
+    .number({ invalid_type_error: 'Apenas Números' })
+    .min(1, 'O número deve ser entre 1 e 5')
+    .max(5, 'O número deve ser entre 1 e 5'),
 })
 
-const insertElectionSchema = electionSchema.merge(
+export const insertElectionSchema = electionSchema.merge(
   z.object({
     id: z.string().uuid().optional(),
     created_at: z.string().optional(),

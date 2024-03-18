@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import {
+  AppAlertError,
   BallotBoxCard,
   BallotBoxForm,
   CandidateForm,
@@ -146,7 +147,11 @@ const validElection = computed(() => {
           <BallotBoxCard
             :ballots-box="ballotsBox"
             @handle-disable="(value) => disableBallotBox(value)"
-          />
+          >
+            <template #noData
+              ><AppAlertError text="Nenhuma urna a exibir!"
+            /></template>
+          </BallotBoxCard>
         </div>
       </v-col>
       <v-col>
@@ -157,6 +162,11 @@ const validElection = computed(() => {
           table-subject="Candidato"
           title="Candidatos"
         >
+          <template #noData
+            ><AppAlertError
+              max-width="350"
+              text="Nenhum candidato a exibir!"
+          /></template>
           <template #addForm
             ><CandidateForm
               :candidate_number_length="election.candidate_number_length"

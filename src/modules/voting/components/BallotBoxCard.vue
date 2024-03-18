@@ -16,7 +16,13 @@ const handleDisable = (ballot_box_id: string) => {
 </script>
 
 <template>
-  <v-card v-if="!ballotsBox.length">Ainda não temos urnas cadastradas</v-card>
+  <template v-if="!ballotsBox.length">
+    <slot
+      v-if="$slots.noData"
+      name="noData"
+    ></slot>
+    <div v-else>Nenhum dado a exibir</div>
+  </template>
   <v-card
     v-for="item in ballotsBox"
     :key="item.id"
@@ -27,7 +33,6 @@ const handleDisable = (ballot_box_id: string) => {
     variant="outlined"
   >
     <v-responsive :aspect-ratio="16 / 9">
-      <v-card-text> </v-card-text>
       <v-card-actions class="d-flex flex-column">
         <v-btn
           block

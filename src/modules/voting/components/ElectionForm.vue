@@ -1,36 +1,51 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElectionInsert } from '../types/Voting'
+import { ElectionInsert, insertElectionSchema } from '../types/Voting'
+import { useField, useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import { z } from 'zod'
 
 const $emit = defineEmits<{
   'handle-submit': [value: ElectionInsert]
 }>()
 
-const formData = ref<ElectionInsert>({
-  date: '2024-03-22',
-  organization: 'Organização',
-  description: 'Descrição sucinta do objeto da eleição',
-  candidate_number_length: 3,
-  uppercase: false,
-  name: 'Nome da Eleição',
-  ready: false,
+const validationSchema = toTypedSchema(insertElectionSchema)
+
+const { values, handleSubmit, meta, resetForm } = useForm<ElectionInsert>({
+  validationSchema,
 })
 
-const handleSubmit = () => {
-  $emit('handle-submit', formData.value)
-}
+const name = useField('name', validationSchema)
+const date = useField('date', validationSchema)
+const description = useField('description', validationSchema)
+const organization = useField('organization', validationSchema)
+const uppercase = useField('uppercase', validationSchema)
+const candidate_number_length = useField(
+  'candidate_number_length',
+  validationSchema,
+)
+
+const onSubmit = handleSubmit(async () => {
+  try {
+    const parsedValues = insertElectionSchema.parse(values)
+    console.log(parsedValues)
+    $emit('handle-submit', parsedValues)
+  } catch (err) {
+    if (err instanceof z.ZodError) console.warn(err.issues)
+  }
+})
 </script>
 
 <template>
   <v-form
     class="pa-1 ma-1"
-    @submit.prevent="handleSubmit"
+    @submit.prevent="onSubmit"
   >
     <v-row no-gutters>
       <v-col cols="12">
         <v-text-field
-          v-model="formData.date"
+          v-model="date.value.value"
           density="compact"
+          :error-messages="date.errorMessage.value"
           label="Data da Eleição"
           type="date"
           variant="outlined"
@@ -38,41 +53,44 @@ const handleSubmit = () => {
       </v-col>
       <v-col cols="12">
         <v-text-field
-          v-model="formData.name"
+          v-model="name.value.value"
           density="compact"
+          :error-messages="name.errorMessage.value"
           label="Titulo da Eleição"
           variant="outlined"
         />
       </v-col>
       <v-col cols="12">
         <v-text-field
-          v-model="formData.description"
+          v-model="description.value.value"
           density="compact"
+          :error-messages="description.errorMessage.value"
           label="Descrição"
           variant="outlined"
         />
       </v-col>
       <v-col cols="12">
         <v-text-field
-          v-model="formData.organization"
+          v-model="organization.value.value"
           density="compact"
+          :error-messages="organization.errorMessage.value"
           label="Nome da Instituição"
           variant="outlined"
         />
       </v-col>
       <v-col cols="4">
-        <v-select
-          v-model="formData.candidate_number_length"
-          clearable
+        <v-text-field
+          v-model.number="candidate_number_length.value.value"
           density="compact"
-          :items="[1, 2, 3, 4, 5]"
+          :error-messages="candidate_number_length.errorMessage.value"
           label="Dígitos"
+          type="number"
           variant="outlined"
-        ></v-select>
+        />
       </v-col>
       <v-col cols="8">
         <v-switch
-          v-model="formData.uppercase"
+          v-model="uppercase.value.value"
           class="d-flex justify-center align-center"
           color="success"
           density="compact"
@@ -80,9 +98,18 @@ const handleSubmit = () => {
           label="Letras em Caixa Alta?"
         ></v-switch>
       </v-col>
+    </v-row>
+    <v-row no-gutters>
       <v-col class="text-right">
         <v-btn
+          class="mr-3"
+          color="warning"
+          @click="resetForm"
+          >Limpar</v-btn
+        >
+        <v-btn
           color="primary"
+          :disabled="!meta.valid"
           type="submit"
           >Cadastrar</v-btn
         >
