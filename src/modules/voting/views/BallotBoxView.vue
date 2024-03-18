@@ -7,8 +7,10 @@ import {
   DisplayCard,
   DisplayEnd,
 } from '../components'
-import { useVoting, useBallotBox } from '../composables'
+import { useVoting, useBallotBox, useHelpers } from '../composables'
 import { useBallotBoxStore, useElectionStore } from '../store'
+import { useSound } from '@vueuse/sound'
+import confirmSound from '@/assets/voting_sounds/confirm.wav'
 
 //composable
 const {
@@ -20,6 +22,8 @@ const {
   updateDisplay,
 } = useVoting()
 const { setBallotBoxReady } = useBallotBox()
+const { delay } = useHelpers()
+const { play } = useSound(confirmSound)
 
 const ballotBoxStore = useBallotBoxStore()
 const { ballotBox } = storeToRefs(ballotBoxStore)
@@ -29,13 +33,18 @@ const { election } = storeToRefs(electionStore)
 const confirmVote = async () => {
   if (!election.value!.id || !selectedCandidate.value!.id) return
   const vote: Vote = {
-    voter_id: ballotBox.value?.ready,
+    voter_id: 'a981b48a-72e5-4dec-878b-837c164cede6',
     election_id: election.value!.id,
     ballot_box_id: ballotBox.value!.id,
     candidate_id: selectedCandidate.value!.id,
   }
   const recordedVote = await addVote(vote)
-  if (recordedVote) await setBallotBoxReady(ballotBox.value!.id, null)
+  if (recordedVote) {
+    play()
+    await setBallotBoxReady(ballotBox.value!.id, null)
+  }
+  await delay(5000)
+  setBallotBoxReady(ballotBox.value!.id, 'dc5e18db-c593-41fc-8c4c-3c58376fd88c')
   console.log(vote, recordedVote)
   resetDisplay()
 }
@@ -83,11 +92,6 @@ const confirmVote = async () => {
           @handle-reset="resetDisplay"
         />
       </v-col>
-    </v-row>
-    <v-row>
-      <v-col>id da urna: {{ ballotBox?.id }}</v-col>
-      <v-col>id do votante: {{ ballotBox?.ready }}</v-col>
-      <v-col>Candidato Selecionado: {{ selectedCandidate }}</v-col>
     </v-row>
   </v-container>
 </template>

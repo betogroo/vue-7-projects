@@ -25,12 +25,12 @@ const useVoting = () => {
   const addVote = async (vote: Vote) => {
     try {
       const { data, error: err } = await supabase
-        .from('votes')
+        .from('votes_sylvio')
         .insert(vote)
         .select('*')
         .returns<Vote[]>()
         .single()
-      if (err) throw Error('Não foi possível votar')
+      if (err) throw err
       if (data) {
         votingStore.setVote(vote)
         resetDisplay()
@@ -45,7 +45,7 @@ const useVoting = () => {
   const fetchVotes = async (election_id: string) => {
     try {
       const { data, error: err } = await supabase
-        .from('votes')
+        .from('votes_sylvio')
         .select('*')
         .eq('election_id', election_id)
       if (err) throw err
