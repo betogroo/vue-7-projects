@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { NumericBtn } from '.'
+import { useSound } from '@vueuse/sound'
+import numericKeySound from '@/assets/voting_sounds/key.wav'
 
 interface Props {
   keyboardDisabled: boolean
@@ -12,7 +14,10 @@ const $emit = defineEmits<{
   'handle-click': [value: number | string]
 }>()
 
+const { play } = useSound(numericKeySound)
+
 const handleClick = (value: number | string) => {
+  play()
   $emit('handle-click', value)
 }
 </script>
