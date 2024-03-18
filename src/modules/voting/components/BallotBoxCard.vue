@@ -8,10 +8,14 @@ defineProps<Props>()
 
 const $emit = defineEmits<{
   'handle-disable': [ballot_box_id: string]
+  'handle-enable': [ballot_box_id: string]
 }>()
 
 const handleDisable = (ballot_box_id: string) => {
   $emit('handle-disable', ballot_box_id)
+}
+const handleEnable = (ballot_box_id: string) => {
+  $emit('handle-enable', ballot_box_id)
 }
 </script>
 
@@ -40,15 +44,16 @@ const handleDisable = (ballot_box_id: string) => {
           >Ir para urna</v-btn
         >
         <v-btn
-          block
-          :to="{ name: 'BallotBoxAdmin', params: { id: item.id } }"
-          >Monitorar</v-btn
-        >
-        <v-btn
           v-if="item.ready"
           block
           @click="handleDisable(item.id)"
-          >Desabilitar</v-btn
+          >Desativar</v-btn
+        >
+        <v-btn
+          v-else
+          block
+          @click="handleEnable(item.id)"
+          >Ativar</v-btn
         >
       </v-card-actions>
     </v-responsive>

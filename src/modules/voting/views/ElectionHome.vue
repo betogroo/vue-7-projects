@@ -74,6 +74,10 @@ const disableBallotBox = async (ballot_box_id: string) => {
   await setBallotBoxReady(ballot_box_id, null)
 }
 
+const enableBallotBox = async (ballot_box_id: string) => {
+  setBallotBoxReady(ballot_box_id, 'dc5e18db-c593-41fc-8c4c-3c58376fd88c')
+}
+
 const validElection = computed(() => {
   const requiredBallotBoxLength = ballotsBox.value.length ? true : false
   const requireCandidateLength = candidates.value.length > 1 ? true : false
@@ -147,6 +151,7 @@ const validElection = computed(() => {
           <BallotBoxCard
             :ballots-box="ballotsBox"
             @handle-disable="(value) => disableBallotBox(value)"
+            @handle-enable="(value) => enableBallotBox(value)"
           >
             <template #noData
               ><AppAlertError text="Nenhuma urna a exibir!"
