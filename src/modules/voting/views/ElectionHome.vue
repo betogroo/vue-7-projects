@@ -83,6 +83,8 @@ const validElection = computed(() => {
   const requireCandidateLength = candidates.value.length > 1 ? true : false
   return requireCandidateLength && requiredBallotBoxLength ? true : false
 })
+
+console.log(['created', 'started'].includes(election.value.status))
 </script>
 
 <template>
@@ -121,7 +123,7 @@ const validElection = computed(() => {
       >
     </v-row>
     <v-card
-      :disabled="election.status !== 'started'"
+      :disabled="!['created', 'started'].includes(election.status)"
       variant="text"
     >
       <v-row>

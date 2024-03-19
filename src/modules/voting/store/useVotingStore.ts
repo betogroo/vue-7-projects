@@ -22,10 +22,10 @@ export const useVotingStore = defineStore('voting', () => {
       votes.value.filter((item) => item.election_id === election_id).length,
   )
 
-  const totalCandidateVote = computed(() => (candidate_id: string) => {
+  const totalCandidateVote = (candidate_id: string) => {
     return votes.value.filter((item) => item.candidate_id === candidate_id)
       .length
-  })
+  }
 
   // const candidates: Candidate[] = []
 
