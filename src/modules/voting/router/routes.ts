@@ -30,8 +30,8 @@ const routes: CustomRouteRecordRaw[] = [
   },
   {
     path: '/election/:id',
-    component: () => import('../views/ElectionHome.vue'),
-    name: 'ElectionHome',
+    /* component: () => import('../views/ElectionHome.vue'),
+    name: 'ElectionHome', */
     meta: {
       title: 'Sistema de Votação',
       requiresAuth: false,
@@ -58,6 +58,18 @@ const routes: CustomRouteRecordRaw[] = [
         next({ name: 'NotFoundVoting' })
       }
     },
+    children: [
+      {
+        component: () => import('../views/ElectionHome.vue'),
+        name: 'ElectionHome',
+        path: '',
+      },
+      {
+        name: 'ElectionReport',
+        component: () => import('../views/ElectionReport.vue'),
+        path: 'report',
+      },
+    ],
   },
   {
     path: '/voting/ballotbox/:id',
