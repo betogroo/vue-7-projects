@@ -18,5 +18,6 @@ export const useElectionStore = defineStore('election', () => {
   })
 
   const totalElections = computed(() => elections.value.length)
+
   return { election, elections, totalElections }
 })
