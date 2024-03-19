@@ -119,7 +119,7 @@ const validElection = computed(() => {
       >
     </v-row>
     <v-card
-      :disabled="!election.ready"
+      :disabled="election.status !== 'started'"
       variant="text"
     >
       <v-row>
