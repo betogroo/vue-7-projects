@@ -25,7 +25,7 @@ import { computed, ref } from 'vue'
 
 const { addBallotBox, setBallotBoxReady, fetchBallotBox } = useBallotBox()
 const { addCandidate: _addCandidate, fetchCandidates } = useCandidates()
-const { setReady } = useElection()
+const { setElectionStatus } = useElection()
 
 const electionStore = useElectionStore()
 const ballotBoxStore = useBallotBoxStore()
@@ -96,94 +96,111 @@ const validElection = computed(() => {
       no-gutters
     >
       <v-col
-        v-if="!election.ready && validElection"
+        v-if="election.status === 'created' && validElection"
         class="text-right pa-1 mb-3"
         cols="12"
-        ><v-btn @click="setReady(election.id, true)"
+        ><v-btn @click="setElectionStatus(election.id, 'started')"
           >Liberar Eleição</v-btn
         ></v-col
       >
-      <v-col cols="12">
-        <v-toolbar density="compact">
-          <v-toolbar-title>Urnas</v-toolbar-title>
-
-          <v-spacer></v-spacer>
-          <v-btn
-            prepend-icon="mdi-plus-thick"
-            @click="formBallotBoxDialog = true"
-            >Cadastrar Urna
-            <v-dialog
-              v-model="formBallotBoxDialog"
-              max-width="500px"
+      <v-col
+        v-if="election.status === 'started' && validElection"
+        class="text-right pa-1 mb-3"
+        cols="12"
+        ><v-btn @click="setElectionStatus(election.id, 'finished')"
+          >Terminar eleição</v-btn
+        ></v-col
+      >
+      <v-col
+        v-if="election.status === 'finished' && validElection"
+        class="text-right pa-1 mb-3"
+        cols="12"
+        ><v-btn>Gerar Relatório Final</v-btn></v-col
+      >
+    </v-row>
+    <v-card
+      :disabled="!election.ready"
+      variant="text"
+    >
+      <v-row>
+        <v-col cols="12">
+          <v-toolbar density="compact">
+            <v-toolbar-title>Urnas</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn
+              prepend-icon="mdi-plus-thick"
+              @click="formBallotBoxDialog = true"
+              >Cadastrar Urna
+              <v-dialog
+                v-model="formBallotBoxDialog"
+                max-width="500px"
+              >
+                <v-card>
+                  <v-card-title>
+                    <span class="text-h5">Cadastrar Urna</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <BallotBoxForm
+                        @handle-submit="
+                          (site) => handleBallotBox(election.id!, site)
+                        "
+                      />
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      block
+                      color="warning"
+                      variant="outlined"
+                      @click="formBallotBoxDialog = false"
+                    >
+                      Cancelar
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-btn>
+          </v-toolbar>
+          <div class="d-flex flex-wrap justify-center mt-3">
+            <BallotBoxCard
+              :ballots-box="ballotsBox"
+              @handle-disable="(value) => disableBallotBox(value)"
+              @handle-enable="(value) => enableBallotBox(value)"
             >
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5">Cadastrar Urna</span>
-                </v-card-title>
-
-                <v-card-text>
-                  <v-container>
-                    <BallotBoxForm
-                      @handle-submit="
-                        (site) => handleBallotBox(election.id!, site)
-                      "
-                    />
-                  </v-container>
-                </v-card-text>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    block
-                    color="warning"
-                    variant="outlined"
-                    @click="formBallotBoxDialog = false"
-                  >
-                    Cancelar
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-btn>
-        </v-toolbar>
-
-        <div class="d-flex flex-wrap justify-center mt-3">
-          <BallotBoxCard
-            :ballots-box="ballotsBox"
-            @handle-disable="(value) => disableBallotBox(value)"
-            @handle-enable="(value) => enableBallotBox(value)"
+              <template #noData
+                ><AppAlertError text="Nenhuma urna a exibir!"
+              /></template>
+            </BallotBoxCard>
+          </div>
+        </v-col>
+        <v-col>
+          <CandidateTable
+            v-model="formCandidateDialog"
+            :headers="candidateTableHeader"
+            :table-data="candidates"
+            table-subject="Candidato"
+            title="Candidatos"
           >
             <template #noData
-              ><AppAlertError text="Nenhuma urna a exibir!"
+              ><AppAlertError
+                max-width="350"
+                text="Nenhum candidato a exibir!"
             /></template>
-          </BallotBoxCard>
-        </div>
-      </v-col>
-      <v-col>
-        <CandidateTable
-          v-model="formCandidateDialog"
-          :headers="candidateTableHeader"
-          :table-data="candidates"
-          table-subject="Candidato"
-          title="Candidatos"
-        >
-          <template #noData
-            ><AppAlertError
-              max-width="350"
-              text="Nenhum candidato a exibir!"
-          /></template>
-          <template #addForm
-            ><CandidateForm
-              :candidate_number_length="election.candidate_number_length"
-              :election_id="election.id!"
-              @add-candidate="(value) => addCandidate(value)"
-          /></template>
-          <template #plus="props">{{
-            votingStore.totalCandidateVote(props.item.id!)
-          }}</template>
-        </CandidateTable>
-      </v-col>
-    </v-row>
+            <template #addForm
+              ><CandidateForm
+                :candidate_number_length="election.candidate_number_length"
+                :election_id="election.id!"
+                @add-candidate="(value) => addCandidate(value)"
+            /></template>
+            <template #plus="props">{{
+              votingStore.totalCandidateVote(props.item.id!)
+            }}</template>
+          </CandidateTable>
+        </v-col>
+      </v-row>
+    </v-card>
   </v-container>
   <v-container v-else>Nada a Mostrar</v-container>
 </template>

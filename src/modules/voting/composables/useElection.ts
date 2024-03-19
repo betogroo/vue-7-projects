@@ -1,7 +1,7 @@
 import { supabase } from '@/plugins/supabase'
 import { useElectionStore } from '../store/useElectionStore'
 import { useHelpers } from '@/shared/composables'
-import type { Election, ElectionInsert } from '../types/Voting'
+import type { Election, ElectionInsert, ElectionStatus } from '../types/Voting'
 import { ref } from 'vue'
 
 const { dateBr } = useHelpers()
@@ -82,6 +82,20 @@ const useElection = () => {
       console.error(e)
     }
   }
+  const setElectionStatus = async (id: string, value: ElectionStatus) => {
+    try {
+      const { data, error: err } = await supabase
+        .from('election')
+        .update({ status: value })
+        .eq('id', id)
+      if (err) throw err
+      console.log(data)
+      console.log(value)
+    } catch (err) {
+      const e = err as Error
+      console.error(e)
+    }
+  }
 
   const deleteElection = async (id: string) => {
     try {
@@ -137,6 +151,7 @@ const useElection = () => {
     getElection,
     addElection,
     setReady,
+    setElectionStatus,
     deleteElection,
   }
 }

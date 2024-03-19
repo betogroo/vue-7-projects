@@ -31,6 +31,10 @@ export const voterSchema = z.object({
   ra: z.number(),
 })
 
+const ELECTION_STATUS = ['created', 'started', 'finished'] as const
+const electionStatusSchema = z.enum(ELECTION_STATUS)
+export type ElectionStatus = z.infer<typeof electionStatusSchema>
+
 export const electionSchema = z.object({
   id: z.string().uuid(),
   created_at: z.string(),
@@ -44,12 +48,14 @@ export const electionSchema = z.object({
     .number({ invalid_type_error: 'Apenas Números' })
     .min(1, 'O número deve ser entre 1 e 5')
     .max(5, 'O número deve ser entre 1 e 5'),
+  status: electionStatusSchema,
 })
 
 export const insertElectionSchema = electionSchema.merge(
   z.object({
     id: z.string().uuid().optional(),
     created_at: z.string().optional(),
+    status: electionStatusSchema.optional(),
   }),
 )
 
