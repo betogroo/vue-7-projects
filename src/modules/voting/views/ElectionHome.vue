@@ -115,7 +115,9 @@ const validElection = computed(() => {
         v-if="election.status === 'finished' && validElection"
         class="text-right pa-1 mb-3"
         cols="12"
-        ><v-btn>Gerar Relatório Final</v-btn></v-col
+        ><v-btn :to="{ name: 'ElectionReport', params: { id: election.id } }"
+          >Gerar Relatório Final</v-btn
+        ></v-col
       >
     </v-row>
     <v-card
