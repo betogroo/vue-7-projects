@@ -13,9 +13,7 @@ withDefaults(defineProps<Props>(), {
 const $emit = defineEmits<{
   'handle-click': [value: number | string]
 }>()
-
 const { play } = useSound(numericKeySound)
-
 const handleClick = (value: number | string) => {
   play()
   $emit('handle-click', value)

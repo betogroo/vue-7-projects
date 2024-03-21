@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useSound } from '@vueuse/sound'
+import numericKeySound from '@/assets/voting_sounds/key.wav'
 interface Props {
   confirmDisabled: boolean
   resetDisabled: boolean
@@ -13,10 +15,14 @@ const $emit = defineEmits<{
   'handle-confirm': []
 }>()
 
+const { play } = useSound(numericKeySound)
 const handleReset = () => {
+  play()
+
   $emit('handle-reset')
 }
 const handleConfirm = () => {
+  play()
   $emit('handle-confirm')
 }
 </script>
