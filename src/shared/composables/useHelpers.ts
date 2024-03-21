@@ -58,6 +58,9 @@ const useHelpers = () => {
   const dateBr = (date: string, dateFormat: DateFormat = 'short') =>
     format(date, dateFormat)
 
+  const dateBrWithTime = (date: Date) =>
+    format(date, { date: 'full', time: 'short' })
+
   const lastColumnGrid = <T>(item: T[], index: number) => {
     return item.length % 2 !== 0 && index === item.length - 1 ? 12 : 6
   }
@@ -67,6 +70,7 @@ const useHelpers = () => {
     deleteItem,
     delay,
     dateBr,
+    dateBrWithTime,
     generateRandomColor,
     localCurrency,
     timestampToDate,

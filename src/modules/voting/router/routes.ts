@@ -68,6 +68,11 @@ const routes: CustomRouteRecordRaw[] = [
         name: 'ElectionReport',
         component: () => import('../views/ElectionReport.vue'),
         path: 'report',
+        meta: {
+          requiresAuth: false,
+          title: 'Relatório de Votos',
+          hideNavBar: true,
+        },
       },
     ],
   },

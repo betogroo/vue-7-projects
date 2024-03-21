@@ -83,8 +83,6 @@ const validElection = computed(() => {
   const requireCandidateLength = candidates.value.length > 1 ? true : false
   return requireCandidateLength && requiredBallotBoxLength ? true : false
 })
-
-console.log(['created', 'started'].includes(election.value.status))
 </script>
 
 <template>
@@ -97,6 +95,14 @@ console.log(['created', 'started'].includes(election.value.status))
       class="mt-3"
       no-gutters
     >
+      <v-col
+        v-if="election.status === 'created' && validElection"
+        class="text-right pa-1 mb-3"
+        cols="12"
+        ><v-btn :to="{ name: 'ElectionReport', params: { id: election.id } }"
+          >Gerar Relatório Inicial</v-btn
+        ></v-col
+      >
       <v-col
         v-if="election.status === 'created' && validElection"
         class="text-right pa-1 mb-3"
