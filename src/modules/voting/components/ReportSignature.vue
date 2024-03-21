@@ -12,8 +12,8 @@ withDefaults(defineProps<Props>(), {
 
 <template>
   <div>
-    <div class="text-center">____________________________________</div>
-    <div class="text-center">{{ `${title} ${name}` }}</div>
+    <div class="text-center">_______________________________</div>
+    <div class="text-center text-caption">{{ `${title} ${name}` }}</div>
     <div class="text-center text-caption">{{ subtitle }}</div>
     <div class="py-4" />
   </div>

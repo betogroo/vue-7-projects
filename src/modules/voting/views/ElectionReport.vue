@@ -90,15 +90,12 @@ const reportStatus = computed(() => (votes.value.length ? 'finish' : 'start'))
 </script>
 
 <template>
-  <v-container
-    class="d-flex flex-column align-center"
-    style="border: 2px dotted"
-  >
+  <v-container class="d-flex flex-column align-center pa-0 ma-0">
     <h1>
       {{ `Relatório ${reportStatus === 'finish' ? 'Final' : 'Inicial'}` }}
     </h1>
     <v-card
-      class="pa-3 ma-3"
+      class="pa-0 ma-0"
       style="border: 2px dotted"
       variant="outlined"
     >
