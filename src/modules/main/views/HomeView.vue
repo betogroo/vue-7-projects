@@ -13,6 +13,11 @@ const apps: AppParam[] = [
     description: 'Sistema de votação, com contabilização de votos',
     name: { name: 'VotingHome' },
   },
+  {
+    title: 'Queens Game',
+    description: 'Jogo da rainha',
+    name: { name: 'QueensGameHome' },
+  },
 ]
 </script>
 <template>
