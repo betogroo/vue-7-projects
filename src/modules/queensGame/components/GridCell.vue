@@ -5,6 +5,14 @@ interface Props {
   color?: string
 }
 defineProps<Props>()
+
+const $emit = defineEmits<{
+  handleClick: []
+}>()
+
+const handleClick = () => {
+  $emit('handleClick')
+}
 </script>
 
 <template>
@@ -15,6 +23,7 @@ defineProps<Props>()
     height="28"
     max-width="28"
     width="28"
+    @click="handleClick"
     ><v-img
       v-if="content === 'queen'"
       src="@/assets/queens_imgs/crown.png"
