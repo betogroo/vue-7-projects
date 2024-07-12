@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import type { colors } from '@/modules/password/types/Password'
 interface Props {
-  color: string
+  color: colors
   icon?: string
 }
 withDefaults(defineProps<Props>(), {

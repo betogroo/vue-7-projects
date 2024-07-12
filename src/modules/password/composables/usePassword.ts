@@ -46,10 +46,10 @@ const usePassword = () => {
     ].filter(Boolean).length
 
     if (countTrue === 2 || countTrue === 3)
-      return { color: 'warning', message: 'razoável' }
+      return { color: 'warning', message: 'razoável', strong: false }
     if (countTrue === 4)
       return { color: 'success', message: 'forte', strong: true }
-    return { color: 'error', message: 'fraca' }
+    return { color: 'error', message: 'fraca', strong: false }
   })
 
   return {
