@@ -28,7 +28,7 @@ const useQueensGame = () => {
     [7, 6, 6, 7, 8, 8, 8, 8],
     [7, 7, 7, 7, 7, 7, 8, 8],
   ]
-  /*  const hard = [
+  const hard = [
     [1, 1, 2, 2, 2, 3, 3, 3],
     [1, 1, 2, 2, 2, 3, 3, 3],
     [4, 1, 2, 2, 2, 3, 3, 3],
@@ -48,10 +48,10 @@ const useQueensGame = () => {
     [1, 6, 6, 6, 7, 7, 7, 3],
     [6, 6, 6, 6, 7, 8, 8, 3],
     [6, 6, 6, 6, 7, 7, 8, 3],
-  ] */
+  ]
 
   const createBoard = () => {
-    board.value = easy.map((row) =>
+    board.value = hard.map((row) =>
       row.map((section) => ({
         content: '',
         section,
@@ -99,6 +99,9 @@ const useQueensGame = () => {
     createGame,
     board,
     queens,
+    hard,
+    easy,
+    medium,
   }
 }
 
