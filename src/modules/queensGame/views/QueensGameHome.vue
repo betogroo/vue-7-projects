@@ -1,27 +1,30 @@
 <script setup lang="ts">
 import GridCell from '../components/GridCell.vue'
 import { useQueensGame } from '../composables'
-const { resetBoard, onGridClick, boardState } = useQueensGame()
+const { board, queens, createGame, onGridClick } = useQueensGame()
 </script>
 
 <template>
-  <v-sheet
-    class="mx-auto mt-8"
-    width="600"
-  >
-    <div class="d-flex">
+  <div class="d-flex flex-column justify-center mt-10">
+    <div class="d-flex mx-auto">
       <div
-        v-for="(n, i) in boardState"
-        :key="i"
+        v-for="(row, rowIndex) in board"
+        :key="rowIndex"
         class="flex-item"
       >
         <GridCell
-          color="blue"
-          :content="n"
-          @handle-click="onGridClick(i, n)"
+          v-for="(grid, cellIndex) in row"
+          :key="`${grid.section}-${cellIndex}`"
+          :color="grid.color"
+          :content="grid.content"
+          @handle-click="onGridClick(rowIndex, cellIndex)"
         />
       </div>
     </div>
-    <v-btn @click="resetBoard">Resetar</v-btn>
-  </v-sheet>
+    <div class="d-flex mx-auto mt-2">
+      <v-btn @click="createGame">Criar Jogo</v-btn>
+      <v-btn @click="createGame">Resetar</v-btn>
+    </div>
+    <div>{{ queens.length }}</div>
+  </div>
 </template>
