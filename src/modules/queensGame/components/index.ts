@@ -1,3 +1,4 @@
-import { AppTooltip } from '@/shared/components'
+import GameBoard from './GameBoard.vue'
+import GridCell from './GridCell.vue'
 
-export { AppTooltip }
+export { GameBoard, GridCell }
