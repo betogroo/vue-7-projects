@@ -77,9 +77,10 @@ const useQueensGame = () => {
   const validateBoard = () => {
     resetValidations()
     for (const queen of queens.value) {
-      const { row } = queen
+      const { row, col } = queen
       const rowValid = validateRow(row)
-      queen.valid = rowValid
+      const colValid = validateCol(col)
+      queen.valid = rowValid && colValid
     }
   }
 
@@ -88,6 +89,17 @@ const useQueensGame = () => {
     if (queensInRow.length > 1) {
       console.log('Rainha Inválida - Colocar agora a lógica')
       queensInRow.forEach((queen) => (queen.valid = false))
+      return false
+    } else {
+      console.log('Pode ser uma rainha válida - Colocar agora a lógica')
+      return true
+    }
+  }
+  const validateCol = (colIndex: number) => {
+    const queensInCol = queens.value.filter((queen) => queen.col === colIndex)
+    if (queensInCol.length > 1) {
+      console.log('Rainha Inválida - Colocar agora a lógica')
+      queensInCol.forEach((queen) => (queen.valid = false))
       return false
     } else {
       console.log('Pode ser uma rainha válida - Colocar agora a lógica')
