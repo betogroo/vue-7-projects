@@ -16,6 +16,7 @@ const { board, queens, createGame, onGridClick } = useQueensGame()
 
     <GameBoard
       :board="board"
+      :queens="queens"
       @on-grid-click="onGridClick"
     />
     <div>{{ queens.length }}</div>

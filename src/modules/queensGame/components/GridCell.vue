@@ -3,6 +3,7 @@ import { GridContent } from '../types/QueensGame'
 interface Props {
   content?: GridContent
   color?: string
+  invalid?: boolean
 }
 defineProps<Props>()
 
@@ -17,7 +18,7 @@ const handleClick = () => {
 
 <template>
   <v-sheet
-    border="opacity-100 sm"
+    :border="invalid ? 'opacity-100 error md' : 'opacity-100 sm'"
     class="d-flex align-center justify-center pa-1 cursor-pointer"
     :color="color"
     height="50"
@@ -26,13 +27,12 @@ const handleClick = () => {
     @click="handleClick"
     ><v-img
       v-if="content === 'queen'"
-      cover
-      src="@/assets/queens_imgs/crown.png"
-      :width="10"
+      :src="`src/assets/queens_imgs/crown${invalid ? '_dashed' : ''}.png`"
     ></v-img>
     <v-icon
       v-if="content === 'marked'"
-      size="small"
+      color="white"
+      size="large"
       >mdi-circle</v-icon
     >
   </v-sheet>

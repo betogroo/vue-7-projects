@@ -70,25 +70,49 @@ const useQueensGame = () => {
     createBoard()
     queens.value = []
   }
-  const validateBoard = () => {
-    console.log('Validatind Board')
+
+  const resetValidations = () => {
+    queens.value.forEach((queen) => (queen.valid = true))
   }
+  const validateBoard = () => {
+    resetValidations()
+    for (const queen of queens.value) {
+      const { row } = queen
+      const rowValid = validateRow(row)
+      queen.valid = rowValid
+    }
+  }
+
+  const validateRow = (rowIndex: number) => {
+    const queensInRow = queens.value.filter((queen) => queen.row === rowIndex)
+    if (queensInRow.length > 1) {
+      console.log('Rainha Inválida - Colocar agora a lógica')
+      queensInRow.forEach((queen) => (queen.valid = false))
+      return false
+    } else {
+      console.log('Pode ser uma rainha válida - Colocar agora a lógica')
+      return true
+    }
+  }
+
   const onGridClick = (rowIndex: number, cellIndex: number) => {
     const cell = board.value[rowIndex][cellIndex]
     if (cell.content === '') board.value[rowIndex][cellIndex].content = 'marked'
     else if (cell.content === 'marked') {
       {
         board.value[rowIndex][cellIndex].content = 'queen'
-        queens.value.push({ row: cellIndex, col: rowIndex, valid: true })
+        queens.value.push({ row: rowIndex, col: cellIndex, valid: true })
       }
     } else if (cell.content === 'queen') {
       board.value[rowIndex][cellIndex].content = ''
       queens.value = queens.value.filter(
-        (queen) => queen.row !== cellIndex || queen.col !== rowIndex,
+        (queen) => queen.row !== rowIndex || queen.col !== cellIndex,
       )
     }
 
     validateBoard()
+
+    // console.log(cell, rowIndex, cellIndex)
   }
   return {
     isPending,
