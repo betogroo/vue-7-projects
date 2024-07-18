@@ -78,10 +78,25 @@ const useQueensGame = () => {
     resetValidations()
     for (const queen of queens.value) {
       const { row, col } = queen
+      const cell = board.value[row][col]
       const rowValid = validateRow(row)
       const colValid = validateCol(col)
-      queen.valid = rowValid && colValid
+      const sectionValid = validateSection(cell.section!)
+      queen.valid = rowValid && colValid && sectionValid
     }
+  }
+
+  function validateSection(section: number) {
+    const queensInSection = queens.value.filter((queen) => {
+      const { row, col } = queen
+      return board.value[row][col].section === section
+    })
+
+    if (queensInSection.length > 1) {
+      queensInSection.forEach((queen) => (queen.valid = false))
+      return false
+    }
+    return true
   }
 
   const validateRow = (rowIndex: number) => {
