@@ -10,17 +10,16 @@ interface Props {
 const props = defineProps<Props>()
 
 const $emit = defineEmits<{
-  onGridClick: [rowIndex: number, cellIndex: number]
+  onGridClick: [rowIndex: number, colIndex: number]
 }>()
 
-const onGridClick = (rowIndex: number, cellIndex: number) => {
-  $emit('onGridClick', rowIndex, cellIndex)
+const onGridClick = (rowIndex: number, colIndex: number) => {
+  $emit('onGridClick', rowIndex, colIndex)
 }
 
-const isValidQueen = computed(() => (rowIndex: number, cellIndex: number) => {
+const isValidQueen = computed(() => (rowIndex: number, colIndex: number) => {
   return props.queens.some(
-    (queen) =>
-      queen.row === rowIndex && queen.col === cellIndex && !queen.valid,
+    (queen) => queen.row === rowIndex && queen.col === colIndex && !queen.valid,
   )
 })
 </script>
@@ -33,15 +32,15 @@ const isValidQueen = computed(() => (rowIndex: number, cellIndex: number) => {
       class="d-flex"
     >
       <div
-        v-for="(grid, cellIndex) in row"
-        :key="`${grid.section}-${cellIndex}`"
+        v-for="(grid, colIndex) in row"
+        :key="`${grid.section}-${colIndex}`"
         class="d-flex"
       >
         <GridCell
           :color="grid.color"
           :content="grid.content"
-          :invalid="isValidQueen(rowIndex, cellIndex)"
-          @handle-click="onGridClick(rowIndex, cellIndex)"
+          :invalid="isValidQueen(rowIndex, colIndex)"
+          @handle-click="onGridClick(rowIndex, colIndex)"
         />
       </div>
     </div>

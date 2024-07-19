@@ -122,24 +122,24 @@ const useQueensGame = () => {
     }
   }
 
-  const onGridClick = (rowIndex: number, cellIndex: number) => {
-    const cell = board.value[rowIndex][cellIndex]
-    if (cell.content === '') board.value[rowIndex][cellIndex].content = 'marked'
+  const onGridClick = (rowIndex: number, colIndex: number) => {
+    const cell = board.value[rowIndex][colIndex]
+    if (cell.content === '') board.value[rowIndex][colIndex].content = 'marked'
     else if (cell.content === 'marked') {
       {
-        board.value[rowIndex][cellIndex].content = 'queen'
-        queens.value.push({ row: rowIndex, col: cellIndex, valid: true })
+        board.value[rowIndex][colIndex].content = 'queen'
+        queens.value.push({ row: rowIndex, col: colIndex, valid: true })
       }
     } else if (cell.content === 'queen') {
-      board.value[rowIndex][cellIndex].content = ''
+      board.value[rowIndex][colIndex].content = ''
       queens.value = queens.value.filter(
-        (queen) => queen.row !== rowIndex || queen.col !== cellIndex,
+        (queen) => queen.row !== rowIndex || queen.col !== colIndex,
       )
     }
 
     validateBoard()
 
-    // console.log(cell, rowIndex, cellIndex)
+    // console.log(cell, rowIndex, colIndex)
   }
   return {
     isPending,
