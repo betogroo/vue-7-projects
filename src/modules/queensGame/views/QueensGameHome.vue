@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { GameBoard } from '../components'
 import { useQueensGame } from '../composables'
-const { board, queens, createGame, onGridClick } = useQueensGame()
+const { error, board, queens, createGame, onGridClick, resetBoard } =
+  useQueensGame()
 </script>
 
 <template>
@@ -11,7 +12,7 @@ const { board, queens, createGame, onGridClick } = useQueensGame()
   >
     <div class="d-flex mx-auto mt-2">
       <v-btn @click="createGame">Criar Jogo</v-btn>
-      <v-btn @click="createGame">Resetar</v-btn>
+      <v-btn @click="resetBoard">Resetar</v-btn>
     </div>
 
     <GameBoard
@@ -20,5 +21,6 @@ const { board, queens, createGame, onGridClick } = useQueensGame()
       @on-grid-click="onGridClick"
     />
     <div>{{ queens.length }}</div>
+    <div>{{ error }}</div>
   </v-card>
 </template>

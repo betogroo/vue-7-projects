@@ -3,7 +3,7 @@ import type { Board, CellColors, Queen } from '../types/QueensGame'
 
 const useQueensGame = () => {
   const isPending = ref(false)
-  const error = ref(null)
+  const error = ref('')
   const board = ref<Board>([])
   const queens = ref<Queen[]>([])
 
@@ -69,10 +69,12 @@ const useQueensGame = () => {
   const resetBoard = () => {
     createBoard()
     queens.value = []
+    error.value = ''
   }
 
   const resetValidations = () => {
     queens.value.forEach((queen) => (queen.valid = true))
+    error.value = ''
   }
   const validateBoard = () => {
     resetValidations()
@@ -81,9 +83,44 @@ const useQueensGame = () => {
       const cell = board.value[row][col]
       const rowValid = validateRow(row)
       const colValid = validateCol(col)
+      const diagonalValid = validateDiagonal(queen)
       const sectionValid = validateSection(cell.section!)
-      queen.valid = rowValid && colValid && sectionValid
+      queen.valid = rowValid && colValid && sectionValid && diagonalValid
     }
+  }
+
+  const validateDiagonal = (queen: Queen) => {
+    const directions = [
+      [-1, -1],
+      [-1, 1],
+      [1, -1],
+      [1, 1],
+    ]
+    let conflicts = false
+
+    const { row: rowIndex, col: colIndex } = queen
+
+    for (const [dx, dy] of directions) {
+      const newRow = rowIndex + dx
+      const newCol = colIndex + dy
+      if (
+        newRow >= 0 &&
+        newRow < board.value.length &&
+        newCol >= 0 &&
+        newCol < board.value[0].length
+      ) {
+        const adjacentQueen = queens.value.find(
+          (q) => q.row === newRow && q.col === newCol,
+        )
+        if (adjacentQueen) {
+          queen.valid = false
+          adjacentQueen.valid = false
+          conflicts = true
+          error.value = 'Erro Diagonal'
+        }
+      }
+    }
+    return !conflicts
   }
 
   function validateSection(section: number) {
@@ -94,6 +131,7 @@ const useQueensGame = () => {
 
     if (queensInSection.length > 1) {
       queensInSection.forEach((queen) => (queen.valid = false))
+      error.value = 'Rainha na mesma seção'
       return false
     }
     return true
@@ -102,22 +140,20 @@ const useQueensGame = () => {
   const validateRow = (rowIndex: number) => {
     const queensInRow = queens.value.filter((queen) => queen.row === rowIndex)
     if (queensInRow.length > 1) {
-      console.log('Rainha Inválida - Colocar agora a lógica')
+      error.value = 'Rainha na mesma linha'
       queensInRow.forEach((queen) => (queen.valid = false))
       return false
     } else {
-      console.log('Pode ser uma rainha válida - Colocar agora a lógica')
       return true
     }
   }
   const validateCol = (colIndex: number) => {
     const queensInCol = queens.value.filter((queen) => queen.col === colIndex)
     if (queensInCol.length > 1) {
-      console.log('Rainha Inválida - Colocar agora a lógica')
+      error.value = 'Rainha na mesma coluna'
       queensInCol.forEach((queen) => (queen.valid = false))
       return false
     } else {
-      console.log('Pode ser uma rainha válida - Colocar agora a lógica')
       return true
     }
   }
@@ -148,6 +184,7 @@ const useQueensGame = () => {
     onGridClick,
     createBoard,
     createGame,
+    validateDiagonal,
     board,
     queens,
     hard,
