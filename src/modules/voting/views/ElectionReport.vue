@@ -115,7 +115,11 @@ const reportStatus = computed(() => (votes.value.length ? 'finish' : 'start'))
         <v-list-item
           v-for="candidate in formattedCandidates"
           :key="candidate.id"
-          :base-color="candidate.isWinner ? 'green' : 'red'"
+          :base-color="
+            candidate.isWinner && election.status === 'finished'
+              ? 'green'
+              : 'red'
+          "
           class="mx-6"
           :prepend-avatar="candidate.avatar"
         >
@@ -127,7 +131,11 @@ const reportStatus = computed(() => (votes.value.length ? 'finish' : 'start'))
             </div></template
           >
           {{ formatCandidate(candidate.id!) }}
-          {{ candidate.isWinner ? '(Vencedor)' : '' }}
+          {{
+            candidate.isWinner && election.status === 'finished'
+              ? '(Vencedor)'
+              : ''
+          }}
         </v-list-item>
       </v-list>
     </v-card>
