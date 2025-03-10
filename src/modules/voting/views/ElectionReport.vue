@@ -10,26 +10,32 @@ const candidatesStore = useCandidateStore()
 const { candidates } = storeToRefs(candidatesStore)
 
 const commission = [
-  'Matheus Domiciano',
-  'João Pedro Queiroz',
-  'Vitor Hugo Teixeira',
-  'Danilo Fukui de Oliveira',
-  'Ana Paula Denoni Jordan',
-  'Jaqueline Silva Badaró Gomes',
+  'Maria Clara Alves Lima',
+  'Sofia Lopes da Silva Caetano',
+  'Helena dos Santos',
+  'Luciana Oliveira Olivério',
 ]
 
 const nominees = [
   {
-    name: 'Isabela Gonçalves de Assis',
-    subtitle: 'Representante da chapa Empatia',
+    name: 'Monyke Campelo da Silva',
+    subtitle: 'Representante da Chapa Confiança',
   },
   {
-    name: 'Bernardo Medeiros Guimarães',
-    subtitle: 'Representante da chapa Amor',
+    name: 'Elisa Lago Mendes',
+    subtitle: 'Representante da Chapa Felicidade',
   },
   {
-    name: 'Gustavo Poleto Santos',
-    subtitle: 'Representante da chapa Mundo da Criatividade',
+    name: 'Ana Cecília de Sousa Aragão',
+    subtitle: 'Representante da Chapa Alegria',
+  },
+  {
+    name: 'Lavínia Vieira de Oliveira Sampar',
+    subtitle: 'Representante da Chapa Amizade',
+  },
+  {
+    name: 'Victor Hugo da Costa Pereira',
+    subtitle: 'Representante da Chapa Esperança',
   },
 ]
 
@@ -43,11 +49,7 @@ const employees = [
     subtitle: 'Mesária',
   },
   {
-    name: 'Marina Vilela',
-    subtitle: 'Mesária',
-  },
-  {
-    name: 'Robson Luis da Silva Araújo',
+    name: 'Valentina Emiliano Santarém',
     subtitle: 'Conselho de Escola',
   },
 ]
