@@ -28,7 +28,7 @@ withDefaults(defineProps<Props>(), {
       >
         <v-img
           cover
-          :src="`/src/assets/voting_img/${candidate.candidate_number}.png`"
+          :src="candidate.avatar"
         ></v-img> </v-avatar
     ></v-col>
   </v-row>

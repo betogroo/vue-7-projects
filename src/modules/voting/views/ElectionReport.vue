@@ -75,8 +75,7 @@ const formattedCandidates = computed(() => {
     return {
       id: item.id,
       candidate: item.name,
-      //avatar: item.avatar,
-      avatar: `/src/assets/voting_img/${item.candidate_number}.png`,
+      avatar: item.avatar,
       number: item.candidate_number,
       votes: totalVotes,
       isWinner,
