@@ -10,38 +10,31 @@ const candidatesStore = useCandidateStore()
 const { candidates } = storeToRefs(candidatesStore)
 
 const commission = [
-  'Maria Clara Alves Lima',
-  'Sofia Lopes da Silva Caetano',
-  'Helena dos Santos',
-  'Luciana Oliveira Olivério',
+  'Karlos Elyel Souza da Costa Araújo Pires',
+'Lívia Maria Nunes Soares',
+'Alisha Aiko Timonera Takano',
+'Danilo Fukui de Oliveira',
+'Luciana Oliveira Olivério',
 ]
 
 const nominees = [
   {
-    name: 'Monyke Campelo da Silva',
-    subtitle: 'Representante da Chapa Confiança',
+    name: 'Maysa Silva Santos',
+    subtitle: 'Representante da Chapa Cooperação',
   },
   {
-    name: 'Elisa Lago Mendes',
-    subtitle: 'Representante da Chapa Felicidade',
+    name: ' Lavínia Prioli Cândido Dias',
+    subtitle: 'Representante da Chapa Unidos Para o Futuro',
   },
   {
-    name: 'Ana Cecília de Sousa Aragão',
-    subtitle: 'Representante da Chapa Alegria',
-  },
-  {
-    name: 'Lavínia Vieira de Oliveira Sampar',
-    subtitle: 'Representante da Chapa Amizade',
-  },
-  {
-    name: 'Victor Hugo da Costa Pereira',
-    subtitle: 'Representante da Chapa Esperança',
+    name: 'Ana Gabriela dos Santos Pereira',
+    subtitle: 'Representante da Chapa Nova Era',
   },
 ]
 
 const employees = [
   {
-    name: 'Viviane Aparecida Costa Garcia',
+    name: 'Gislaine Barbosa Dezem dos Reis',
     subtitle: 'Articuladora',
   },
   {
@@ -50,7 +43,7 @@ const employees = [
   },
   {
     name: 'Valentina Emiliano Santarém',
-    subtitle: 'Conselho de Escola',
+    subtitle: 'Sara de Sousa Parada',
   },
 ]
 
